@@ -1,0 +1,42 @@
+body {
+    background-color: rgba(245, 245, 245, 0.856);
+}
+.header {
+    color: whitesmoke;
+    background-color: rgba(0, 0, 0, 0.733);
+    height: 85px;
+}
+#headerRow{
+    width: 100%
+}
+#title{
+    text-align: center;
+    margin-top: 10px;
+}
+#email{
+    margin-top: 25px;
+    height: 30px;
+}
+#password{
+    margin-top: 25px;
+    height: 30px;
+}
+#login-Btn {
+    margin-top: 25px;
+    height: 30px;
+    border-radius: 5px;
+}
+#signUpForm{
+    float: right;
+    width: 40%;
+    margin-top: 6%;
+    margin-right: 5%;
+}
+@media only screen and (max-device-width : 820px){
+    #signUpForm{
+        float: none;
+        width: 100%;
+        margin-top: 6%;
+        margin-right: 5%;
+    }
+}

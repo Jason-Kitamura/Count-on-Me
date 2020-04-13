@@ -1,8 +1,10 @@
 import React from "react";
-import SearchBox from './SearchBox';
-import SearchResult from './SearchResult';
+import { Link, useLocation } from "react-router-dom";
 
 function SideBar( props ){
+    const [showAttr, setShowAttr] = React.useState('Search');
+    const theLocation = useLocation();
+
     return (
         <>
             <nav id="sidebar">
@@ -12,46 +14,53 @@ function SideBar( props ){
 
             <ul class="list-unstyled components">
                 <p><img class="rounded-circle" alt="100x100" src="https://placehold.it/100x100" data-holder-rendered="true" /></p>
-                <li>
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <a href="#">Home 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Home 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Home 3</a>
-                        </li>
-                    </ul>
+                <li className={((showAttr === 'Home') ? 'active' : '')}>
+                    <Link to="/home" onClick={() => setShowAttr('Home')} >
+                        Home
+                    </Link>
                 </li>
-                <li class="active">
-                    <a href="#">About</a>
+                <li className={((showAttr === 'Search') ? 'active' : '')} >
+                    {/* <a href="#" onClick={() => setShowAttr('Search')}>Search</a> */}
+                    <Link to="/search" onClick={() => setShowAttr('Search')} >
+                        Search
+                    </Link>
                 </li>
-                <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                {/* <li>
+                    <a href="#pageSubmenu" data-toggle="collapse" 
+                        aria-expanded={((showAttr === 'Pages') ? 'true' : 'false')} 
+                        onClick={() => setShowAttr('Pages')}
+                        className={((showAttr === 'Pages') ? 'dropdown-toggle active' : 'dropdown-toggle ')}>Pages</a>
+                    <ul className={((showAttr === 'Pages') ? 'list-unstyled collapse show' : 'list-unstyled collapse')} id="pageSubmenu">
                         <li>
                             <a href="#">Page 1</a>
                         </li>
                         <li>
                             <a href="#">Page 2</a>
                         </li>
-                        <li>
-                            <a href="#">Page 3</a>
-                        </li>
                     </ul>
+                </li> */}
+                <li className={((showAttr === 'Dashboard') ? 'active' : '')}>
+                    <Link to="/dashboard" onClick={() => setShowAttr('Dashboard')} >
+                        Dashboard
+                    </Link>
                 </li>
-                <li>
-                    <a href="#">Portfolio</a>
+                <li className={((showAttr === 'Portfolio') ? 'active' : '')}>
+                    <Link to="/porfolio" onClick={() => setShowAttr('Portfolio')} >
+                        Portfolio
+                    </Link>
                 </li>
-                <li>
-                    <a href="#">Contact</a>
+                <li className={((showAttr === 'Settings') ? 'active' : '')}>
+                    <Link to="/settings" onClick={() => setShowAttr('Settings')} >
+                        Settings
+                    </Link>
+                </li>
+                <li className={((showAttr === 'Login') ? 'active' : '')}>
+                    <Link to="/login" onClick={() => setShowAttr('Login')} >
+                        Login
+                    </Link>
                 </li>
             </ul>
         </nav>
-       
         </>
     )
 }
