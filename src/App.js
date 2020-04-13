@@ -1,24 +1,49 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+import SideBar from './components/SideBar';
+import SearchBox from './components/SearchBox';
+import SearchResult from './components/SearchResult';
+
 function App() {
+  const style = {
+    RightSection: { border: "0px solid Purple" },
+    SearchBox: { 
+      border: "0px solid Black"
+    },
+    SearchResult: { 
+      border: "0px solid Yellow"
+    }
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <div class="wrapper">
+
+        <div class="sidebar"> <SideBar /> </div>
+        <div class="container-fluid" style={style.RightSection} >
+          <div class="d-flex flex-column h-100">
+                  <div class="row">
+                  <div class="col" style={style.SearchBox} >
+                      <SearchBox />
+                    </div>
+                  </div>
+                  <div class="row flex-grow-1">
+                    <div class="col" style={style.SearchResult} >
+                      <SearchResult /> 
+                      {/* <p>dddddddd</p><p>dddddddd</p><p>dddddddd</p><p>dddddddd</p>
+                      <p>dddddddd</p><p>dddddddd</p><p>dddddddd</p><p>dddddddd</p>
+                      <p>dddddddd</p><p>dddddddd</p><p>dddddddd</p><p>dddddddd</p> */}
+                      
+                    </div>
+                  </div>
+          </div>
+        </div>
+
+      
+
+
+
+        </div>
     </div>
   );
 }
