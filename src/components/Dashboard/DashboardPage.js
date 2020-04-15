@@ -80,8 +80,8 @@ async function closeGoal(){
         <div class='row' style={liveData}>
             <TodoLists />
         </div>
-        <div class='row' style={liveData}>
-            <Followers ref={followers} />
+        <div class='row' ref={followers} style={liveData}>
+            <Followers />
         </div>
         <div class='row' ref={following} style={liveData}>
             <Following />
