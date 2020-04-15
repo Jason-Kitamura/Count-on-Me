@@ -31,6 +31,7 @@ body {
     width: 40%;
     margin-top: 6%;
     margin-right: 5%;
+    text-align: left;
 }
 @media only screen and (max-device-width : 820px){
     #signUpForm{
@@ -38,5 +39,24 @@ body {
         width: 100%;
         margin-top: 6%;
         margin-right: 5%;
+    }
+    #title{
+        text-align: center;
+        margin-top: 10px;
+        font-size: xx-large;
+    }
+    #email{
+        margin-top: 5px;
+        height: 20px;
+    }
+    #password{
+        margin-top: 5px;
+        height: 20px;
+    }
+    #login-Btn {
+        margin-top: 5px;
+        height: 20px;
+        border-radius: 5px;
+       font-size: 15px;
     }
 }
