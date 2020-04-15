@@ -1,6 +1,8 @@
 import React from 'react';
 import './style.css'
 
+const axios = require('axios')
+
 class LoginPage extends React.Component{
     constructor(props) {
         super(props);
@@ -15,9 +17,24 @@ class LoginPage extends React.Component{
     handlePasswordChange = (event) => {
         this.setState({ password : event.target.value })
     }
-    showInput = () => {
-        console.log('this is input function')
 
+    signIn = async (e) => {
+        e.preventDefault();
+        console.log('searching db for user' );
+
+        const loginCredentials = {
+            email : this.state.email,
+            password : this.state.password
+        }
+
+        const response = await axios.post( 'http://localhost:5000/api/checkUser', loginCredentials );
+        console.log('response', response );
+
+        if ( response.data === 'success' ){
+           alert( 'login successful' );
+        } else {
+            alert( 'wrong email/password')
+        }
     }
 
     render() {
@@ -28,14 +45,14 @@ class LoginPage extends React.Component{
                     <div className='col-4'></div >
                     <form className='col-4'>
                         <div className='row'>
-                            <div className='col-4'>
+                            <div className='col-md-4'>
                                 <input type="text" value={this.state.email} onChange={this.handleEmailChange} className='form-control' id='email' placeholder='email' />
                                 </div>
-                            <div className='col-4'>
+                            <div className='col-md-4'>
                                 <input type="text" value={this.state.password} onChange={this.handlePasswordChange} className='form-control' id='password' placeholder='password'/>
                             </div>
                             <div className='col-4'>
-                                <button type="submit" value="Submit" onClick={this.showInput} id='login-Btn'>Login</button>
+                                <button type="submit" value="Submit" onClick={this.signIn} className="btn btn-primary"id='login-Btn'>Login</button>
                             </div>
                         </div>
                     </form >
