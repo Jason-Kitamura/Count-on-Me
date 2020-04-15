@@ -28,7 +28,10 @@ app.post( '/api/createUser', async ( req, res ) => {
     const userData = req.body
 
     const dbUser = new user ( userData );
-    dbUser.save(  );
+    dbUser.save( (err, user )=>{
+        if( err ){ console.log(err)};
+        console.log(dbUser);
+    } );
 
     res.send( 'user data received! ')
 });
