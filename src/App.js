@@ -5,6 +5,7 @@ import SearchPage from './components/Search/SearchPage';
 import LoginPage from './components/Login/LoginPage';
 import HomePage from './components/Home/HomePage';
 import SettingsPage from './components/Settings/SettingsPage';
+import DashboardPage from './components/Dashboard/DashboardPage';
 
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -40,6 +41,7 @@ function App() {
                     <div class="col-11 ">
                       <Route exact path={["/", "/search"]} component={SearchPage} />
                       <Route path={["/login"]} component={LoginPage} />
+                      <Route path={["/dashboard"]} component={DashboardPage} />
                       <Route path={["/home"]} component={HomePage} />
                       <Route path={["/settings"]} component={SettingsPage} />
 
