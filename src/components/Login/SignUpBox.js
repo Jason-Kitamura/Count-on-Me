@@ -38,11 +38,14 @@ class SignUp extends React.Component{
             email : this.state.email,
             password : this.state.password1
         }
-        const createUser = await axios.post( 'http://localhost:5000/api/createUser', newUser)
-        console.log('created user', createUser );
+        if ( this.state.password2 !== newUser.password ) {
+            alert( ' passwords do not match ')
+        } else if (  this.state.password2 == newUser.password ){
+            const createUser = await axios.post( 'http://localhost:5000/api/createUser', newUser)
+            alert('created user', createUser );
+        }
      }
         
-
     render() {
         return(
             <div className='container' id='signUpForm'>

@@ -11,7 +11,6 @@ app.use(cors());
 app.use(express.json());
 
 //MONGOOSE CONECTION AND STUFF
-
 mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true,});
 mongoose.set('useCreateIndex', true);
 
@@ -55,6 +54,5 @@ app.post( '/api/checkUser', async ( req, res ) => {
 })
 
 //LISTENING
-
 app.listen( PORT, function(){
     console.log( `RUNNING, http://localhost:${PORT}` ); });
