@@ -5,6 +5,7 @@ import SearchPage from './components/Search/SearchPage';
 import LoginPage from './components/Login/LoginPage';
 import HomePage from './components/Home/HomePage';
 import SettingsPage from './components/Settings/SettingsPage';
+import DashboardPage from './components/Dashboard/DashboardPage';
 
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -33,10 +34,10 @@ function App() {
     width: '400px',
     height: '600px',
     backgroundColor: 'white',
-    
+
 
   }
-  
+
 
 
   return (
@@ -57,53 +58,24 @@ function App() {
                   <i class="fas fa-align-left"></i>
                 </button>
                 {/* </nav> */}
+
               </div>
 
               <div class="col-11 ">
                 <Route exact path={["/", "/search"]} component={SearchPage} />
                 <Route path={["/login"]} component={LoginPage} />
+                <Route path={["/dashboard"]} component={DashboardPage} />
                 <Route path={["/home"]} component={HomePage} />
                 <Route path={["/settings"]} component={SettingsPage} />
 
-
-                {/* <Route path="/settings/:id" component={ProductInfoPage} /> */}
-
               </div>
-
             </div>
-
           </div>
-          {/* <div class='bg-modal' style={modal}>
-            <div class='modal-content' style={modalContent}>
-              <div class='close' style={close}>
-              +
-              </div>
-              <div style={addGoal}>
-                <h3>ADD GOAL</h3>
-              </div>
-              <form style={formStyle}>
-                <div class="form-row" style={input}>
-                  <div class="col">
-                    <input style={insideForm} type="text" class="form-control" placeholder="Enter Your Goal Title" />
-                  </div>
-                  <div class="col">
-                    <textarea style={insideForm} type="text" class="form-control" placeholder="Description" />
-                  </div>
-                  <div class='col'>
-                  <label >Start Date</label> < input style={insideForm} type="date" id="Start Date" name="Start Date"></input>
-                  </div>
-                  <div class='col'>
-                  <label>End Date</label> <input style={insideForm} type="date" id="End Date" name="End Date"></input>
-                </div>
-                </div>
-                <button class="btn btn-secondary" type="submit">Submit form</button>
-              </form>
-            </div>
-          </div> */}
         </div>
       </div>
-    </Router>
-  );
-}
 
-export default App;
+    </Router>
+      );
+    }
+    
+    export default App;

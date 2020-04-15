@@ -1,4 +1,4 @@
-import React,{useState, useRef, createRef} from 'react';
+import React,{useState} from 'react';
 
 function GoalModal(props) {
     const [display,setDisplay] = useState(true);
@@ -33,7 +33,8 @@ function GoalModal(props) {
         boxShadow: '0 0 10px rgba(0,0,0,0.25)',
         zIndex: 101,
         padding: '40px',
-        marginTop:'10px'
+        marginTop:'10px',
+        marginBottom:'10px'
     }
     const insideForm = {
         margin: '3px'
@@ -92,10 +93,12 @@ function GoalModal(props) {
         const { id, value } = e.target; //
 
         setGoal( { ...goal, [id]: value } );
+
     }
 
     function registerGoals(){
         console.log('[Goal set by User]',goal);
+        
     }
 
 
