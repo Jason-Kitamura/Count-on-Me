@@ -13,13 +13,21 @@ function SideBar( props ){
             </div>
 
             <ul class="list-unstyled components">
-                <p><img class="rounded-circle" alt="100x100" src="https://placehold.it/100x100" data-holder-rendered="true" /></p>
+            <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar rounded-circle img-thumbnail" alt="avatar" />
+                {/*<p><img class="rounded-circle" alt="100x100" src="https://placehold.it/100x100" data-holder-rendered="true" /></p>*/}
+                <div class="text-center">
+
+        
+          {/*</div>*/}
+          
                 <li className={((showAttr === 'Home') ? 'active' : '')}>
+                    
                     <Link to="/home" onClick={() => setShowAttr('Home')} >
                         Home
                     </Link>
                 </li>
                 <li className={((showAttr === 'Search') ? 'active' : '')} >
+                    
                     {/* <a href="#" onClick={() => setShowAttr('Search')}>Search</a> */}
                     <Link to="/search" onClick={() => setShowAttr('Search')} >
                         Search
@@ -40,16 +48,19 @@ function SideBar( props ){
                     </ul>
                 </li> */}
                 <li className={((showAttr === 'Dashboard') ? 'active' : '')}>
+                    
                     <Link to="/dashboard" onClick={() => setShowAttr('Dashboard')} >
                         Dashboard
                     </Link>
                 </li>
                 <li className={((showAttr === 'Portfolio') ? 'active' : '')}>
+                    
                     <Link to="/porfolio" onClick={() => setShowAttr('Portfolio')} >
                         Portfolio
                     </Link>
                 </li>
                 <li className={((showAttr === 'Settings') ? 'active' : '')}>
+
                     <Link to="/settings" onClick={() => setShowAttr('Settings')} >
                         Settings
                     </Link>
@@ -59,7 +70,9 @@ function SideBar( props ){
                         Login
                     </Link>
                 </li>
+                </div>
             </ul>
+        
         </nav>
         </>
     )
