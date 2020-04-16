@@ -53,12 +53,7 @@ function SideBar( props ){
                         Dashboard
                     </Link>
                 </li>
-<<<<<<< HEAD
-                <li className={((showAttr === 'Portfolio') ? 'active' : '')}>
-                    
-=======
                 {/* <li className={((showAttr === 'Portfolio') ? 'active' : '')}>
->>>>>>> develop
                     <Link to="/porfolio" onClick={() => setShowAttr('Portfolio')} >
                         Portfolio
                     </Link>
