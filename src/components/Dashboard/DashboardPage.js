@@ -1,6 +1,5 @@
-import React,{useState, useRef} from "react";
+import React,{useState, useRef,} from "react";
 import CoverPhoto from './CoverPhoto';
-
 import UserOptions from './UserOptions';
 import TodoLists from './TodoLists';
 import Followers from './Followers';
@@ -39,7 +38,6 @@ function HomePage(){
 const scroll = {
     scrollBehavior: 'smooth'
    }
-
 
    const followers = useRef(null)
    const following = useRef(null)

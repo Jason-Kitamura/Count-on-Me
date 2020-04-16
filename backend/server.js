@@ -61,11 +61,25 @@ app.post( '/api/createGoal', (req, res) => {
     const newGoal = req.body;
     console.log( 'newGoal', newGoal );
 
-    const dbGoal = new goal ( newGoal );
-    dbGoal.save( (err, goal )=>{
+    const dbGoal = new goal ( newGoal.goal );
+    dbGoal.save( async (err, goal )=>{
         if( err ){ console.log(err)};
         console.log('new goal', goal);
+        // adding id to user goals array
+        const pushGoalId = mongoose.Types.ObjectId(goal._id);
+        console.log( '[Pushing into goal into user goals: ]', pushGoalId );
+
+        const pushGoalArray = await user.updateOne({email:`${newGoal.email}`}, { $push: { goals: pushGoalId } });
+        console.log('user with new goal', pushGoalArray );
     } );
+    res.send()
+})
+app.post( '/api/getUserGoals', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user goals for', obj.email );
+    const userGoals = await user.findOne({ email: `${obj.email}` }).populate('goals');
+    console.log( 'user goals:', userGoals );
+    res.send( JSON.stringify( userGoals ));
 })
 
 //LISTENING
