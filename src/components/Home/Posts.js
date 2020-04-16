@@ -1,47 +1,103 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { functionExpression } from '@babel/types';
 function Posts() {
-    const card={
-        width:'100%',
-        margin:'10px'
+    const card = {
+        width: '100%',
+        margin: '10px'
     }
     const img = {
-        border: "1px solid #ddd",
+        border: "1px hidden #ddd",
         borderRadius: "50%",
-        padding: "5px",
-        width:'80px',
-        display:'block',
-        marginLeft:'auto',
-        marginRight:'auto',
-        marginTop:'5px'
+        padding: "15px",
+        width: '80px',
+        display: 'block',
+
     }
     const name = {
-        textAlign:'center',
-        
+        fontFamily: 'Pacifico',
+        textAlign: 'center',
+        padding: "15px",
+        paddingTop: '25px',
+        margin: '0px'
+    }
+    const post = {
+        display: 'flex',
+        flexDirection: "row"
+    }
+    const cardBody = {
+        padding: '5px'
+    }
+    const commentSection = {
+        marginBottom: '0px',
+        bottom: '-20px',
+        width: '100%',
+        button: {
+            fontFamily: 'Pacifico',
+            backgroundColor: 'Transparent',
+            backgroundRepeat: 'no-repeat',
+            border: 'none',
+            cursor: 'pointer',
+            overflow: 'hidden',
+            outline: 'none',
+            boxShadow:'0px'
+        },
+        input: {
+            border: 'none'
+        }
+    }
+    const [comment,setComment] = useState('');
+
+    function HandleOnComment(e){
+        const value =e.target.value;
+        setComment(value);
+    }
+    function postComment(){
+        console.log(comment);
+        setComment('');
     }
     return (
-    <div>
-        <div class="card" style={card}>
-            <img style={img}src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.flt4Xq9M4mMny9LVm2SwWgHaHa%26pid%3DApi&f=1" class="card-img-top" alt="..." />
-            <h3 style={name}>John</h3>
-            <div class="card-body">
-                <p class="card-text lead">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <div>
+            <div class="card" style={card}>
+                <div style={post}>
+                    <img style={img} src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.flt4Xq9M4mMny9LVm2SwWgHaHa%26pid%3DApi&f=1" class="card-img-top" alt="..." />
+                    <h5 style={name}>John</h5>
+                </div>
+                <div style={cardBody}>
+                    <p class="font-weight-normal">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <div class="input-group mb-3" style={commentSection}>
+                        <input style={commentSection.input} onChange={HandleOnComment} type="text" class="form-control no-border" placeholder="Add a comment..." aria-label="comment" aria-describedby="basic-addon2" />
+                        <button style={commentSection.button} class="btn" type="button">post</button>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card" style={card}>
+                <div style={post}>
+                    <img style={img} src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.flt4Xq9M4mMny9LVm2SwWgHaHa%26pid%3DApi&f=1" class="card-img-top" alt="..." />
+                    <h5 style={name}>John</h5>
+                </div>
+                <div style={cardBody}>
+                    <p class="font-weight-normal">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <div class="input-group mb-3" style={commentSection}>
+                        <input style={commentSection.input} type="text" class="form-control no-border" placeholder="Add a comment..." aria-label="comment" aria-describedby="basic-addon2" />
+                        <button style={commentSection.button} class="btn" type="button">post</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style={card}>
+                <div style={post}>
+                    <img style={img} src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.flt4Xq9M4mMny9LVm2SwWgHaHa%26pid%3DApi&f=1" class="card-img-top" alt="..." />
+                    <h5 style={name}>John</h5>
+                </div>
+                <div style={cardBody}>
+                    <p class="font-weight-normal">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <div class="input-group mb-3" style={commentSection}>
+                        <input style={commentSection.input} onChange={HandleOnComment} type="text" class="form-control no-border" placeholder="Add a comment..." aria-label="comment" aria-describedby="basic-addon2" />
+                        <button style={commentSection.button} onClick={postComment} class="btn" type="button">post</button>
+                    </div>
+                </div>
             </div>
         </div>
-         <div class="card" style={card}>
-         <img style={img}src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.yn3SqRavuJc2nyP1um5TygHaHa%26pid%3DApi&f=1" class="card-img-top" alt="..." />
-         <h3 style={name}>Chris</h3>
-         <div class="card-body">
-             <p class="card-text lead">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-         </div>
-     </div>
-      <div class="card" style={card}>
-      <img style={img}src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2Fc8%2F0a%2Fe0%2Fc80ae037a8d010dbd4caa91ac11336f5.jpg&f=1&nofb=1" class="card-img-top" alt="..." />
-      <h3 style={name}>Karen</h3>
-      <div class="card-body">
-          <p class="card-text lead">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      </div>
-  </div>
-</div>
     );
 }
 
