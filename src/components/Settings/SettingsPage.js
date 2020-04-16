@@ -1,16 +1,11 @@
 import React from "react";
-import $ from 'jquery';
+//import ReactDOM from "react-dom";
+//import $ from 'jquery';
 //import SearchBox from './SearchBox';
 //import SearchResult from './SearchResult';
 
 function SettingsPage( props ){
-    /*const style = {
-        SearchBox: { 
-          border: "0px solid Black" },
-        SearchResult: { 
-          border: "0px solid Yellow"
-        }
-      }*/
+
 
     return (
         <>
@@ -22,37 +17,8 @@ function SettingsPage( props ){
                 This is an <strong>alert</strong> to show important messages to the user.
               </div>
             <h3>Personal info</h3>
-            {/*<form class="form-horizontal" role="form">*/}
             <br></br>
-            <div class="row">
-            <label class="col-lg-4 control-label">Upload a different photo:</label>
-            <div class="col-lg-7">
-              <input type="file" class="text-center center-block well well-sm" />
-              {/*{(() => {
-$(document).ready(function() {
-
-    
-  var readURL = function(input) {
-      if (input.files && input.files[0]) {
-          var reader = new FileReader();
-
-          reader.onload = function (e) {
-              $('.avatar').attr('src', e.target.result);
-          }
-  
-          reader.readAsDataURL(input.files[0]);
-      }
-  }
-  
-
-  $(".file-upload").on('change', function(){
-      readURL(this);
-  });
-});
-      })()}*/}
-              </div>
-              </div>
-              <br></br>
+            <br></br>
               <div class="form-group">
                 <div class="row">
                 <label class="col-lg-3 control-label" >First name:</label>
@@ -111,9 +77,8 @@ $(document).ready(function() {
                 </div>
                 </div>
               </div>
-            {/*</form>*/}
-          </div>
-                    </div>
+            </div>
+            </div>
             </div>
         </>
     )
