@@ -31,6 +31,7 @@ function LoginPage(props) {
         if ( response.data === 'success' ){
            alert( 'login successful' );
            setUserEmail( email );
+           localStorage.setItem('userEmail',JSON.stringify( email ));
            history.push("/home")
         } else {
             alert( 'wrong email/password')

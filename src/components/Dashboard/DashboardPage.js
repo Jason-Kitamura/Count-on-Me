@@ -1,4 +1,4 @@
-import React,{useState, useRef} from "react";
+import React,{useState, useRef, useEffect, useContext} from "react";
 import CoverPhoto from './CoverPhoto';
 
 import UserOptions from './UserOptions';
@@ -7,7 +7,10 @@ import Followers from './Followers';
 import Following from './Following';
 import GoalModal from '../Home/GoalModal';
 
+import {LoginContext} from '../../LoginContext'
 import "./style.css";
+
+const axios = require('axios');
 
 function HomePage(){
    const home = {
@@ -40,9 +43,37 @@ const scroll = {
     scrollBehavior: 'smooth'
    }
 
+   const userEmail = JSON.parse(localStorage.getItem('userEmail'));
 
-   const followers = useRef(null)
-   const following = useRef(null)
+   if ( !userEmail ){
+       console.log( 'logged out!' );
+   } else {
+       console.log( 'logged in!', userEmail );
+   }
+   const [ user, setUser ]= useState([]);
+   const followers = useRef(null);
+   const following = useRef(null);
+//    let firstName = user.data.firstName
+//    let lastName = user.data.lastName
+//    const id = '5e987fbf77392c86b2b27070';
+
+   useEffect( function(){
+        getUser();
+    }, [] );
+
+   async function getUser(){
+    console.log(`calling axios.get for email: `, userEmail)
+    const user = await axios.get( `http://localhost:5000/api/userData/${userEmail}`);
+
+    if( user.error ){
+        console.log(`error getting from db`, user.error)
+        return;
+    }
+    
+    setUser( user );
+    console.log( `Retrieved user data:`, user);
+    // console.log(`User first:`, , `user last`, )
+   }
 
    function executeScrollToFollowers(){
     console.log(`Calling scroll function`, followers)
@@ -59,15 +90,18 @@ const scroll = {
    async function addGoal(){
     console.log('[Add New GOAL button pressed]',show)
     setShow(true);
-}
-async function closeGoal(){
-    setShow(false);
-}
+    }
+
+    async function closeGoal(){
+        setShow(false);
+    }
+
+
 
     return (
         <div style={scroll}>
         <div>
-            <h3  style={home}>Home Page</h3>
+            <h3  style={home}></h3>
         </div>
         <div class='row' style={liveData}>
             <div class='col-12 col-md-8' style={columns}>
