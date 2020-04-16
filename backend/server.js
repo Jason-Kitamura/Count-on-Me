@@ -19,7 +19,8 @@ connection.once( 'open', () => {
     console.log('MongoDB connection established successfully')
 })
 
-const user = require( './db/models/user.js' )
+const user = require( './db/models/user.js' );
+const goal = require( './db/models/goals')
 
 
 // NODE ENDPOINTS
@@ -54,6 +55,17 @@ app.post( '/api/checkUser', async ( req, res ) => {
         res.send( 'error' );
     };
     
+})
+
+app.post( '/api/createGoal', (req, res) => {
+    const newGoal = req.body;
+    console.log( 'newGoal', newGoal );
+
+    const dbGoal = new goal ( newGoal );
+    dbGoal.save( (err, goal )=>{
+        if( err ){ console.log(err)};
+        console.log('new goal', goal);
+    } );
 })
 
 //LISTENING

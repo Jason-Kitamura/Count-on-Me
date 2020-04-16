@@ -1,4 +1,5 @@
 import React,{useState} from 'react';
+const axios = require('axios');
 
 function GoalModal(props) {
     const [display,setDisplay] = useState(true);
@@ -96,9 +97,11 @@ function GoalModal(props) {
 
     }
 
-    function registerGoals(){
+  async function registerGoals(){
         console.log('[Goal set by User]',goal);
-        
+        //sending to server
+        const newGoal = await axios.post( 'http://localhost:5000/api/createGoal', goal );
+        console.log( 'new goal', newGoal)
     }
 
 
