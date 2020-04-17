@@ -80,23 +80,6 @@ app.post( '/api/getUserGoals', async ( req, res )=> {
     console.log('get user goals for', obj.email );
     const userGoals = await user.findOne({ email: `${obj.email}` }).populate('goals');
     console.log( 'user goals:', userGoals );
-
-    // const completedGoals = userGoals.goals.map((goal)=>{
-    //     if(goal.completed === true){
-    //         return goal
-    //     }
-    // });
-    // const incompletedGoals = userGoals.goals.map((goal)=>{
-    //     if(goal.completed === false){
-    //         return goal
-    //     }
-    // });
-    // console.log('completed goals', completedGoals, 'incompleted goals', incompletedGoals );
-    // const goalObj = {
-    //     userGoals : userGoals,
-    //     completedGoals : completedGoals,
-    //     incompletedGoals : incompletedGoals
-    // }
     res.send( JSON.stringify( userGoals ));
 });
 app.post( '/api/getCompletedGoals', async ( req, res )=> {
@@ -110,17 +93,6 @@ app.post( '/api/getCompletedGoals', async ( req, res )=> {
             return goal
         }
     });
-    // const incompletedGoals = userGoals.goals.map((goal)=>{
-    //     if(goal.completed === false){
-    //         return goal
-    //     }
-    // });
-    // console.log('completed goals', completedGoals, 'incompleted goals', incompletedGoals );
-    // const goalObj = {
-    //     userGoals : userGoals,
-    //     completedGoals : completedGoals,
-    //     incompletedGoals : incompletedGoals
-    // }
     res.send( JSON.stringify( completedGoals ));
 });
 

@@ -14,9 +14,13 @@ function Goals() {
     }
     const checkBox = {
         float: 'left',
+        cursor : 'pointer',
+
     }
     const completeBox = {
         float: 'right',
+        fontSize : 'small',
+        cursor : 'pointer',
     }
   
     const [goals, setGoals] = useState([]);
@@ -55,41 +59,27 @@ function Goals() {
          getGoalList( localEmail );
         }
     },[])
-    async function completeGoal( e,id){
-        console.log(e, id);
-        if ( e === true ){
-            const obj = {
-                id : id
-            }
-            //update in in database
-          const updateGoalComplete = await axios.post( 'http://localhost:5000/api/completeGoal', obj);
-          console.log('Update goal complete', updateGoalComplete );
-        } else {
-            const obj = {
-                id : id
-            }
-            //update in in database
-          const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
-          console.log('Undo goal complete', undoGoalComplete );
+    async function completeGoal( id){
+        const obj = {
+            id : id
         }
+        //update in in database
+        const updateGoalComplete = await axios.post( 'http://localhost:5000/api/completeGoal', obj);
+        console.log('Update goal complete', updateGoalComplete );
+        //re render page
+        const localEmail1 = JSON.parse(localStorage.getItem('userEmail'));
+        getGoalList( localEmail1 );
     }
-    async function undoGoal( e,id){
-        console.log(e, id);
-        if ( e === false ){
-            const obj = {
-                id : id
-            }
-            //update in in database
-          const updateGoalComplete = await axios.post( 'http://localhost:5000/api/completeGoal', obj);
-          console.log('Update goal complete', updateGoalComplete );
-        } else {
-            const obj = {
-                id : id
-            }
-            //update in in database
-          const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
-          console.log('Undo goal complete', undoGoalComplete );
+    async function undoGoal( id ){
+        const obj = {
+            id : id
         }
+        //update in in database
+        const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
+        console.log('Undo goal complete', undoGoalComplete );
+        //re render page
+        const localEmail2 = JSON.parse(localStorage.getItem('userEmail'));
+        getGoalList( localEmail2 );
     }
 
     return (
@@ -98,10 +88,19 @@ function Goals() {
             <div class="card-body">
                 <h5 class="card-title text-center">Today's Goals</h5>         
                 {goals.map( goal => (
-                    <h6 style={Goals} key={goal.id}><input type="checkbox" onChange={e => {completeGoal(e.target.checked, goal._id)}} style={checkBox}/>{goal.title}</h6>
+                    <h6 style={Goals} key={goal.id}>
+                        <input type="checkbox" checked={false} onClick={e => {completeGoal( goal._id)}} style={checkBox}/>
+                        {goal.title}
+                    </h6>
                  ))}
                  {completed.map( goal => (
-                    <h6 style={Goals} key={goal.id}><i class="fa fa-check" aria-hidden="true" style={checkBox}></i><input type="checkbox"  onChange={e => {undoGoal(e.target.checked, goal._id)}} style={completeBox}/>{goal.title}</h6>
+                    <h6 style={Goals} key={goal.id}>
+                        <i class="fa fa-check" aria-hidden="true" style={checkBox}/>
+                        <p onClick={e => {undoGoal( goal._id)}} style={completeBox}>
+                            undo
+                        </p>
+                        {goal.title}
+                    </h6>
                  ))}
             </div>
         </div>

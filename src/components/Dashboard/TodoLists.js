@@ -75,6 +75,7 @@ function Goals() {
 
     async function completeGoal( e,id){
         console.log(e, id);
+        const localEmail = JSON.parse(localStorage.getItem('userEmail'));
         if ( e === true ){
             const obj = {
                 id : id
@@ -90,6 +91,8 @@ function Goals() {
           const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
           console.log('Undo goal complete', undoGoalComplete );
         }
+        const localEmail1 = JSON.parse(localStorage.getItem('userEmail'));
+        getGoalList( localEmail1 );
     }
     async function undoGoal( e,id){
         console.log(e, id);
@@ -108,6 +111,8 @@ function Goals() {
           const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
           console.log('Undo goal complete', undoGoalComplete );
         }
+        const localEmail2 = JSON.parse(localStorage.getItem('userEmail'));
+        getGoalList( localEmail2 );
     }
 
     return (
