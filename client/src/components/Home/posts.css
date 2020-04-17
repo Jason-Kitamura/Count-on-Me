@@ -1,0 +1,14 @@
+
+.btn:active,.btn:focus {
+    outline: none !important;
+    box-shadow: none;
+    
+}
+
+#input:focus,#input:active {
+    outline: none !important;
+    box-shadow: none;
+    
+
+
+}
