@@ -50,11 +50,11 @@ const scroll = {
    } else {
        console.log( 'logged in!', userEmail );
    }
-   const [ user, setUser ]= useState([]);
-   const followers = useRef(null);
-   const following = useRef(null);
-//    let firstName = user.data.firstName
-//    let lastName = user.data.lastName
+    const [ user, setUser ]= useState([]);
+    const followers = useRef(null);
+    const following = useRef(null);
+    let firstName = "";
+    let lastName = "";
 //    const id = '5e987fbf77392c86b2b27070';
 
    useEffect( function(){
@@ -72,7 +72,9 @@ const scroll = {
     
     setUser( user );
     console.log( `Retrieved user data:`, user);
-    // console.log(`User first:`, , `user last`, )
+    firstName = user.data.firstName;
+    lastName = user.data.lastName;
+    console.log(`User first:`, firstName , `user last`, lastName)
    }
 
    function executeScrollToFollowers(){
@@ -100,8 +102,8 @@ const scroll = {
 
     return (
         <div style={scroll}>
-        <div>
-            <h3  style={home}></h3>
+        <div id="header">
+            <h3  style={home}>{firstName} {lastName}</h3>
         </div>
         <div class='row' style={liveData}>
             <div class='col-12 col-md-8' style={columns}>

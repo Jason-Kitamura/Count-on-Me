@@ -86,7 +86,7 @@ app.get( '/api/userData/:emailId', async ( req, res ) => {
 
       console.log(`find by id`,findById)
     
-    res.send(findById.data)
+    res.send(findById)
     
 })
 
