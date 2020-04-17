@@ -1,9 +1,26 @@
-import React,{useState} from 'react';
-import Axios from 'axios';
+import React,{useState, useContext, useEffect} from 'react';
+const axios = require('axios');
 
 function GoalModal(props) {
-    const [display,setDisplay] = useState(true);
+    const [display, setDisplay] = useState(true);
     const [goal,setGoal] = useState({title:"",description:'',StartDate:'',EndDate:''});
+    const[ email, setEmail ] = useState('')
+   
+    function setUserEmail( localEmail ){
+        setEmail( localEmail );
+    }
+
+    useEffect( ()=>{
+        const localEmail = JSON.parse(localStorage.getItem('userEmail'));
+    
+        if ( !localEmail ){
+            console.log( 'logged out!' );
+        } else {
+            console.log( 'logged in!', localEmail );
+            setUserEmail( localEmail );
+        }
+    },[])
+
     //setDisplay(props.show)
     const modalWrapper = {
         position: 'fixed',
@@ -97,16 +114,14 @@ function GoalModal(props) {
 
     }
 
-   async function registerGoals(){
-        const user = JSON.parse(localStorage.getItem('user'));
-        const userId = user._id;
+  async function registerGoals(){
         console.log('[Goal set by User]',goal);
-        let obj = {
-            id : userId,
-            goal: goal
-        }
-        const apiResult = await Axios.post('/api/enterUserGoals',obj);
-        console.log('[Goal Added to User]',apiResult);
+        const newUserGoal = { email, goal }
+        console.log( 'new User Goal', newUserGoal );
+        //sending to server
+        const newGoal = await axios.post( '/api/createGoal', newUserGoal );
+        console.log( 'new goal', newGoal);
+        setDisplay( false );
     }
 
 

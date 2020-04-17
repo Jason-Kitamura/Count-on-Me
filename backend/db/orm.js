@@ -5,32 +5,63 @@ mongoose.set('useCreateIndex', true);
 
 // include mongoose models (it will include each file in the models directory)
 const User = require( './models/user' );
-
+const Goal = require('./models/goals');
 function saveUser(data){
-    const user = {
-        firstName :  data.firstName,
-        lastName : data.lastName ,
-        email : data.email ,
-        password : data.password ,
-        goals : []
-    }
-    const dbUser = new User( user );
+    
+    const dbUser = new User( data );
     return dbUser.save();
 }
 
 async function findUserByEmail(data){
     console.log('[Email Received for verification]',data)
-    const result = await User.findOne({ email: data.email})
+    const result = await User.findOne({ email: data.email});
     console.log(`[User Found]`,result);
     return result;
 }
 async function addGoal(data)
 {
-    console.log(`[user Information received]`,data);
-    const result = await  User.updateOne({_id:`${data.id}`}, { $push: { goals: data.goals} });
-    console.log(`[Work done]`,result);
+    console.log(`[Goal Received ]`,data);
+    const dbGoal = new Goal ( data.goal );
+    dbGoal.save(async (err,goal) => {
+        if( err ){ console.log(err)};
+        console.log('new goal', goal);
+        const pushGoalId = mongoose.Types.ObjectId(goal._id);
+        const result = await  User.updateOne({email:`${data.email}`}, { $push: { goals: pushGoalId } });
+        console.log(`[Work done]`,result);
+    })
+
 }
 
+async function getUserGoals(obj){
+    const userGoals = await User.findOne({ email: `${obj.email}` }).populate('goals');
+    console.log( 'user goals:', userGoals );
+    return userGoals
+
+}
+
+async function getCompletedGoals(data){
+    const userGoals = await User.findOne({ email: `${obj.email}` }).populate('goals');
+    console.log( 'user goals:', userGoals );
+    return userGoals
+}
+
+async function completeGoal(obj){
+    const GoalId = mongoose.Types.ObjectId(obj.id);
+    const updateGoal = await Goal.updateOne({ _id : String(GoalId) }, { $set : { completed : true} } );
+    console.log(`updated goal ${GoalId} to true: ${updateGoal}`);
+    return updateGoal
+}
+async function undoGoal(obj){
+    const GoalId = mongoose.Types.ObjectId(obj.id);
+    const updateGoal = await Goal.updateOne({ _id : String(GoalId) }, { $set : { completed : false} } );
+    console.log(`updated goal ${GoalId} to false: ${updateGoal}`)
+    return updateGoal
+}
+async function getUserByEmailId(id){
+    const result = await User.findOne({ email: id });
+    console.log(`[user found]`,result);
+    return result
+}
 async function findUserById(id){
     const result = await User.findOne({ _id: id})
     console.log(`[User Found]`,result);
@@ -67,6 +98,11 @@ module.exports = {
     findUserById,
     allUsers,
     finduser,
-    addFollowing
+    addFollowing,
+    getUserGoals,
+    getCompletedGoals,
+    completeGoal,
+    undoGoal,
+    getUserByEmailId
     
 }
