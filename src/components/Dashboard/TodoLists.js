@@ -32,8 +32,11 @@ function Goals() {
     const checkBox = {
         float: 'left',
     }
-    const completeBox = {
+    const undoBtn = {
         float: 'right',
+        fontSize : 'small',
+        cursor : 'pointer',
+        margin: '0px'
     }
 
     const [goals, setGoals] = useState([]);
@@ -73,44 +76,25 @@ function Goals() {
         }
     },[])
 
-    async function completeGoal( e,id){
-        console.log(e, id);
-        const localEmail = JSON.parse(localStorage.getItem('userEmail'));
-        if ( e === true ){
-            const obj = {
-                id : id
-            }
-            //update in in database
-          const updateGoalComplete = await axios.post( 'http://localhost:5000/api/completeGoal', obj);
-          console.log('Update goal complete', updateGoalComplete );
-        } else {
-            const obj = {
-                id : id
-            }
-            //update in in database
-          const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
-          console.log('Undo goal complete', undoGoalComplete );
+    async function completeGoal( id ){
+        const obj = {
+            id : id
         }
+        //update in in database
+        const updateGoalComplete = await axios.post( 'http://localhost:5000/api/completeGoal', obj);
+        console.log('Update goal complete', updateGoalComplete );
+       
         const localEmail1 = JSON.parse(localStorage.getItem('userEmail'));
         getGoalList( localEmail1 );
     }
-    async function undoGoal( e,id){
-        console.log(e, id);
-        if ( e === false ){
-            const obj = {
-                id : id
-            }
-            //update in in database
-          const updateGoalComplete = await axios.post( 'http://localhost:5000/api/completeGoal', obj);
-          console.log('Update goal complete', updateGoalComplete );
-        } else {
-            const obj = {
-                id : id
-            }
-            //update in in database
-          const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
-          console.log('Undo goal complete', undoGoalComplete );
+    async function undoGoal( id){
+        const obj = {
+            id : id
         }
+        //update in in database
+        const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
+        console.log('Undo goal complete', undoGoalComplete );
+        //rerender component
         const localEmail2 = JSON.parse(localStorage.getItem('userEmail'));
         getGoalList( localEmail2 );
     }
@@ -121,16 +105,25 @@ function Goals() {
                 <div class="card-body">
                     <h5 class="card-title text-center">Today's Goals</h5>
                     {goals.map( goal => (
-                    <h6 style={Goals} key={goal._id}><input onChange={e => {completeGoal(e.target.checked, goal._id)}} type="checkbox" style={checkBox}/> {goal.title}</h6>
-                 ))}
+                        <h6 style={Goals} key={goal._id}>
+                            <input onClick={e => {completeGoal( goal._id)}} type="checkbox" checked={false} style={checkBox}/>
+                            {goal.title}
+                        </h6>
+                     ))}
                 </div>
             </div>
             <div class="card col-12 col-lg-3 col-md-6" style={card}>
                 <div class="card-body">
                     <h5 class="card-title text-center">Completed Goals</h5>
                     {completed.map( goal => (
-                    <h6 style={Goals} key={goal._id}><i class="fa fa-check" aria-hidden="true" style={checkBox}></i><input  type="checkbox" onChange={e => {undoGoal(e.target.checked, goal._id)}} style={completeBox}/> {goal.title}</h6>
-                 ))}
+                        <h6 style={Goals} key={goal._id}>
+                            <i class="fa fa-check" aria-hidden="true" style={checkBox}/>
+                            {goal.title}
+                            <p onClick={e => {undoGoal(goal._id)}} style={undoBtn}>
+                                undo
+                            </p>
+                        </h6>
+                     ))}
                 </div>
             </div>
             <div class="card col-12 col-lg-3 col-md-6" style={card}>
