@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import useForceUpdate from 'use-force-update';
 const axios = require('axios');
 
 
@@ -31,19 +32,33 @@ function Goals() {
     const checkBox = {
         float: 'left',
     }
+    const completeBox = {
+        float: 'right',
+    }
 
     const [goals, setGoals] = useState([]);
+    const [completed, setCompleted] = useState([]);
+
 
     async function getGoalList( localEmail){
         const obj = {
             email : localEmail 
         }
         //get info from server
-        const userGoals = await axios.post( 'http://localhost:5000/api/getUserGoals', obj );
-        console.log('user data', userGoals);
+        const allGoals = await axios.post( 'http://localhost:5000/api/getUserGoals', obj );
+        const goalsArray = allGoals.data.goals
 
-         setGoals( userGoals.data.goals );
-         console.log(goals)
+        const incompletedGoals = goalsArray.filter( goal => {
+            return goal.completed === false;
+        })
+        console.log('incompleted goals', incompletedGoals);
+        setGoals( incompletedGoals );
+
+        const completedGoals = goalsArray.filter( goal => {
+            return goal.completed === true;
+        })
+        console.log('completed goals', completedGoals);
+        setCompleted( completedGoals );
     }
 
   useEffect( ()=>{
@@ -57,10 +72,41 @@ function Goals() {
          getGoalList( localEmail );
         }
     },[])
-    function goalChecked( e,id){
+
+    async function completeGoal( e,id){
         console.log(e, id);
         if ( e === true ){
-            
+            const obj = {
+                id : id
+            }
+            //update in in database
+          const updateGoalComplete = await axios.post( 'http://localhost:5000/api/completeGoal', obj);
+          console.log('Update goal complete', updateGoalComplete );
+        } else {
+            const obj = {
+                id : id
+            }
+            //update in in database
+          const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
+          console.log('Undo goal complete', undoGoalComplete );
+        }
+    }
+    async function undoGoal( e,id){
+        console.log(e, id);
+        if ( e === false ){
+            const obj = {
+                id : id
+            }
+            //update in in database
+          const updateGoalComplete = await axios.post( 'http://localhost:5000/api/completeGoal', obj);
+          console.log('Update goal complete', updateGoalComplete );
+        } else {
+            const obj = {
+                id : id
+            }
+            //update in in database
+          const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
+          console.log('Undo goal complete', undoGoalComplete );
         }
     }
 
@@ -70,23 +116,16 @@ function Goals() {
                 <div class="card-body">
                     <h5 class="card-title text-center">Today's Goals</h5>
                     {goals.map( goal => (
-                    <h6 style={Goals} key={goal.id}><input onChange={e => {goalChecked(e.target.checked, goal._id)}} type="checkbox" style={checkBox}/> {goal.title}</h6>
+                    <h6 style={Goals} key={goal._id}><input onChange={e => {completeGoal(e.target.checked, goal._id)}} type="checkbox" style={checkBox}/> {goal.title}</h6>
                  ))}
                 </div>
             </div>
             <div class="card col-12 col-lg-3 col-md-6" style={card}>
                 <div class="card-body">
                     <h5 class="card-title text-center">Completed Goals</h5>
-                    <h6 style={Goals}>  <input type="checkbox" style={checkBox}/>   Eat</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Sleep</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Study</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Excercise</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Repeat</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Eat</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Sleep</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Study</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Excercise</h6>
-                    <h6 style={Goals}> <i class="fas fa-check-square"></i>   Repeat</h6>
+                    {completed.map( goal => (
+                    <h6 style={Goals} key={goal._id}><i class="fa fa-check" aria-hidden="true" style={checkBox}></i><input  type="checkbox" onChange={e => {undoGoal(e.target.checked, goal._id)}} style={completeBox}/> {goal.title}</h6>
+                 ))}
                 </div>
             </div>
             <div class="card col-12 col-lg-3 col-md-6" style={card}>
