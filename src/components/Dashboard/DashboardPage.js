@@ -1,13 +1,11 @@
 import React,{useState, useRef, useEffect, useContext} from "react";
 import CoverPhoto from './CoverPhoto';
-
 import UserOptions from './UserOptions';
 import TodoLists from './TodoLists';
 import Followers from './Followers';
 import Following from './Following';
 import GoalModal from '../Home/GoalModal';
 
-import {LoginContext} from '../../LoginContext'
 import "./style.css";
 
 const axios = require('axios');
@@ -43,21 +41,24 @@ const scroll = {
     scrollBehavior: 'smooth'
    }
 
+   //Checking user login 
    const userEmail = JSON.parse(localStorage.getItem('userEmail'));
-
    if ( !userEmail ){
        console.log( 'logged out!' );
    } else {
        console.log( 'logged in!', userEmail );
    }
+
+
     const [ user, setUser ]= useState([]);
+    const [ firstName, setUserFirstName ] = useState([]);
+    const [ lastName, setUserLastName ] = useState([]);
     const followers = useRef(null);
     const following = useRef(null);
-    let firstName = "";
-    let lastName = "";
-//    const id = '5e987fbf77392c86b2b27070';
+
 
    useEffect( function(){
+       
         getUser();
     }, [] );
 
@@ -72,8 +73,12 @@ const scroll = {
     
     setUser( user );
     console.log( `Retrieved user data:`, user);
-    firstName = user.data.firstName;
-    lastName = user.data.lastName;
+    let firstName = user.data.firstName;
+    firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1)
+    setUserFirstName( firstName )
+    let lastName = user.data.lastName;
+    lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1)
+    setUserLastName( lastName )
     console.log(`User first:`, firstName , `user last`, lastName)
    }
 

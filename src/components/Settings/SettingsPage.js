@@ -1,10 +1,61 @@
-import React from "react";
+import React,{useState, useRef, useEffect, useContext} from "react";
 //import ReactDOM from "react-dom";
 //import $ from 'jquery';
 //import SearchBox from './SearchBox';
 //import SearchResult from './SearchResult';
 
+const axios = require('axios');
+
 function SettingsPage( props ){
+
+  //Checking user login 
+  const userEmail = JSON.parse(localStorage.getItem('userEmail'));
+  if ( !userEmail ){
+      console.log( 'logged out!' );
+  } else {
+      console.log( 'logged in!', userEmail );
+  }
+
+
+   const [ user, setUser ]= useState([]);
+   const [ firstName, setUserFirstName ] = useState([]);
+   const [ lastName, setUserLastName ] = useState([]);
+   const [ password, setPassword ] = useState([]);
+   const followers = useRef(null);
+   const following = useRef(null);
+
+
+  useEffect( function(){
+      
+       getUser();
+   }, [] );
+
+  async function getUser(){
+   console.log(`calling axios.get for email: `, userEmail)
+   const user = await axios.get( `http://localhost:5000/api/userData/${userEmail}`);
+
+   if( user.error ){
+       console.log(`error getting from db`, user.error)
+       return;
+   }
+   
+   setUser( user );
+   console.log( `Retrieved user data:`, user);
+
+   let firstName = user.data.firstName;
+   firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1)
+   setUserFirstName( firstName )
+
+   let lastName = user.data.lastName;
+   lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1)
+   setUserLastName( lastName )
+
+   console.log(`User first:`, firstName , `user last`, lastName)
+
+   let password = user.data.password;
+   setPassword( password )
+  }
+
 
 
     return (
@@ -23,7 +74,7 @@ function SettingsPage( props ){
                 <div class="row">
                 <label class="col-lg-3 control-label" >First name:</label>
                 <div class="col-lg-8">
-                  <input class="form-control" value="Jane" type="text" />
+                  <input class="form-control" value={firstName} type="text" />
                 </div>
                 </div>
               </div>    
@@ -31,7 +82,7 @@ function SettingsPage( props ){
               <div class="row">
                 <label class="col-lg-3 control-label">Last name:</label>
                 <div class="col-lg-8">
-                  <input class="form-control" value="Bishop" type="text" />
+                  <input class="form-control" value={lastName} type="text" />
                 </div>
                 </div>
               </div>
@@ -39,7 +90,7 @@ function SettingsPage( props ){
               <div class="row">
                 <label class="col-lg-3 control-label">Email:</label>
                 <div class="col-lg-8">
-                  <input class="form-control" value="janesemail@gmail.com" type="text" />
+                  <input class="form-control" value={userEmail} type="text" />
                 </div>
                 </div>
               </div>
@@ -55,7 +106,7 @@ function SettingsPage( props ){
               <div class="row">
                 <label class="col-lg-3 control-label">Password:</label>
                 <div class="col-lg-8">
-                  <input class="form-control" value="11111122333" type="password" />
+                  <input class="form-control" value={password} type="password" />
                 </div>
                 </div>
               </div>
@@ -63,7 +114,7 @@ function SettingsPage( props ){
               <div class="row">
                 <label class="col-lg-3 control-label">Confirm password:</label>
                 <div class="col-lg-8">
-                  <input class="form-control" value="11111122333" type="password" />
+                  <input class="form-control" value={password} type="password" />
                 </div>
                 </div>
               </div>

@@ -61,11 +61,86 @@ app.post( '/api/createGoal', (req, res) => {
     const newGoal = req.body;
     console.log( 'newGoal', newGoal );
 
-    const dbGoal = new goal ( newGoal );
-    dbGoal.save( (err, goal )=>{
+    const dbGoal = new goal ( newGoal.goal );
+    dbGoal.save( async (err, goal )=>{
         if( err ){ console.log(err)};
         console.log('new goal', goal);
+        // adding id to user goals array
+        const pushGoalId = mongoose.Types.ObjectId(goal._id);
+        console.log( '[Pushing into goal into user goals: ]', pushGoalId );
+
+        const pushGoalArray = await user.updateOne({email:`${newGoal.email}`}, { $push: { goals: pushGoalId } });
+        console.log('user with new goal', pushGoalArray );
     } );
+    res.send()
+})
+
+app.post( '/api/getUserGoals', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user goals for', obj.email );
+    const userGoals = await user.findOne({ email: `${obj.email}` }).populate('goals');
+    console.log( 'user goals:', userGoals );
+
+    // const completedGoals = userGoals.goals.map((goal)=>{
+    //     if(goal.completed === true){
+    //         return goal
+    //     }
+    // });
+    // const incompletedGoals = userGoals.goals.map((goal)=>{
+    //     if(goal.completed === false){
+    //         return goal
+    //     }
+    // });
+    // console.log('completed goals', completedGoals, 'incompleted goals', incompletedGoals );
+    // const goalObj = {
+    //     userGoals : userGoals,
+    //     completedGoals : completedGoals,
+    //     incompletedGoals : incompletedGoals
+    // }
+    res.send( JSON.stringify( userGoals ));
+});
+app.post( '/api/getCompletedGoals', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user goals for', obj.email );
+    const userGoals = await user.findOne({ email: `${obj.email}` }).populate('goals');
+    console.log( 'user goals:', userGoals );
+
+    const completedGoals = userGoals.goals.map((goal)=>{
+        if(goal.completed === true){
+            return goal
+        }
+    });
+    // const incompletedGoals = userGoals.goals.map((goal)=>{
+    //     if(goal.completed === false){
+    //         return goal
+    //     }
+    // });
+    // console.log('completed goals', completedGoals, 'incompleted goals', incompletedGoals );
+    // const goalObj = {
+    //     userGoals : userGoals,
+    //     completedGoals : completedGoals,
+    //     incompletedGoals : incompletedGoals
+    // }
+    res.send( JSON.stringify( completedGoals ));
+});
+
+
+
+app.post( '/api/completeGoal', async ( req, res )=> {
+    const obj = req.body;
+    const GoalId = mongoose.Types.ObjectId(obj.id);
+    const updateGoal = await goal.updateOne({ _id : String(GoalId) }, { $set : { completed : true} } );
+    console.log(`updated goal ${GoalId} to true: ${updateGoal}`)
+    res.send('updated goal')
+
+})
+app.post( '/api/undoGoal', async ( req, res )=> {
+    const obj = req.body;
+    const GoalId = mongoose.Types.ObjectId(obj.id);
+    const updateGoal = await goal.updateOne({ _id : String(GoalId) }, { $set : { completed : false} } );
+    console.log(`updated goal ${GoalId} to false: ${updateGoal}`)
+    res.send('updated goal')
+
 })
 
 
