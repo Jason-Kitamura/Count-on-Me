@@ -143,6 +143,28 @@ app.post( '/api/undoGoal', async ( req, res )=> {
 
 })
 
+
+app.get( '/api/userData/:emailId', async ( req, res ) => {
+    console.log('received userid: ', req.params.emailId );
+    const id = req.params.emailId
+
+    const findById =  await user.findOne({ email: id }, (err, data) => {
+        if(err){
+          return ('err');
+        }
+        console.log( `Data recieved from db: `, data)
+
+        // data = JSON.parse(data)
+
+        return (data);
+      });
+
+      console.log(`find by id`,findById)
+    
+    res.send(findById)
+    
+})
+
 //LISTENING
 app.listen( PORT, function(){
     console.log( `RUNNING, http://localhost:${PORT}` ); });

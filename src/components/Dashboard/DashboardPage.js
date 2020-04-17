@@ -1,4 +1,4 @@
-import React,{useState, useRef,} from "react";
+import React,{useState, useRef, useEffect, useContext} from "react";
 import CoverPhoto from './CoverPhoto';
 import UserOptions from './UserOptions';
 import TodoLists from './TodoLists';
@@ -7,6 +7,8 @@ import Following from './Following';
 import GoalModal from '../Home/GoalModal';
 
 import "./style.css";
+
+const axios = require('axios');
 
 function HomePage(){
    const home = {
@@ -39,8 +41,46 @@ const scroll = {
     scrollBehavior: 'smooth'
    }
 
-   const followers = useRef(null)
-   const following = useRef(null)
+   //Checking user login 
+   const userEmail = JSON.parse(localStorage.getItem('userEmail'));
+   if ( !userEmail ){
+       console.log( 'logged out!' );
+   } else {
+       console.log( 'logged in!', userEmail );
+   }
+
+
+    const [ user, setUser ]= useState([]);
+    const [ firstName, setUserFirstName ] = useState([]);
+    const [ lastName, setUserLastName ] = useState([]);
+    const followers = useRef(null);
+    const following = useRef(null);
+
+
+   useEffect( function(){
+       
+        getUser();
+    }, [] );
+
+   async function getUser(){
+    console.log(`calling axios.get for email: `, userEmail)
+    const user = await axios.get( `http://localhost:5000/api/userData/${userEmail}`);
+
+    if( user.error ){
+        console.log(`error getting from db`, user.error)
+        return;
+    }
+    
+    setUser( user );
+    console.log( `Retrieved user data:`, user);
+    let firstName = user.data.firstName;
+    firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1)
+    setUserFirstName( firstName )
+    let lastName = user.data.lastName;
+    lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1)
+    setUserLastName( lastName )
+    console.log(`User first:`, firstName , `user last`, lastName)
+   }
 
    function executeScrollToFollowers(){
     console.log(`Calling scroll function`, followers)
@@ -57,15 +97,18 @@ const scroll = {
    async function addGoal(){
     console.log('[Add New GOAL button pressed]',show)
     setShow(true);
-}
-async function closeGoal(){
-    setShow(false);
-}
+    }
+
+    async function closeGoal(){
+        setShow(false);
+    }
+
+
 
     return (
         <div style={scroll}>
-        <div>
-            <h3  style={home}>Home Page</h3>
+        <div id="header">
+            <h3  style={home}>{firstName} {lastName}</h3>
         </div>
         <div class='row' style={liveData}>
             <div class='col-12 col-md-8' style={columns}>
