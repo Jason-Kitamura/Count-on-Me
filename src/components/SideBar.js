@@ -20,6 +20,10 @@ function SideBar( props ){
         reader.readAsDataURL(file);
       }
     };
+    function logOutUser(){
+        localStorage.removeItem( 'userEmail' );
+        alert('you have logged out!')
+    }
 
     return (
         <>
@@ -110,6 +114,11 @@ function SideBar( props ){
                 <li className={((showAttr === 'Login') ? 'active' : '')}>
                     <Link to="/login" onClick={() => setShowAttr('Login')} >
                         Login
+                    </Link>
+                </li>
+                <li className={((showAttr === 'Logout') ? 'active' : '')}>
+                    <Link to="/login" onClick={() => setShowAttr('Login')} onClick={logOutUser} >
+                        Logout
                     </Link>
                 </li>
                 </div>
