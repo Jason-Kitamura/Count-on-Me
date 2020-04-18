@@ -27,7 +27,7 @@ app.post( '/api/createUser', async ( req, res ) => {
     res.send( 'user data received! ')
 });
 
-app.post( '/api/checkUser', async ( req, res ) => {
+app.get( '/api/checkUser', async ( req, res ) => {
     console.log('received login info:', req.body );
     const loginCredentrials = req.body;
 
