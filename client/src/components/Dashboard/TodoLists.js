@@ -48,7 +48,7 @@ function Goals() {
             email : localEmail 
         }
         //get info from server
-        const allGoals = await axios.post( 'http://localhost:5000/api/getUserGoals', obj );
+        const allGoals = await axios.post( '/api/getUserGoals', obj );
         const goalsArray = allGoals.data.goals
 
         const incompletedGoals = goalsArray.filter( goal => {
