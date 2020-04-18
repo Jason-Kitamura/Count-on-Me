@@ -1,6 +1,5 @@
 import React, {useState, useContext} from 'react';
 import './style.css'
-import {LoginContext} from '../../LoginContext'
 import {useHistory} from 'react-router-dom';
 
 const axios = require('axios');
@@ -8,7 +7,6 @@ const axios = require('axios');
 
 function LoginPage(props) {
     //for global context
-    const [ userEmail, setUserEmail ] = useContext( LoginContext );
     //loval state
     const [ email, setEmail ] = useState('');
     const [ password, setPassword] = useState('');
@@ -26,12 +24,15 @@ function LoginPage(props) {
         }
         // route for server to check credentials
         const response = await axios.post( 'http://localhost:5000/api/checkUser', loginCredentials );
-        console.log('response', response );
+        console.log('response', response.data.status );
 
-        if ( response.data === 'success' ){
+        if ( response.data.status === 'success' ){
            alert( 'login successful' );
-           setUserEmail( email );
-           localStorage.setItem('userEmail',JSON.stringify( email ));
+           const obj = {
+               email : email,
+               id : response.data.id
+           }
+           localStorage.setItem('userEmail',JSON.stringify( obj ));
            history.push("/home")
         } else {
             alert( 'wrong email/password')

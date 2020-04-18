@@ -49,14 +49,14 @@ function Goals() {
     }
 
   useEffect( ()=>{
-        const localEmail = JSON.parse(localStorage.getItem('userEmail'));
+        const user = JSON.parse(localStorage.getItem('userEmail'));
     
-        if ( !localEmail ){
+        if ( !user.email ){
             console.log( 'logged out!' );
         } else {
-            console.log( 'logged in!', localEmail );
+            console.log( 'logged in!', user.email );
 
-         getGoalList( localEmail );
+         getGoalList( user.email );
         }
     },[])
     async function completeGoal( id){
@@ -67,8 +67,8 @@ function Goals() {
         const updateGoalComplete = await axios.post( '/api/completeGoal', obj);
         console.log('Update goal complete', updateGoalComplete );
         //re render page
-        const localEmail1 = JSON.parse(localStorage.getItem('userEmail'));
-        getGoalList( localEmail1 );
+        const user = JSON.parse(localStorage.getItem('userEmail'));
+        getGoalList( user.email );
     }
     async function undoGoal( id ){
         const obj = {
@@ -78,8 +78,8 @@ function Goals() {
         const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
         console.log('Undo goal complete', undoGoalComplete );
         //re render page
-        const localEmail2 = JSON.parse(localStorage.getItem('userEmail'));
-        getGoalList( localEmail2 );
+        const user = JSON.parse(localStorage.getItem('userEmail'));
+        getGoalList( user.email );
     }
 
     return (
