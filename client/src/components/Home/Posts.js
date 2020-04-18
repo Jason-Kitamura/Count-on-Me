@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './posts.css';
+import axios from 'axios';
+
 function Posts() {
     const card = {
         width: '100%',
@@ -16,9 +18,9 @@ function Posts() {
     }
     const name = {
         fontFamily: 'Pacifico',
-        textAlign: 'center',
-        padding: "15px",
-        paddingTop: '25px',
+        fontSize : 'x-large',
+        textAlign: 'left',
+        padding: "10px",
         margin: '0px'
     }
     const post = {
@@ -27,6 +29,25 @@ function Posts() {
     }
     const cardBody = {
         padding: '5px'
+    }
+
+    const goalStyle = {
+        border : 'solid  thin grey ',
+        width : '80%',
+        display : 'block',
+        margin : 'auto',
+        marginBottom : '5px',
+        padding : '5px'
+    }
+    const goalTitleStyle = {
+        // textAlign : 'left',
+        fontWeight : 'bold',
+        margin : '0px'
+    }
+    const goalDesStyle = {
+        textAlign : 'left',
+        margin : '0px',
+        fontSize : 'small'
     }
     const commentSection = {
         marginBottom: '0px',
@@ -45,25 +66,94 @@ function Posts() {
             
         },
         input: {
-            border: 'none',
+            borderRadius : '5px',
             fontSize:'15px',
             
         }
     }
+    const commentStyle = {
+        borderStyle : ' groove',
+        borderRadius : '5px',
+        textAlign : 'left',
+        display : 'block',
+        margin : 'auto',
+        marginLeft : '10%',
+        marginBottom : '10px',
+        fontSize : 'smaller',
+        width : 'fit-content',
+        padding : '5px'
+    }
+    const commentNameStyle = {
+        margin : '0px',
+    }
+    const commentBodyStyle = {
+        margin : '0px',
+        float : 'right',
+        fontSize : 'small',
+        paddingLeft : '5px',
+    }
+    
     const [comment,setComment] = useState('');
+    const [ newsFeed, setNewsFeed ]= useState([]);
+
+    async function getPosts( userEmail ){
+        const obj = {
+            email : userEmail
+        }
+        const posts = await axios.post('/api/getPosts', obj );
+        console.log('front end receiving posts: ', posts)
+
+        setNewsFeed( posts.data );
+    }
+
+    
+    useEffect( () => {
+        const user = JSON.parse( localStorage.getItem('userEmail'));
+        
+        getPosts( user.email);
+
+    },[])
 
     function HandleOnComment(e){
         const value =e.target.value;
         setComment(value);
     }
-
-
     
-
     return (
         <div>
-           
-        </div>
+            {newsFeed.map( post => (
+            
+                    <div class="card" style={card}>
+                        <div style={post}>
+                            <h5 style={name}>{post.firstName}</h5>
+                        </div>
+                        <div style={cardBody}>
+                            <div>
+                                {post.goals.map( goal => (
+                                    <div style={goalStyle}>
+                                        <h6 style={goalTitleStyle}>{goal.title}</h6>
+                                        <p style={goalDesStyle}>{goal.description}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            <div class="input-group mb-3" style={commentSection}>
+                                <input style={commentSection.input}  value={comment} type="text" id='input' class="form-control no-border" placeholder="Add a comment..." aria-label="comment" aria-describedby="basic-addon2" />
+                                <button style={commentSection.button}  clickFocus={false} class="btn" type="button">post</button>
+                            </div>
+                        </div>
+                        <div style={cardBody}>
+                            {post.comments.map( comment => (
+                                <div style={commentStyle}>
+                                    <h5 style={commentNameStyle}>{comment.name}<p style={commentBodyStyle}>{comment.body}</p></h5>
+                                    
+                                </div>
+                            ))}
+                        </div>
+                
+                    </div>
+                 
+            ))}
+        </div> 
     );
 }
 

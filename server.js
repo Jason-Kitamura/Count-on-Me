@@ -25,7 +25,10 @@ app.post( '/api/checkUser', async ( req, res ) => {
     console.log('userdata retreived:', findByEmail );
     
     if ( findByEmail.password === loginCredentrials.password ){
-        res.send( 'success' );
+        res.send( {
+            status : 'success',
+            id : findByEmail._id
+        } );
     } else {
         res.send( 'error' );
     };
@@ -45,22 +48,6 @@ app.post( '/api/getUserGoals', async ( req, res )=> {
     console.log('get user goals for', obj.email );
     const userGoals = await orm.getUserGoals(obj);
 
-    // const completedGoals = userGoals.goals.map((goal)=>{
-    //     if(goal.completed === true){
-    //         return goal
-    //     }
-    // });
-    // const incompletedGoals = userGoals.goals.map((goal)=>{
-    //     if(goal.completed === false){
-    //         return goal
-    //     }
-    // });
-    // console.log('completed goals', completedGoals, 'incompleted goals', incompletedGoals );
-    // const goalObj = {
-    //     userGoals : userGoals,
-    //     completedGoals : completedGoals,
-    //     incompletedGoals : incompletedGoals
-    // }
     res.send( JSON.stringify( userGoals ));
 });
 app.post( '/api/getCompletedGoals', async ( req, res )=> {
@@ -72,17 +59,7 @@ app.post( '/api/getCompletedGoals', async ( req, res )=> {
             return goal
         }
     });
-    // const incompletedGoals = userGoals.goals.map((goal)=>{
-    //     if(goal.completed === false){
-    //         return goal
-    //     }
-    // });
-    // console.log('completed goals', completedGoals, 'incompleted goals', incompletedGoals );
-    // const goalObj = {
-    //     userGoals : userGoals,
-    //     completedGoals : completedGoals,
-    //     incompletedGoals : incompletedGoals
-    // }
+
     res.send( JSON.stringify( completedGoals ));
 });
 
@@ -131,6 +108,25 @@ app.get('/api/allusers', async (req, res) => {
     const result= await orm.allUsers();
     res.send(result);
 });
+app.post( '/api/getPosts', async ( req, res ) => {
+    const userEmail = req.body;
+    console.log('going to lookup users following for', userEmail );
+    const userData = await orm.findFolloweesAndPopulate( userEmail );
+    console.log( 'found user data', userData );
+    res.send( userData.following )
+})
+app.post( '/api/postComment', async ( req, res ) => {
+    const obj = req.body;
+    const userData = await orm.findUserByEmail( obj);
+    console.log( 'data for', obj.email, userData );
+    const commentData = {
+        postEmail : obj.postEmail,
+        name : userData.firstName,
+        body : obj.comment
+    }
+    const createComment = await orm.createComment( commentData );
+    
+})
 //LISTENING
 app.listen( PORT, function(){
     console.log( `RUNNING, http://localhost:${PORT}` ); });
