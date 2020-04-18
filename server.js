@@ -117,7 +117,6 @@ app.get('/api/allusers', async (req, res) => {
     const result= await orm.allUsers();
     res.send(result);
 });
-<<<<<<< HEAD
 app.post( '/api/getPosts', async ( req, res ) => {
     const userEmail = req.body;
     console.log('going to lookup users following for', userEmail );
@@ -137,7 +136,6 @@ app.post( '/api/postComment', async ( req, res ) => {
     const createComment = await orm.createComment( commentData );
     
 })
-=======
 
 
 /*-- m.p. started the socket --*/
@@ -197,7 +195,6 @@ io.on('connection', function(socket){
   });
 
 
->>>>>>> cf5394531fb65d144d3bdc0bc4047a82ba87d5b6
 //LISTENING
 app.listen( PORT, function(){
     console.log( `RUNNING, http://localhost:${PORT}` ); });
