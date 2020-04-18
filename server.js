@@ -57,7 +57,6 @@ app.post( '/api/getUserGoals', async ( req, res )=> {
     console.log('get user goals for', obj.email );
     const userGoals = await orm.getUserGoals(obj);
 
-
     res.send( JSON.stringify( userGoals ));
 });
 app.post( '/api/getCompletedGoals', async ( req, res )=> {
@@ -134,7 +133,7 @@ app.post( '/api/postComment', async ( req, res ) => {
         body : obj.comment
     }
     const createComment = await orm.createComment( commentData );
-    
+    res.send();
 })
 
 

@@ -3,13 +3,10 @@ import './style.css'
 import {useHistory} from 'react-router-dom';
 import { socketio } from "../Socket/Socket.io"; /*-- m.p. initialize the socketio --*/
 
-
 const axios = require('axios');
 
-
 function LoginPage(props) {
-    //for global context
-    //loval state
+
     const [ email, setEmail ] = useState('');
     const [ password, setPassword] = useState('');
     //used to redirect Route
@@ -31,8 +28,11 @@ function LoginPage(props) {
         if ( response.data.status === 'success' ){
            alert( 'login successful' );
            openSocket( email ); /*-- m.p. socketio --*/
-           localStorage.setItem('userEmail', JSON.stringify( email ));
-           sessionStorage.setItem('userEmail', JSON.stringify( email ));
+           const obj = {
+               email : email,
+               id : response.data.id
+           }
+           sessionStorage.setItem('userEmail',JSON.stringify( obj ));
            history.push("/home")
         } else {
             alert( 'wrong email/password')
@@ -47,7 +47,6 @@ function LoginPage(props) {
             else{ console.log(`${user} is already in pool.`); }
         });
     }
-
 
     return(
         <header className="header">

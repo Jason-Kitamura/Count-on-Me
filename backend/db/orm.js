@@ -6,7 +6,11 @@ mongoose.set('useCreateIndex', true);
 // include mongoose models (it will include each file in the models directory)
 const User = require( './models/user' );
 const Goal = require('./models/goals');
+<<<<<<< HEAD
 const Comment = require('./models/comment')
+=======
+const Comment = require('./models/comment');
+>>>>>>> signIn
 function saveUser(data){
     
     const dbUser = new User( data );
