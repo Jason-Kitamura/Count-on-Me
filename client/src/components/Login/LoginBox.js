@@ -2,6 +2,8 @@ import React, {useState, useContext} from 'react';
 import './style.css'
 import {LoginContext} from '../../LoginContext'
 import {useHistory} from 'react-router-dom';
+import { socketio } from "../Socket/Socket.io"; /*-- m.p. initialize the socketio --*/
+
 
 const axios = require('axios');
 
@@ -30,13 +32,26 @@ function LoginPage(props) {
 
         if ( response.data === 'success' ){
            alert( 'login successful' );
-           setUserEmail( email );
-           localStorage.setItem('userEmail',JSON.stringify( email ));
+           setUserEmail( email ); 
+           openSocket( email ); /*-- m.p. socketio --*/
+           localStorage.setItem('userEmail', JSON.stringify( email ));
+           sessionStorage.setItem('userEmail', JSON.stringify( email ));
            history.push("/home")
         } else {
             alert( 'wrong email/password')
         }
     }
+
+    /*-- m.p. socketio --*/
+    function openSocket(user){ 
+        console.log("open socket called");
+        socketio.emit('Login', user, function(data){
+            if (data){ console.log(`${user} added into pool.`);} 
+            else{ console.log(`${user} is already in pool.`); }
+        });
+    }
+
+
     return(
         <header className="header">
             <div className='row' id='headerRow'>
