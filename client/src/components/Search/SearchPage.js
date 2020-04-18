@@ -77,11 +77,7 @@ function SearchPage(props) {
     setInput('');
   }
  async  function addFollower(){
-<<<<<<< HEAD
-    const user = JSON.parse(localStorage.getItem('userEmail'));
-=======
     const user = JSON.parse(sessionStorage.getItem('userEmail'));
->>>>>>> signIn
     console.log('[input Received]',forsearch);  
   
    const  object ={
