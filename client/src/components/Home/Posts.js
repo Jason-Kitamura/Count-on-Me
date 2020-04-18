@@ -95,6 +95,7 @@ function Posts() {
     
     const [comment,setComment] = useState('');
     const [ newsFeed, setNewsFeed ]= useState([]);
+    const [ Email, setEmail ]=useState('');
 
     async function getPosts( userEmail ){
         const obj = {
@@ -109,6 +110,8 @@ function Posts() {
     
     useEffect( () => {
         const user = JSON.parse( localStorage.getItem('userEmail'));
+
+        setEmail( user.email)
         
         getPosts( user.email);
 
@@ -117,6 +120,16 @@ function Posts() {
     function HandleOnComment(e){
         const value =e.target.value;
         setComment(value);
+    }
+    async function postComment( postEmail ){
+        const obj = {
+            email : Email,
+            postEmail : postEmail,
+            comment : comment
+        }
+        const sendComment = await axios.post( '/api/postComment', obj );
+        const user = JSON.parse( localStorage.getItem('userEmail'));
+        getPosts( user.email);
     }
     
     return (
@@ -137,15 +150,14 @@ function Posts() {
                                 ))}
                             </div>
                             <div class="input-group mb-3" style={commentSection}>
-                                <input style={commentSection.input}  value={comment} type="text" id='input' class="form-control no-border" placeholder="Add a comment..." aria-label="comment" aria-describedby="basic-addon2" />
-                                <button style={commentSection.button}  clickFocus={false} class="btn" type="button">post</button>
+                                <input style={commentSection.input} onChange={HandleOnComment}  value={comment} type="text" id='input' class="form-control no-border" placeholder="Add a comment..." aria-label="comment" aria-describedby="basic-addon2" />
+                                <button style={commentSection.button} onClick={e => {postComment(post.email)}} class="btn" type="button">post</button>
                             </div>
                         </div>
                         <div style={cardBody}>
                             {post.comments.map( comment => (
                                 <div style={commentStyle}>
                                     <h5 style={commentNameStyle}>{comment.name}<p style={commentBodyStyle}>{comment.body}</p></h5>
-                                    
                                 </div>
                             ))}
                         </div>
