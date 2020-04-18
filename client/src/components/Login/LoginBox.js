@@ -27,7 +27,7 @@ function LoginPage(props) {
             password : password
         }
         // route for server to check credentials
-        const response = await axios.post( 'http://localhost:5000/api/checkUser', loginCredentials );
+        const response = await axios.post( '/api/checkUser', loginCredentials );
         console.log('response', response );
 
         if ( response.data === 'success' ){
