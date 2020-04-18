@@ -64,11 +64,11 @@ function App() {
                     
                         <div class="col-11 ">
                         <LoginProvider>
-                          <Route path={["/", "/search"]} component={SearchPage} />
-                          <Route path={["/login"]} component={LoginPage} />
-                          <Route path={["/dashboard"]} component={DashboardPage} />
-                          <Route path={["/home"]} component={HomePage} />
-                          <Route path={["/settings"]} component={SettingsPage} />
+                          <Route exact path={["/", "/search"]} component={SearchPage} />
+                          <Route  path={["/login"]} component={LoginPage} />
+                          <Route  path={["/dashboard"]} component={DashboardPage} />
+                          <Route  path={["/home"]} component={HomePage} />
+                          <Route  path={["/settings"]} component={SettingsPage} />
                         </LoginProvider>
 
 
