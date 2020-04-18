@@ -6,18 +6,18 @@ function GoalModal(props) {
     const [goal,setGoal] = useState({title:"",description:'',StartDate:'',EndDate:''});
     const[ email, setEmail ] = useState('')
    
-    function setUserEmail( localEmail ){
-        setEmail( localEmail );
+    function setUserEmail( userEmail ){
+        setEmail( userEmail );
     }
 
     useEffect( ()=>{
-        const localEmail = JSON.parse(localStorage.getItem('userEmail'));
+        const user = JSON.parse(localStorage.getItem('userEmail'));
     
-        if ( !localEmail ){
+        if ( !user.email ){
             console.log( 'logged out!' );
         } else {
-            console.log( 'logged in!', localEmail );
-            setUserEmail( localEmail );
+            console.log( 'logged in!', user.email );
+            setUserEmail( user.email );
         }
     },[])
 
