@@ -33,7 +33,7 @@ function LoginPage(props) {
                email : email,
                id : response.data.id
            }
-           localStorage.setItem('userEmail',JSON.stringify( obj ));
+           sessionStorage.setItem('userEmail',JSON.stringify( obj ));
            history.push("/home")
         } else {
             alert( 'wrong email/password')

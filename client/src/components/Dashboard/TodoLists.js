@@ -65,7 +65,7 @@ function Goals() {
     }
 
   useEffect( ()=>{
-        const user = JSON.parse(localStorage.getItem('userEmail'));
+        const user = JSON.parse(sessionStorage.getItem('userEmail'));
     
         if ( !user.email ){
             console.log( 'logged out!' );
@@ -84,7 +84,7 @@ function Goals() {
         const updateGoalComplete = await axios.post( '/api/completeGoal', obj);
         console.log('Update goal complete', updateGoalComplete );
        
-        const user = JSON.parse(localStorage.getItem('userEmail'));
+        const user = JSON.parse(sessionStorage.getItem('userEmail'));
         getGoalList( user.email );
     }
     async function undoGoal( id){
@@ -95,7 +95,7 @@ function Goals() {
         const undoGoalComplete = await axios.post( '/api/undoGoal', obj);
         console.log('Undo goal complete', undoGoalComplete );
         //rerender component
-        const user = JSON.parse(localStorage.getItem('userEmail'));
+        const user = JSON.parse(sessionStorage.getItem('userEmail'));
         getGoalList( user.email );
     }
 

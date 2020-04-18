@@ -42,7 +42,7 @@ const scroll = {
    }
 
    //Checking user login 
-   const userEmail = JSON.parse(localStorage.getItem('userEmail'));
+   const userEmail = JSON.parse(sessionStorage.getItem('userEmail'));
    if ( !userEmail ){
        console.log( 'logged out!' );
    } else {

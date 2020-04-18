@@ -11,7 +11,7 @@ function GoalModal(props) {
     }
 
     useEffect( ()=>{
-        const user = JSON.parse(localStorage.getItem('userEmail'));
+        const user = JSON.parse(sessionStorage.getItem('userEmail'));
     
         if ( !user.email ){
             console.log( 'logged out!' );

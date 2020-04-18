@@ -109,7 +109,7 @@ function Posts() {
 
     
     useEffect( () => {
-        const user = JSON.parse( localStorage.getItem('userEmail'));
+        const user = JSON.parse( sessionStorage.getItem('userEmail'));
 
         setEmail( user.email)
         
@@ -121,15 +121,26 @@ function Posts() {
         const value =e.target.value;
         setComment(value);
     }
-    async function postComment( postEmail ){
+    async function postComment( e,  postEmail ){
+        
+        e.preventDefault();
         const obj = {
             email : Email,
             postEmail : postEmail,
             comment : comment
         }
         const sendComment = await axios.post( '/api/postComment', obj );
-        const user = JSON.parse( localStorage.getItem('userEmail'));
+        const user = JSON.parse( sessionStorage.getItem('userEmail'));
         getPosts( user.email);
+
+        setComment('')
+        // try{
+        //     socketio.emit('message-sent', {A:JSON.parse(sessionStorage.getItem('userEmail')), B: postEmail, T:comment}, function(data){
+
+        //       console.log(`message sent : ${data}`);   
+
+        //     });
+        // } catch (err){ console.log("Error happened in posts component" + err) }
     }
     
     return (
@@ -151,7 +162,7 @@ function Posts() {
                             </div>
                             <div class="input-group mb-3" style={commentSection}>
                                 <input style={commentSection.input} onChange={HandleOnComment}  value={comment} type="text" id='input' class="form-control no-border" placeholder="Add a comment..." aria-label="comment" aria-describedby="basic-addon2" />
-                                <button style={commentSection.button} onClick={e => {postComment(post.email)}} class="btn" type="button">post</button>
+                                <button style={commentSection.button} onClick={(e) => {postComment( e, post.email)}} class="btn" type="button">post</button>
                             </div>
                         </div>
                         <div style={cardBody}>
@@ -161,7 +172,6 @@ function Posts() {
                                 </div>
                             ))}
                         </div>
-                
                     </div>
                  
             ))}

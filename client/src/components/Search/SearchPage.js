@@ -77,7 +77,7 @@ function SearchPage(props) {
     setInput('');
   }
  async  function addFollower(){
-    const user = JSON.parse(localStorage.getItem('userEmail'));
+    const user = JSON.parse(sessionStorage.getItem('userEmail'));
     console.log('[input Received]',forsearch);  
   
    const  object ={
