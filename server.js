@@ -125,7 +125,7 @@ app.post( '/api/postComment', async ( req, res ) => {
         body : obj.comment
     }
     const createComment = await orm.createComment( commentData );
-    
+    res.send();
 })
 //LISTENING
 app.listen( PORT, function(){
