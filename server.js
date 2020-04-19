@@ -7,12 +7,17 @@ const bodyParser = require('body-parser');
 const app = express();
 
 
+const PORT = process.env.PORT || 5000;
+//LISTENING
+app.listen( PORT, function(){
+    console.log( `RUNNING, http://localhost:${PORT}` ); });
+
 /*-- m.p. initialization --*/
 var users = {};
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-io.listen(4000);
-const PORT = process.env.PORT || 5000;
+io.listen(PORT+1);
+
 
 
 app.use(cors());
@@ -198,7 +203,3 @@ io.on('connection', function(socket){
 
   });
 
-
-//LISTENING
-app.listen( PORT, function(){
-    console.log( `RUNNING, http://localhost:${PORT}` ); });
