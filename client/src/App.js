@@ -6,6 +6,7 @@ import LoginPage from './components/Login/LoginPage';
 import HomePage from './components/Home/HomePage';
 import SettingsPage from './components/Settings/SettingsPage';
 import DashboardPage from './components/Dashboard/DashboardPage';
+import FriendsPage from './components/User/FriendsPage';
 import {LoginProvider} from './LoginContext';
 
 
@@ -69,6 +70,7 @@ function App() {
                           <Route path={["/dashboard"]} component={DashboardPage} />
                           <Route path={["/home"]} component={HomePage} />
                           <Route path={["/settings"]} component={SettingsPage} />
+                          <Route path={["/user/:id"]} component={FriendsPage} />
                         </LoginProvider>
 
 

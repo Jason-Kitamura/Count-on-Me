@@ -58,6 +58,7 @@ function SearchPage(props) {
       setInput(i);
       setForsearch(i);
       setnamesList(newList)
+      console.log(`User id:`, userdata)
     } else {
       setInput(i);
       setnamesList([]);
@@ -102,7 +103,7 @@ if (display){
         </form>
         <ul>{namesList.map(name => <li class="list-group-item" style={liStyle} onClick={() => setInput(name)}>{name}</li>)}</ul>
         <div>
-          <SearchResult result={result} btn={btn} addFollower={addFollower} />
+          <SearchResult result={result} btn={btn} id={forsearch} addFollower={addFollower} />
         </div>
       </div>
     </>
