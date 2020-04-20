@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+=======
+import React, { useState } from 'react';
+import { socketio } from "../Socket/Socket.io"; /*-- m.p. initialize the socketio --*/
+>>>>>>> develop
 
 function Comments(){
     const card={
@@ -43,6 +48,7 @@ function Comments(){
 
     const [ userComments, setUserComments ] = useState([]);
     const [ Email, setEmail ]=useState('');
+    const [chatcomment, setChatcomment] = useState("");
 
     async function getComments( userEmail ){
         const obj = {
@@ -58,15 +64,32 @@ function Comments(){
 
         getComments( user.email )
     },[])
+
+    
+    /*-- m.p. post comment --*/
+    socketio.on('whisp', function(data){
+        console.log(`${data.msg} from ${data.fromUser} to ${data.toUser}`)
+        setChatcomment(chatcomment + ` ${data.fromUser} : ${data.msg} <br/>`);
+    });
+
     return(
-        <div style={card} class="card">
-           
-            <h5 style={commentTitle}>Comments</h5>
-            {userComments.map( comment => (
-                <div style={commentStyle}>
-                    <h5 style={commentNameStyle}>{comment.name}<p style={commentBodyStyle}>{comment.body}</p></h5>
+        <div>
+       
+            <div class="card" style={card}>
+                <h5 class="card-title" style={styleForNotificationHead}><i class="fas fa-comment-alt"></i>   Notifications</h5>
+                <div class="card-body">
+                    <p style={comment} dangerouslySetInnerHTML={{__html: chatcomment}}></p>
                 </div>
-            ))}
+            </div>
+        
+            <div style={card} class="card">
+                <h5 style={commentTitle}>Comments</h5>
+                {userComments.map( comment => (
+                    <div style={commentStyle}>
+                        <h5 style={commentNameStyle}>{comment.name}<p style={commentBodyStyle}>{comment.body}</p></h5>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

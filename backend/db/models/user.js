@@ -12,7 +12,6 @@ let user = new Schema ({
    comments : [ {type: Schema.Types.ObjectId, ref: 'comment'} ]
 
 
-
 } );
 
 module.exports = mongoose.model('user', user);

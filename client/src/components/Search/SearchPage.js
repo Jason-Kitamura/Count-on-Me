@@ -88,7 +88,6 @@ function SearchPage(props) {
     const apiResult = axios.post('/api/addFollowing',object);
     console.log('[Added to following]',apiResult);
     
-    
   }
 
 if (display){

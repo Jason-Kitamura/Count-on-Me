@@ -64,7 +64,7 @@ const scroll = {
 
    async function getUser(){
     console.log(`calling axios.get for email: `, userEmail)
-    const user = await axios.get( `/api/userData/${userEmail}`);
+    const user = await axios.get( `/api/userData/${userEmail.email}`);
 
     if( user.error ){
         console.log(`error getting from db`, user.error)

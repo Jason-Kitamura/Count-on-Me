@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { socketio } from "../Socket/Socket.io"; /*-- m.p. initialization  --*/
+
 
 import './posts.css';
 import axios from 'axios';
@@ -137,13 +139,13 @@ function Posts() {
         getPosts( user.email);
 
         setComment('')
-        // try{
-        //     socketio.emit('message-sent', {A:JSON.parse(sessionStorage.getItem('userEmail')), B: postEmail, T:comment}, function(data){
+        try{
+            socketio.emit('message-sent', {A:JSON.parse(sessionStorage.getItem('userEmail')), B: postEmail, T:comment}, function(data){
 
-        //       console.log(`message sent : ${data}`);   
+              console.log(`message sent : ${data}`);   
 
-        //     });
-        // } catch (err){ console.log("Error happened in posts component" + err) }
+            });
+        } catch (err){ console.log("Error happened in posts component" + err) }
     }
     function checkCompleted( status ){
         console.log( status );
