@@ -21,7 +21,7 @@ function SideBar( props ){
       }
     };
     function logOutUser(){
-        localStorage.removeItem( 'userEmail' );
+        sessionStorage.removeItem( 'userEmail' );
         alert('you have logged out!')
     }
 
@@ -109,11 +109,6 @@ function SideBar( props ){
                 <li className={((showAttr === 'Settings') ? 'active' : '')}>
                     <Link to="/settings" onClick={() => setShowAttr('Settings')} >
                         Settings
-                    </Link>
-                </li>
-                <li className={((showAttr === 'Login') ? 'active' : '')}>
-                    <Link to="/login" onClick={() => setShowAttr('Login')} >
-                        Login
                     </Link>
                 </li>
                 <li className={((showAttr === 'Logout') ? 'active' : '')}>

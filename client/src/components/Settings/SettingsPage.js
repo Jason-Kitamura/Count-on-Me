@@ -9,13 +9,8 @@ const axios = require('axios');
 function SettingsPage( props ){
 
   //Checking user login 
-  const userEmail = JSON.parse(localStorage.getItem('userEmail'));
-  if ( !userEmail ){
-      console.log( 'logged out!' );
-  } else {
-      console.log( 'logged in!', userEmail );
-  }
-
+  const userEmail = JSON.parse(sessionStorage.getItem('userEmail')).email;
+ 
 
    const [ user, setUser ]= useState([]);
    const [ firstName, setUserFirstName ] = useState([]);
