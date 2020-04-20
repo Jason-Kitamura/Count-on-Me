@@ -1,15 +1,37 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 
 function Comments(){
     const card={
         width:'100%',
-        margin:'10px'
+        margin:'10px',
+        padding : '6%'
     }
-    const  comment = {
+    const commentTitle = {
+        fontWeight : '500',
+        marginBottom : '10px',
+    }
+    const  commentStyle = {
         borderStyle:'groove',
-        borderRadius:'5px',
-        marginBotton:'5px',
-        padding:'3px'
+        borderRadius:'10px',
+        marginBottom:'10px',
+        marginLeft : '4%',
+        padding:'4px',
+        paddingLeft : '8px',
+        paddingRight : '8px',
+        width : 'fit-content',
+        boxShadow: '5px 10px 15px #888888'
+    
+    }
+    const commentNameStyle = {
+        margin : '0px',
+        textAlign:'left'
+    }
+    const commentBodyStyle = {
+        margin : '0px',
+        float : 'right',
+        fontSize : 'small',
+        paddingLeft : '5px',
     }
     const styleForNotificationHead ={
         
@@ -18,16 +40,33 @@ function Comments(){
         paddingBottom:'0px',
         textAlign:'left'
     }
+
+    const [ userComments, setUserComments ] = useState([]);
+    const [ Email, setEmail ]=useState('');
+
+    async function getComments( userEmail ){
+        const obj = {
+            email : userEmail
+        }
+        const userData = await axios.post( '/api/getComments', obj);
+        console.log('comments:', userData );
+        setUserComments( userData.data )
+    }
+
+    useEffect( () => {
+        const user = JSON.parse( sessionStorage.getItem('userEmail'));
+
+        getComments( user.email )
+    },[])
     return(
-        <div class="card" style={card}>
-              <h5 class="card-title" style={styleForNotificationHead}><i class="fas fa-comment-alt"></i>   Notifications</h5>
-            <div class="card-body">
-                <p style={comment}>Commented By Chris on your goal
-                Good Job On Your Goals john</p>
-                <p style={comment}>Commented By Chris on your goal
-                Good Job On Your Goals john</p>
-               
-            </div>
+        <div style={card} class="card">
+           
+            <h5 style={commentTitle}>Comments</h5>
+            {userComments.map( comment => (
+                <div style={commentStyle}>
+                    <h5 style={commentNameStyle}>{comment.name}<p style={commentBodyStyle}>{comment.body}</p></h5>
+                </div>
+            ))}
         </div>
     );
 }
