@@ -39,6 +39,13 @@ async function getUserGoals(obj){
 
 }
 
+async function getFriendGoals(obj){
+    const userGoals = await User.findById({ _id: `${obj.id}` }).populate('goals');
+    console.log( 'user goals:', userGoals );
+    return userGoals
+
+}
+
 async function getCompletedGoals(data){
     const userGoals = await User.findOne({ email: `${obj.email}` }).populate('goals');
     console.log( 'user goals:', userGoals );
@@ -59,6 +66,11 @@ async function undoGoal(obj){
 }
 async function getUserByEmailId(id){
     const result = await User.findOne({ email: id });
+    console.log(`[user found]`,result);
+    return result
+}
+async function getUserById(id){
+    const result = await User.findById({ _id: id });
     console.log(`[user found]`,result);
     return result
 }
@@ -100,6 +112,8 @@ module.exports = {
     finduser,
     addFollowing,
     getUserGoals,
+    getUserById,
+    getFriendGoals,
     getCompletedGoals,
     completeGoal,
     undoGoal,

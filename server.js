@@ -72,6 +72,13 @@ app.post( '/api/getUserGoals', async ( req, res )=> {
     // }
     res.send( JSON.stringify( userGoals ));
 });
+app.post( '/api/getFriendGoals', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user goals for', obj.id );
+    const userGoals = await orm.getFriendGoals(obj);
+
+    res.send( JSON.stringify( userGoals ));
+});
 app.post( '/api/getCompletedGoals', async ( req, res )=> {
     const obj = req.body;
     console.log('get user goals for', obj.email );
@@ -117,6 +124,14 @@ app.get( '/api/userData/:emailId', async ( req, res ) => {
     console.log('received userid: ', req.params.emailId );
     const id = req.params.emailId
     const findById =  await orm.getUserByEmailId(id);
+    console.log(`find by id`,findById);
+    res.send(findById)
+})
+
+app.get( '/api/friend/:id', async ( req, res ) => {
+    console.log('received userid: ', req.params.id );
+    const id = req.params.id
+    const findById =  await orm.getUserById(id);
     console.log(`find by id`,findById);
     res.send(findById)
 })
