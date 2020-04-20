@@ -60,6 +60,13 @@ app.post( '/api/getFriendGoals', async ( req, res )=> {
 
     res.send( JSON.stringify( userGoals ));
 });
+app.post( '/api/getUserFollowers', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user goals for', obj.email );
+    const userFollowers = await orm.getUserFollowers(obj);
+    console.log(`Server recieved followers`, userFollowers)
+    res.send( JSON.stringify( userFollowers ));
+});
 app.post( '/api/getCompletedGoals', async ( req, res )=> {
     const obj = req.body;
     console.log('get user goals for', obj.email );

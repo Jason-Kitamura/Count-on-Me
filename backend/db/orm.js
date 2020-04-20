@@ -47,6 +47,12 @@ async function getFriendGoals(obj){
     return userGoals
 
 }
+async function getUserFollowers(obj){
+    const userFollowers = await User.findOne({ email: `${obj.email}` });
+    console.log( 'user followers:', userFollowers.followers);
+    return userFollowers.followers
+
+}
 
 async function getCompletedGoals(data){
     const userGoals = await User.findOne({ email: `${obj.email}` }).populate('goals');
@@ -139,6 +145,7 @@ module.exports = {
     addFollowing,
     getUserGoals,
     getUserById,
+    getUserFollowers,
     getFriendGoals,
     getCompletedGoals,
     completeGoal,
