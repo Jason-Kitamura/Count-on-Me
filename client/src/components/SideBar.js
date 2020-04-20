@@ -8,6 +8,15 @@ function SideBar( props ){
     const theLocation = useLocation();
     const [profileLink,setProfileLink] = useState('');
     
+
+    async function changeProfilePicture(){
+        const userFromSessionStorage = JSON.parse(sessionStorage.getItem('userEmail'));
+        console.log('[user mail id:]',userFromSessionStorage.email);
+        const user = await axios.get( `/api/userData/${userFromSessionStorage.email}`);
+        console.log(`[Profile picture Link ]`,user.data.profilePic)
+        setProfileLink(`${user.data.profilePic}`)
+    }
+
     function logOutUser(){
         sessionStorage.removeItem( 'userEmail' );
         alert('you have logged out!')
@@ -21,7 +30,7 @@ function SideBar( props ){
         console.log('[user mail id:]',userFromSessionStorage.email);
         const user = await axios.get( `/api/userData/${userFromSessionStorage.email}`);
         console.log(`[Profile picture Link ]`,user.data.profilePic)
-        setProfileLink(user.data.profilePic)
+        setProfileLink(`${user.data.profilePic}`)
     }
 
     return (
@@ -58,7 +67,7 @@ function SideBar( props ){
                                 padding:'0px'
                                }} />
                             }
-                        <AvatarUpload />
+                        <AvatarUpload  changeProfilePicture={changeProfilePicture}/>
                         {/* <input
                         type="file"
                         accept="image/*"

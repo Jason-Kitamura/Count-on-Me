@@ -40,8 +40,7 @@ function AvatarUpload(props) {
                 body: formData
             }
         ).then( result=>result.json())
-            console.log(uploadPic);
-        
+        props.changeProfilePicture(e);
     }
     return (
         <div>            
