@@ -115,6 +115,11 @@ async function createComment( data ){
         console.log(`[comment added to user]`, result);
     });
 }
+async function findUserAndPopulateComments( data ){
+    console.log('looking for user and populationg comments', data.email);
+    const userData = await User.findOne({ email: data.email }).populate('comments');
+    return( userData );
+}
 
 module.exports = {
     saveUser,
@@ -130,6 +135,7 @@ module.exports = {
     undoGoal,
     getUserByEmailId,
     findFolloweesAndPopulate,
-    createComment
+    createComment,
+    findUserAndPopulateComments
     
 }

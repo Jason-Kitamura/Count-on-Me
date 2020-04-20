@@ -127,6 +127,12 @@ app.post( '/api/postComment', async ( req, res ) => {
     const createComment = await orm.createComment( commentData );
     res.send();
 })
+app.post( '/api/getComments', async ( req, res ) => {
+    const userEmail = req.body;
+    const userData = await orm.findUserAndPopulateComments( userEmail );
+    console.log( 'comments user data', userData );
+    res.send( userData.comments );
+})
 //LISTENING
 app.listen( PORT, function(){
     console.log( `RUNNING, http://localhost:${PORT}` ); });
