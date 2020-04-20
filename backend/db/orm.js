@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
-//mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
-mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true,});
+// mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.set('useCreateIndex', true);
 
 // include mongoose models (it will include each file in the models directory)
 const User = require( './models/user' );
 const Goal = require('./models/goals');
+const Comment = require('./models/comment');
+
 function saveUser(data){
     
     const dbUser = new User( data );
@@ -102,6 +104,30 @@ async function addFollowing(data){
     console.log('[modified]',obj);
     return obj
 }
+async function findFolloweesAndPopulate( data ){
+    console.log( 'populating followees for', data.email)
+    const userData = await User.findOne({ email: data.email })
+        .populate({
+            path :'following', 
+            populate: [{  path: 'goals' },{  path: 'comments' }]
+         })
+    return userData;
+}
+async function createComment( data ){
+    console.log( 'orm recceived data ', data );
+    const obj = {
+        name : data.name,
+        body : data.body
+    }
+    const dbcomment = new Comment( obj );
+    return dbcomment.save(async (err, comment) => {
+        if( err ){ console.log(err)};
+        console.log('new comment', comment);
+        const pushCommentId = mongoose.Types.ObjectId(comment._id);
+        const result = await  User.updateOne({email:`${data.postEmail}`}, { $push: { comments: pushCommentId } });
+        console.log(`[comment added to user]`, result);
+    });
+}
 
 module.exports = {
     saveUser,
@@ -117,6 +143,8 @@ module.exports = {
     getCompletedGoals,
     completeGoal,
     undoGoal,
-    getUserByEmailId
+    getUserByEmailId,
+    findFolloweesAndPopulate,
+    createComment
     
 }

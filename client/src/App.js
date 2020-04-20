@@ -7,7 +7,7 @@ import HomePage from './components/Home/HomePage';
 import SettingsPage from './components/Settings/SettingsPage';
 import DashboardPage from './components/Dashboard/DashboardPage';
 import FriendsPage from './components/User/FriendsPage';
-import {LoginProvider} from './LoginContext';
+
 
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -36,25 +36,22 @@ function App() {
     width: '400px',
     height: '600px',
     backgroundColor: 'white',
-
-
   }
-
-
-
+  
   return (
     <Router>
-  
         {console.log("App.js Rendering....")}
-
         <div className="App">
             <div class="wrapper">
               
-              <div class="sidebar"> <SideBar /> </div>
+              <div class="sidebar">
+                 <Route path={[ "/search", "/dashBoard", "/home", "/settings", "/user/:id"]} component={SideBar} /> 
+              </div>
 
               <div class="container-fluid" style={style.RightSection}>
                     
                     <div id="content" class="row pt-2">
+                      
                         <div class="col-1 d-flex justify-content-start pl-0 align-self-baseline" style={style.ToggleSection}>
                             {/* <nav class="navbar navbar-expand-lg navbar-light bg-light">  */}
                                   <button type="button" id="sidebarCollapse" class="btn btn-info"> {/* Toggle Button */}
@@ -64,14 +61,15 @@ function App() {
                         </div>
                     
                         <div class="col-11 ">
-                        <LoginProvider>
-                          <Route exact path={["/", "/search"]} component={SearchPage} />
-                          <Route path={["/login"]} component={LoginPage} />
+                   
+                          <Route path={["/search"]} component={SearchPage} />
                           <Route path={["/dashboard"]} component={DashboardPage} />
                           <Route path={["/home"]} component={HomePage} />
                           <Route path={["/settings"]} component={SettingsPage} />
                           <Route path={["/user/:id"]} component={FriendsPage} />
-                        </LoginProvider>
+                          <Route exact path={["/", "/login"]} component={LoginPage} />
+
+                    
 
 
                           {/* <Route path="/settings/:id" component={ProductInfoPage} /> */}

@@ -78,17 +78,16 @@ function SearchPage(props) {
     setInput('');
   }
  async  function addFollower(){
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(sessionStorage.getItem('userEmail'));
     console.log('[input Received]',forsearch);  
   
    const  object ={
-      id:forsearch,
-      userid:user._id
+      id : forsearch,
+      userid : user.id
     }
     console.log(`[object to be posted]`,object);
     const apiResult = axios.post('/api/addFollowing',object);
     console.log('[Added to following]',apiResult);
-    
     
   }
 
