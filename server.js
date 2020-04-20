@@ -1,33 +1,23 @@
 require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const orm = require('./backend/db/orm');
-const path = require('path');
 const bodyParser = require('body-parser');
 var fs = require('fs');
+const path = require('path');
+const cors = require('cors');
+const express = require('express');
+
+const orm = require('./backend/db/orm');
+
+
 
 const app = express();
-
-
-/*-- m.p. initialization --*/
-var users = {};
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-io.listen(4000);
-
 const PORT = process.env.PORT || 5000;
-
 
 app.use(cors());
 app.use(express.json());
-//app.use(express.bodyParser());
-
-app.use(express.static('client/build/'));
-app.use(express.static(path.join(__dirname, "build")));
-//app.use(express.urlencoded({ extended: false }));
+//app.use(express.static('client/build/'));
+app.use(express.static(path.join(__dirname, "client/build")));
 app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({ extended: true}));
 //multer operations
 const multer = require('multer');
 
@@ -176,7 +166,14 @@ app.post( '/api/postComment', async ( req, res ) => {
 })
 
 
+//LISTENING
+var server = app.listen( PORT, function(){ console.log( `RUNNING, http://localhost:${PORT}` ); });
+
+
 /*-- m.p. started the socket --*/
+/*-- m.p. initialization --*/
+var users = {};
+const io = require('socket.io')(server);
 io.on('connection', function(socket){
     console.log("[inside connection]");
   
@@ -238,5 +235,6 @@ io.on('connection', function(socket){
   });
 
 //LISTENING
-app.listen( PORT, function(){
-    console.log( `RUNNING, http://localhost:${PORT}` ); });
+// app.listen( PORT, function(){
+//     console.log( `RUNNING, http://localhost:${PORT}` ); 
+// });
