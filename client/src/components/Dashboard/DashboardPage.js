@@ -55,6 +55,7 @@ const scroll = {
     const [ lastName, setUserLastName ] = useState([]);
     const followers = useRef(null);
     const following = useRef(null);
+    
 
 
    useEffect( function(){
@@ -108,7 +109,7 @@ const scroll = {
 
     return (
         <div style={scroll}>
-        <div id="header">
+        <div id="header" ref={top}>
             <h3  style={home}>{firstName} {lastName}</h3>
         </div>
         <div class='row' style={liveData}>

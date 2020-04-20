@@ -38,6 +38,11 @@ function FollowerCard(props){
     setId( id )
    }
 
+   function executeScrollToTop (){
+    console.log(`Calling scroll function`)
+    
+    window.scrollTo(0, 0)  
+   }
 
     return(
                 <div class="col-6 col-md-4">
@@ -48,7 +53,7 @@ function FollowerCard(props){
                             
                             <div class="card-body">
                             <Link to={'/user/'+id}>
-                                <h5 class="card-title">{firstName} {lastName}</h5>
+                                <h5 class="card-title" onClick={executeScrollToTop}>{firstName} {lastName}</h5>
                             </Link>
                                 <a href="#" class="btn btn-primary">Follow</a>
                             </div>

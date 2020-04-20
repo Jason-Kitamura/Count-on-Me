@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import FollowerCard from '../Dashboard/FollowerCard.js'
 import { useParams } from 'react-router-dom';
 
