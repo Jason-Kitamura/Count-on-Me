@@ -1,23 +1,49 @@
 require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const orm = require('./backend/db/orm');
-const path = require('path');
 const bodyParser = require('body-parser');
+var fs = require('fs');
+const path = require('path');
+const cors = require('cors');
+const express = require('express');
+
+const orm = require('./backend/db/orm');
+
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('client/build/'));
+//app.use(express.static('client/build/'));
+app.use(express.static(path.join(__dirname, "client/build")));
 app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true}));
+//multer operations
+const multer = require('multer');
+
+//end point for multer picture-----------------/////////////////
+const upload = require('multer')({ dest: 'client/build/uploads/' });
+
+app.put( '/api/upload/:userid', upload.single('myFile'), async function( req, res ){
+  let userId = req.params.userid;
+  const filePath = req.file.path;
+  const originalName = req.file.originalname;
+ 
+  const fileExt = originalName.toLowerCase().substr((originalName.lastIndexOf('.'))).replace('jpeg','jpg');
+    fs.renameSync( `${__dirname}/${filePath}`, `${__dirname}/${filePath}${fileExt}` );
+  const imageUrl = req.file.path.replace(/\\/g, '/').replace('client/build/','/')+fileExt;
+  const imgUploadDb = await orm.updateAvatar( userId, imageUrl );
+  res.send( imgUploadDb );
+});
+
+//------------------------------------------------------------
+
+
 // NODE ENDPOINTS
 app.post( '/api/createUser', async ( req, res ) => {
     console.log( 'receving body: ', req.body );
     const Result = await orm.saveUser(req.body);
-    res.send( 'user data received! ')
+    res.send( 'user data received! ',Result)
 });
 
 app.post( '/api/checkUser', async ( req, res ) => {
@@ -148,7 +174,16 @@ app.get('/api/user/:name', async (req, res) => {
     const result= await orm.finduser(req.params.name);
     res.send(result);
 });
-
+app.get('/api/getUser/:id', async (req, res) => {
+    console.log('received name: ', req.params.id);
+    const result= await orm.findUser(req.params.id);
+    res.send(result);
+});
+app.post('/api/uploadImage', async  (req, res) => {
+  const data = await orm.uploadImage(req.body);
+  console.log(`result uploaded`,data);
+  res.send(data);
+});
 
 app.get('/api/allusers', async (req, res) => {
     const result= await orm.allUsers();
@@ -172,6 +207,12 @@ app.post( '/api/postComment', async ( req, res ) => {
     }
     const createComment = await orm.createComment( commentData );
     res.send();
+})
+app.post( '/api/getComments', async ( req, res ) => {
+    const userEmail = req.body;
+    const userData = await orm.findUserAndPopulateComments( userEmail );
+    console.log( 'comments user data', userData );
+    res.send( userData.comments );
 })
 
 
@@ -238,3 +279,12 @@ io.on('connection', function(socket){
 
   });
 
+  app.get('/*', function( req,res ){
+    console.log("redirect to index page!");
+    res.sendFile( path.join(__dirname, 'build', 'index.html') );
+  });
+
+//LISTENING
+// app.listen( PORT, function(){
+//     console.log( `RUNNING, http://localhost:${PORT}` ); 
+// });

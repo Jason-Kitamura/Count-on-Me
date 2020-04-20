@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { Link } from "react-router-dom";
 
 const axios = require('axios');
 
@@ -7,6 +8,7 @@ function FollowerCard(props){
     const [ user, setUser ]= useState([]);
     const [ firstName, setUserFirstName ] = useState([]);
     const [ lastName, setUserLastName ] = useState([]);
+    const [ id, setId ] = useState();
 
     // console.log(`calling follower card for: `, props.id)
     useEffect( function(){
@@ -32,6 +34,8 @@ function FollowerCard(props){
     lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1)
     setUserLastName( lastName )
     console.log(`User first:`, firstName , `user last`, lastName)
+    let id = user.data._id;
+    setId( id )
    }
 
 
@@ -43,7 +47,9 @@ function FollowerCard(props){
                             </div>
                             
                             <div class="card-body">
+                            <Link to={'/user/'+id}>
                                 <h5 class="card-title">{firstName} {lastName}</h5>
+                            </Link>
                                 <a href="#" class="btn btn-primary">Follow</a>
                             </div>
                         </div>

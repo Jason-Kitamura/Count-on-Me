@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-// mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
-mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology:true});
+//mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true,});
 mongoose.set('useCreateIndex', true);
 
 // include mongoose models (it will include each file in the models directory)
@@ -117,6 +117,13 @@ function finduser(name)
     console.log(`[User Found]`,result);
     return result
 }
+function findUser(id)
+{
+    console.log(`[id Received]`,id)
+    const result = User.find({_id:id});
+    console.log(`[User Found]`,result);
+    return result
+}
 async function addFollowing(data){
     console.log(`[info about adding following]`,data);
     const result = await  User.updateOne({_id:`${data.userid}`}, { $push: { following: data.id} });
@@ -137,12 +144,20 @@ async function findFolloweesAndPopulate( data ){
          })
     return userData;
 }
+//-----------------multer--------------------------------
+async function updateAvatar( userId, imageUrl ){
+    const dbResult = await User.findOneAndUpdate({_id: userId}, {$set :{profilePic : imageUrl}});
+    return dbResult
+}
+
+
 async function createComment( data ){
     console.log( 'orm recceived data ', data );
     const obj = {
         name : data.name,
         body : data.body
     }
+
     const dbcomment = new Comment( obj );
     return dbcomment.save(async (err, comment) => {
         if( err ){ console.log(err)};
@@ -151,6 +166,11 @@ async function createComment( data ){
         const result = await  User.updateOne({email:`${data.postEmail}`}, { $push: { comments: pushCommentId } });
         console.log(`[comment added to user]`, result);
     });
+}
+async function findUserAndPopulateComments( data ){
+    console.log('looking for user and populationg comments', data.email);
+    const userData = await User.findOne({ email: data.email }).populate('comments');
+    return( userData );
 }
 
 module.exports = {
@@ -173,6 +193,9 @@ module.exports = {
     undoGoal,
     getUserByEmailId,
     findFolloweesAndPopulate,
-    createComment
+    createComment,
+    findUserAndPopulateComments,
+    updateAvatar,
+    findUser
     
 }
