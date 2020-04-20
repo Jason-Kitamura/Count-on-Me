@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-=======
-import React, { useState } from 'react';
 import { socketio } from "../Socket/Socket.io"; /*-- m.p. initialize the socketio --*/
->>>>>>> develop
 
 function Comments(){
     const card={
@@ -74,11 +70,11 @@ function Comments(){
 
     return(
         <div>
-       
+
             <div class="card" style={card}>
                 <h5 class="card-title" style={styleForNotificationHead}><i class="fas fa-comment-alt"></i>   Notifications</h5>
                 <div class="card-body">
-                    <p style={comment} dangerouslySetInnerHTML={{__html: chatcomment}}></p>
+                    <p style={commentStyle} dangerouslySetInnerHTML={{__html: chatcomment}}></p>
                 </div>
             </div>
         

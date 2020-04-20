@@ -140,7 +140,7 @@ function Posts() {
 
         setComment('')
         try{
-            socketio.emit('message-sent', {A:JSON.parse(sessionStorage.getItem('userEmail')), B: postEmail, T:comment}, function(data){
+            socketio.emit('message-sent', {A: Email, B: postEmail, T:comment}, function(data){
 
               console.log(`message sent : ${data}`);   
 
