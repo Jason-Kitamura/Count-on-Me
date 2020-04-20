@@ -59,7 +59,7 @@ function LoginPage(props) {
                             <input type="text" value={email} onChange={e => setEmail(e.target.value)} className='form-control' id='email' placeholder='email' />
                             </div>
                         <div className='col-md-4'>
-                            <input type="text" value={password} onChange={e => setPassword(e.target.value)} className='form-control' id='password' placeholder='password'/>
+                            <input type="password" value={password} onChange={e => setPassword(e.target.value)} className='form-control' id='password' placeholder='password'/>
                         </div>
                         <div className='col-4'>
                             <button  value="Submit" onClick={signIn} className="btn btn-primary"id='login-Btn'>Login</button>
