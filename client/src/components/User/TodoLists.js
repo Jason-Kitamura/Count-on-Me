@@ -33,7 +33,7 @@ function Goals(props) {
     const [goals, setGoals] = useState([]);
     const [completed, setCompleted] = useState([]);
     const  id  = useParams();
-    console.log(`Calling for `, { id })
+    // console.log(`Calling for `, { id })
 
 
 

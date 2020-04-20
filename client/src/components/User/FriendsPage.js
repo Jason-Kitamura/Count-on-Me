@@ -42,7 +42,7 @@ function HomePage(){
     }
 
     const  id  = useParams();
-    console.log(`Displaying user with id...`, { id })
+    // console.log(`Displaying user with id...`, { id })
 
 
     const [ user, setUser ]= useState([]);
@@ -55,7 +55,7 @@ function HomePage(){
 
    useEffect( function(){
         getUser();
-        console.log('use effect is called');
+        // console.log('use effect is called');
     }, [] );
 
    async function getUser(){
@@ -67,6 +67,9 @@ function HomePage(){
         return;
     }
     
+    let email = user.data.email;
+    setUserEmail( email )
+    console.log(`User email:`, email)
     setUser( user );
     console.log( `Retrieved user data:`, user);
     let firstName = user.data.firstName;
@@ -76,9 +79,7 @@ function HomePage(){
     lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1)
     setUserLastName( lastName )
     console.log(`User first:`, firstName , `user last`, lastName)
-    let email = user.data.email;
-    setUserEmail( email )
-    console.log(`User email:`, email)
+
    }
 
    function executeScrollToFollowers(){
@@ -111,7 +112,7 @@ function HomePage(){
             <TodoLists email={email}/>
         </div>
         <div class='row' ref={followers} style={liveData}>
-            <Followers />
+            <Followers/>
         </div>
         <div class='row' ref={following} style={liveData}>
             <Following />

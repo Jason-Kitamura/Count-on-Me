@@ -1,6 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import FollowerCard from '../Dashboard/FollowerCard.js'
+import { useParams } from 'react-router-dom';
 
-function Goals() {
+const axios = require('axios');
+
+
+function Followers(props) {
+
     const card={
         width:'100%',
         margin:'10px',
@@ -15,7 +21,33 @@ function Goals() {
         marginLeft: '0px'
         
     }
+    
 
+    const [followers, setFollowers] = useState([]);
+    const id = useParams();
+
+
+
+    async function getFollowersList( ){
+        const obj = {
+            id : id 
+        }
+        //get info from server
+        console.log(`Axios call for followers:`, obj)
+        const allFollowers = await axios.post( 'http://localhost:5000/api/getUserFollowersById', obj );
+        console.log('Array of followers', allFollowers.data);
+        setFollowers( allFollowers.data );
+        // console.log(`Followers set to `, followers)
+    }
+
+  useEffect( ()=>{
+
+        getFollowersList( );
+
+    },[])
+
+
+    
     return (
         <div class='row' style={cardsContainer}>    
             <div class="card col-12" style={card}>
@@ -24,42 +56,8 @@ function Goals() {
                     Followers
 
                     <div class="row d-flex justify-content-center mt-2">
-                    <div class="col-6 col-md-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <img class="rounded-circle" alt="70x70" src="https://placehold.it/70x70" data-holder-rendered="true" />
-                            </div>
-                            
-                            <div class="card-body">
-                                <h5 class="card-title">First Last</h5>
-                                <a href="#" class="btn btn-primary">Follow</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <img class="rounded-circle" alt="70x70" src="https://placehold.it/70x70" data-holder-rendered="true" />
-                            </div>
-                            
-                            <div class="card-body">
-                                <h5 class="card-title">First Last</h5>
-                                <a href="#" class="btn btn-primary">Follow</a>
-                            </div>
-                        </div>
-                    </div>
-                     <div class="col-6 col-md-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <img class="rounded-circle" alt="70x70" src="https://placehold.it/70x70" data-holder-rendered="true" />
-                            </div>
-                            
-                            <div class="card-body">
-                                <h5 class="card-title">First Last</h5>
-                                <a href="#" class="btn btn-primary">Follow</a>
-                            </div>
-                        </div>
-                    </div>
+                    {followers.map( follower=><FollowerCard id={follower} />)}
+                   
                 </div>
 
                 </div>
@@ -68,4 +66,4 @@ function Goals() {
     );
 }
 
-export default Goals;
+export default Followers;

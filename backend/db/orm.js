@@ -43,7 +43,7 @@ async function getUserGoals(obj){
 
 async function getFriendGoals(obj){
     const userGoals = await User.findById({ _id: `${obj.id}` }).populate('goals');
-    console.log( 'user goals:', userGoals );
+    // console.log( 'user goals:', userGoals );
     return userGoals
 
 }
@@ -53,10 +53,28 @@ async function getUserFollowers(obj){
     return userFollowers.followers
 
 }
+async function getUserFollowersById(obj){
+    const userFollowers = await User.findById({ _id: `${obj.id}` });
+    console.log( 'user followers:', userFollowers.followers);
+    return userFollowers.followers
+
+}
+async function getUserFollowing(obj){
+    const userFollowing = await User.findOne({ email: `${obj.email}` });
+    console.log( 'user following:', userFollowing.following);
+    return userFollowing.following
+
+}
+async function getUserFollowingById(obj){
+    const userFollowing = await User.findById({ _id: `${obj.id}` });
+    console.log( 'user following:', userFollowing.following);
+    return userFollowing.following
+
+}
 
 async function getCompletedGoals(data){
     const userGoals = await User.findOne({ email: `${obj.email}` }).populate('goals');
-    console.log( 'user goals:', userGoals );
+    // console.log( 'user goals:', userGoals );
     return userGoals
 }
 
@@ -74,17 +92,17 @@ async function undoGoal(obj){
 }
 async function getUserByEmailId(id){
     const result = await User.findOne({ email: id });
-    console.log(`[user found]`,result);
+    // console.log(`[user found]`,result);
     return result
 }
 async function getUserById(id){
     const result = await User.findById({ _id: id });
-    console.log(`[user found]`,result);
+    // console.log(`[user found]`,result);
     return result
 }
 async function findUserById(id){
     const result = await User.findOne({ _id: id})
-    console.log(`[User Found]`,result);
+    // console.log(`[User Found]`,result);
     return result;
 }
 function allUsers(){
@@ -146,6 +164,9 @@ module.exports = {
     getUserGoals,
     getUserById,
     getUserFollowers,
+    getUserFollowing,
+    getUserFollowersById, 
+    getUserFollowingById,
     getFriendGoals,
     getCompletedGoals,
     completeGoal,
