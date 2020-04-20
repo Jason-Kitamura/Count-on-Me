@@ -48,7 +48,7 @@ function Goals() {
             email : localEmail 
         }
         //get info from server
-        const allGoals = await axios.post( 'http://localhost:5000/api/getUserGoals', obj );
+        const allGoals = await axios.post( '/api/getUserGoals', obj );
         const goalsArray = allGoals.data.goals
 
         const incompletedGoals = goalsArray.filter( goal => {
@@ -65,14 +65,14 @@ function Goals() {
     }
 
   useEffect( ()=>{
-        const localEmail = JSON.parse(localStorage.getItem('userEmail'));
+        const user = JSON.parse(sessionStorage.getItem('userEmail'));
     
-        if ( !localEmail ){
+        if ( !user.email ){
             console.log( 'logged out!' );
         } else {
-            console.log( 'logged in!', localEmail );
+            console.log( 'logged in!', user.email );
 
-         getGoalList( localEmail );
+         getGoalList( user.email );
         }
     },[])
 
@@ -84,8 +84,8 @@ function Goals() {
         const updateGoalComplete = await axios.post( '/api/completeGoal', obj);
         console.log('Update goal complete', updateGoalComplete );
        
-        const localEmail1 = JSON.parse(localStorage.getItem('userEmail'));
-        getGoalList( localEmail1 );
+        const user = JSON.parse(sessionStorage.getItem('userEmail'));
+        getGoalList( user.email );
     }
     async function undoGoal( id){
         const obj = {
@@ -95,8 +95,8 @@ function Goals() {
         const undoGoalComplete = await axios.post( '/api/undoGoal', obj);
         console.log('Undo goal complete', undoGoalComplete );
         //rerender component
-        const localEmail2 = JSON.parse(localStorage.getItem('userEmail'));
-        getGoalList( localEmail2 );
+        const user = JSON.parse(sessionStorage.getItem('userEmail'));
+        getGoalList( user.email );
     }
 
     return (

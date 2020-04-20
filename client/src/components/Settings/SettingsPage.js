@@ -9,7 +9,7 @@ const axios = require('axios');
 function SettingsPage( props ){
 
   //Checking user login 
-  const userEmail = JSON.parse(localStorage.getItem('userEmail'));
+  const userEmail = JSON.parse(sessionStorage.getItem('userEmail'));
   if ( !userEmail ){
       console.log( 'logged out!' );
   } else {
@@ -32,7 +32,7 @@ function SettingsPage( props ){
 
   async function getUser(){
    console.log(`calling axios.get for email: `, userEmail)
-   const user = await axios.get( `/api/userData/${userEmail}`);
+   const user = await axios.get( `/api/userData/${userEmail.email}`);
 
    if( user.error ){
        console.log(`error getting from db`, user.error)
@@ -90,7 +90,7 @@ function SettingsPage( props ){
               <div class="row">
                 <label class="col-lg-3 control-label">Email:</label>
                 <div class="col-lg-8">
-                  <input class="form-control" value={userEmail} type="text" />
+                  <input class="form-control" value={userEmail.email} type="text" />
                 </div>
                 </div>
               </div>

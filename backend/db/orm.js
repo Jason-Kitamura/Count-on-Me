@@ -6,6 +6,7 @@ mongoose.set('useCreateIndex', true);
 // include mongoose models (it will include each file in the models directory)
 const User = require( './models/user' );
 const Goal = require('./models/goals');
+const Comment = require('./models/comment');
 function saveUser(data){
     
     const dbUser = new User( data );
@@ -79,6 +80,13 @@ function finduser(name)
     console.log(`[User Found]`,result);
     return result
 }
+function findUser(id)
+{
+    console.log(`[id Received]`,id)
+    const result = User.find({_id:id});
+    console.log(`[User Found]`,result);
+    return result
+}
 async function addFollowing(data){
     console.log(`[info about adding following]`,data);
     const result = await  User.updateOne({_id:`${data.userid}`}, { $push: { following: data.id} });
@@ -89,6 +97,38 @@ async function addFollowing(data){
     }
     console.log('[modified]',obj);
     return obj
+}
+async function findFolloweesAndPopulate( data ){
+    console.log( 'populating followees for', data.email)
+    const userData = await User.findOne({ email: data.email })
+        .populate({
+            path :'following', 
+            populate: [{  path: 'goals' },{  path: 'comments' }]
+         })
+    return userData;
+}
+//-----------------multer--------------------------------
+async function updateAvatar( userId, imageUrl ){
+    const dbResult = await User.findOneAndUpdate({_id: userId}, {$set :{profilePic : imageUrl}});
+    return dbResult
+}
+
+
+async function createComment( data ){
+    console.log( 'orm recceived data ', data );
+    const obj = {
+        name : data.name,
+        body : data.body
+    }
+
+    const dbcomment = new Comment( obj );
+    return dbcomment.save(async (err, comment) => {
+        if( err ){ console.log(err)};
+        console.log('new comment', comment);
+        const pushCommentId = mongoose.Types.ObjectId(comment._id);
+        const result = await  User.updateOne({email:`${data.postEmail}`}, { $push: { comments: pushCommentId } });
+        console.log(`[comment added to user]`, result);
+    });
 }
 
 module.exports = {
@@ -103,6 +143,10 @@ module.exports = {
     getCompletedGoals,
     completeGoal,
     undoGoal,
-    getUserByEmailId
+    getUserByEmailId,
+    findFolloweesAndPopulate,
+    createComment,
+    updateAvatar,
+    findUser
     
 }
