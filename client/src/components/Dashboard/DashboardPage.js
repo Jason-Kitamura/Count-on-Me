@@ -73,6 +73,7 @@ const scroll = {
     
     setUser( user );
     console.log( `Retrieved user data:`, user);
+    console.log( `Retrieved user data:`, user.data.profilePic);
     let firstName = user.data.firstName;
     firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1)
     setUserFirstName( firstName )
