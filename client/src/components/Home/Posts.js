@@ -45,9 +45,12 @@ function Posts() {
         margin : '0px'
     }
     const goalDesStyle = {
-        textAlign : 'left',
+        // textAlign : 'left',
         margin : '0px',
         fontSize : 'small'
+    }
+    const iconStyle = {
+        float : 'left',
     }
     const commentSection = {
         marginBottom: '0px',
@@ -142,11 +145,24 @@ function Posts() {
         //     });
         // } catch (err){ console.log("Error happened in posts component" + err) }
     }
-    
-    return (
-        <div>
-            {newsFeed.map( post => (
-            
+    function checkCompleted( status ){
+        console.log( status );
+        if ( status === true ){
+            return ('fa fa-check')
+        } else {
+            return ('far fa-square')
+        }
+    }
+    if ( newsFeed.length === 0 ){
+        return (
+            <div class="card" style={card}>
+                <h3>You aren't following anyone yet.</h3>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                {newsFeed.map( post => (
                     <div class="card" style={card}>
                         <div style={post}>
                             <h5 style={name}>{post.firstName}</h5>
@@ -155,7 +171,7 @@ function Posts() {
                             <div>
                                 {post.goals.map( goal => (
                                     <div style={goalStyle}>
-                                        <h6 style={goalTitleStyle}>{goal.title}</h6>
+                                        <h6 style={goalTitleStyle}><i className={checkCompleted(goal.completed)} style={iconStyle}></i>{goal.title}</h6>
                                         <p style={goalDesStyle}>{goal.description}</p>
                                     </div>
                                 ))}
@@ -173,10 +189,10 @@ function Posts() {
                             ))}
                         </div>
                     </div>
-                 
-            ))}
-        </div> 
-    );
+                ))}
+            </div> 
+        );
+    }  
 }
 
 export default Posts;
