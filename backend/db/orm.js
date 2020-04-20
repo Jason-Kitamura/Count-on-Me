@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
-//mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
-mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true,});
+// mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.set('useCreateIndex', true);
 
 // include mongoose models (it will include each file in the models directory)
 const User = require( './models/user' );
 const Goal = require('./models/goals');
 const Comment = require('./models/comment');
+
 function saveUser(data){
     
     const dbUser = new User( data );
