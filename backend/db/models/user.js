@@ -8,7 +8,8 @@ let user = new Schema ({
    password :  { type: String, required: true, trim: true },
    goals : [ {type: Schema.Types.ObjectId, ref: 'goal'} ],
    following:[ {type: Schema.Types.ObjectId, ref: 'user'} ],
-   followers:[ {type: Schema.Types.ObjectId, ref: 'user'} ]
+   followers:[ {type: Schema.Types.ObjectId, ref: 'user'} ],
+   comments : [ {type: Schema.Types.ObjectId, ref: 'comment'} ]
 
 
 } );

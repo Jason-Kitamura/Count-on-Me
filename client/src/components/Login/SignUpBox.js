@@ -26,7 +26,14 @@ function SignUp() {
         } else if ( password2 == newUser.password ){
             const createUser = await axios.post( '/api/createUser', newUser);
 
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+            setPassword1('');
+            setPassword2('');
+
             alert('created user', createUser );
+
         }
      }
      return(
