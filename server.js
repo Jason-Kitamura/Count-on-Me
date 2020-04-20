@@ -1,31 +1,49 @@
 require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const orm = require('./backend/db/orm');
-const path = require('path');
 const bodyParser = require('body-parser');
+var fs = require('fs');
+const path = require('path');
+const cors = require('cors');
+const express = require('express');
+
+const orm = require('./backend/db/orm');
+
+
+
 const app = express();
-
-
-/*-- m.p. initialization --*/
-var users = {};
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-io.listen(4000);
 const PORT = process.env.PORT || 5000;
 
-
 app.use(cors());
-
+app.use(express.json());
 //app.use(express.static('client/build/'));
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true}));
+//multer operations
+const multer = require('multer');
+
+//end point for multer picture-----------------/////////////////
+const upload = require('multer')({ dest: 'client/build/uploads/' });
+
+app.put( '/api/upload/:userid', upload.single('myFile'), async function( req, res ){
+  let userId = req.params.userid;
+  const filePath = req.file.path;
+  const originalName = req.file.originalname;
+ 
+  const fileExt = originalName.toLowerCase().substr((originalName.lastIndexOf('.'))).replace('jpeg','jpg');
+    fs.renameSync( `${__dirname}/${filePath}`, `${__dirname}/${filePath}${fileExt}` );
+  const imageUrl = req.file.path.replace(/\\/g, '/').replace('client/build/','/')+fileExt;
+  const imgUploadDb = await orm.updateAvatar( userId, imageUrl );
+  res.send( imgUploadDb );
+});
+
+//------------------------------------------------------------
+
+
 // NODE ENDPOINTS
 app.post( '/api/createUser', async ( req, res ) => {
     console.log( 'receving body: ', req.body );
     const Result = await orm.saveUser(req.body);
-    res.send( 'user data received! ')
+    res.send( 'user data received! ',Result)
 });
 
 app.post( '/api/checkUser', async ( req, res ) => {
@@ -36,7 +54,10 @@ app.post( '/api/checkUser', async ( req, res ) => {
     console.log('userdata retreived:', findByEmail );
     
     if ( findByEmail.password === loginCredentrials.password ){
-        res.send( 'success' );
+        res.send( {
+            status : 'success',
+            id : findByEmail._id
+        } );
     } else {
         res.send( 'error' );
     };
@@ -56,22 +77,6 @@ app.post( '/api/getUserGoals', async ( req, res )=> {
     console.log('get user goals for', obj.email );
     const userGoals = await orm.getUserGoals(obj);
 
-    // const completedGoals = userGoals.goals.map((goal)=>{
-    //     if(goal.completed === true){
-    //         return goal
-    //     }
-    // });
-    // const incompletedGoals = userGoals.goals.map((goal)=>{
-    //     if(goal.completed === false){
-    //         return goal
-    //     }
-    // });
-    // console.log('completed goals', completedGoals, 'incompleted goals', incompletedGoals );
-    // const goalObj = {
-    //     userGoals : userGoals,
-    //     completedGoals : completedGoals,
-    //     incompletedGoals : incompletedGoals
-    // }
     res.send( JSON.stringify( userGoals ));
 });
 app.post( '/api/getCompletedGoals', async ( req, res )=> {
@@ -83,17 +88,6 @@ app.post( '/api/getCompletedGoals', async ( req, res )=> {
             return goal
         }
     });
-    // const incompletedGoals = userGoals.goals.map((goal)=>{
-    //     if(goal.completed === false){
-    //         return goal
-    //     }
-    // });
-    // console.log('completed goals', completedGoals, 'incompleted goals', incompletedGoals );
-    // const goalObj = {
-    //     userGoals : userGoals,
-    //     completedGoals : completedGoals,
-    //     incompletedGoals : incompletedGoals
-    // }
     res.send( JSON.stringify( completedGoals ));
 });
 
@@ -136,15 +130,56 @@ app.get('/api/user/:name', async (req, res) => {
     const result= await orm.finduser(req.params.name);
     res.send(result);
 });
-
+app.get('/api/getUser/:id', async (req, res) => {
+    console.log('received name: ', req.params.id);
+    const result= await orm.findUser(req.params.id);
+    res.send(result);
+});
+app.post('/api/uploadImage', async  (req, res) => {
+  const data = await orm.uploadImage(req.body);
+  console.log(`result uploaded`,data);
+  res.send(data);
+});
 
 app.get('/api/allusers', async (req, res) => {
     const result= await orm.allUsers();
     res.send(result);
 });
+app.post( '/api/getPosts', async ( req, res ) => {
+    const userEmail = req.body;
+    console.log('going to lookup users following for', userEmail );
+    const userData = await orm.findFolloweesAndPopulate( userEmail );
+    console.log( 'found user data', userData );
+    res.send( userData.following )
+})
+app.post( '/api/postComment', async ( req, res ) => {
+    const obj = req.body;
+    const userData = await orm.findUserByEmail( obj);
+    console.log( 'data for', obj.email, userData );
+    const commentData = {
+        postEmail : obj.postEmail,
+        name : userData.firstName,
+        body : obj.comment
+    }
+    const createComment = await orm.createComment( commentData );
+    res.send();
+})
+app.post( '/api/getComments', async ( req, res ) => {
+    const userEmail = req.body;
+    const userData = await orm.findUserAndPopulateComments( userEmail );
+    console.log( 'comments user data', userData );
+    res.send( userData.comments );
+})
+
+
+//LISTENING
+var server = app.listen( PORT, function(){ console.log( `RUNNING, http://localhost:${PORT}` ); });
 
 
 /*-- m.p. started the socket --*/
+/*-- m.p. initialization --*/
+var users = {};
+const io = require('socket.io')(server);
 io.on('connection', function(socket){
     console.log("[inside connection]");
   
@@ -206,5 +241,6 @@ io.on('connection', function(socket){
   });
 
 //LISTENING
-app.listen( PORT, function(){
-    console.log( `RUNNING, http://localhost:${PORT}` ); });
+// app.listen( PORT, function(){
+//     console.log( `RUNNING, http://localhost:${PORT}` ); 
+// });

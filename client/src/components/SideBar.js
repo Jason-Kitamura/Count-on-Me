@@ -1,28 +1,36 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-
+import AvatarUpload from './AvatarUpload';
+import axios from 'axios';
+import { func } from "prop-types";
 function SideBar( props ){
     const [showAttr, setShowAttr] = React.useState('Home');
     const theLocation = useLocation();
+    const [profileLink,setProfileLink] = useState('');
+    
 
-    const uploadedImage = React.useRef(null);
-    const imageUploader = React.useRef(null);
-  
-    const handleImageUpload = e => {
-      const [file] = e.target.files;
-      if (file) {
-        const reader = new FileReader();
-        const { current } = uploadedImage;
-        current.file = file;
-        reader.onload = e => {
-          current.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    };
+    async function changeProfilePicture(){
+        const userFromSessionStorage = JSON.parse(sessionStorage.getItem('userEmail'));
+        console.log('[user mail id:]',userFromSessionStorage.email);
+        const user = await axios.get( `/api/userData/${userFromSessionStorage.email}`);
+        console.log(`[Profile picture Link ]`,user.data.profilePic)
+        setProfileLink(`${user.data.profilePic}`)
+    }
+
     function logOutUser(){
-        localStorage.removeItem( 'userEmail' );
+        sessionStorage.removeItem( 'userEmail' );
         alert('you have logged out!')
+    }
+    
+        if(sessionStorage.getItem('userEmail') !== null){
+            getProfilePic()
+        }
+    async function getProfilePic(){
+        const userFromSessionStorage = JSON.parse(sessionStorage.getItem('userEmail'));
+        console.log('[user mail id:]',userFromSessionStorage.email);
+        const user = await axios.get( `/api/userData/${userFromSessionStorage.email}`);
+        console.log(`[Profile picture Link ]`,user.data.profilePic)
+        setProfileLink(`${user.data.profilePic}`)
     }
 
     return (
@@ -41,7 +49,26 @@ function SideBar( props ){
                         justifyContent: "center"
                     }}
                     >
-                        <input
+                      
+                            { { profileLink } === "" ?<img class="rounded-circle img-thumbnail" src="https://i.stack.imgur.com/34AD2.jpg" 
+                            alt="avatar"
+                            style={{
+                                borderRadius:'50%',
+                                width:'160px',
+                                height:'150px',
+                                padding:'0px'
+                               
+                            }}/> : <img  class="rounded-circle img-thumbnail" src={profileLink}
+                            alt="avatar"
+                            style={{
+                                borderRadius:'50%',
+                                width:'160px',
+                                height:'150px',
+                                padding:'0px'
+                               }} />
+                            }
+                        <AvatarUpload  changeProfilePicture={changeProfilePicture}/>
+                        {/* <input
                         type="file"
                         accept="image/*"
                         onChange={handleImageUpload}
@@ -60,6 +87,7 @@ function SideBar( props ){
                             <img
                             src="https://pickaface.net/gallery/avatar/20151109_144853_2380_sample.png"
                             class="avatar rounded-circle img-thumbnail"
+                            name="profile"
                             ref={uploadedImage}
                             alt="avatar"
                             style={{
@@ -69,7 +97,7 @@ function SideBar( props ){
                             }}
                             />
                         </div>
-                        Click to upload Image
+                        Click to upload Image*/}
                     </div>
                     <li className={((showAttr === 'Home') ? 'active' : '')}>
                         <Link to="/home" onClick={() => setShowAttr('Home')} >
@@ -109,11 +137,6 @@ function SideBar( props ){
                 <li className={((showAttr === 'Settings') ? 'active' : '')}>
                     <Link to="/settings" onClick={() => setShowAttr('Settings')} >
                         Settings
-                    </Link>
-                </li>
-                <li className={((showAttr === 'Login') ? 'active' : '')}>
-                    <Link to="/login" onClick={() => setShowAttr('Login')} >
-                        Login
                     </Link>
                 </li>
                 <li className={((showAttr === 'Logout') ? 'active' : '')}>
