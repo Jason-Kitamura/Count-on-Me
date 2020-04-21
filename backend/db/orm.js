@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology:true});
-//mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true,});
+// mongoose.connect( process.env.MONGODB_URI , {useNewUrlParser: true, useUnifiedTopology:true});
+mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true,});
 mongoose.set('useCreateIndex', true);
 
 // include mongoose models (it will include each file in the models directory)
 const User = require( './models/user' );
 const Goal = require('./models/goals');
 const Comment = require('./models/comment');
+const Habit = require('./models/habit')
 
 function saveUser(data){
     
@@ -35,7 +36,7 @@ async function addGoal(data)
 }
 
 async function getUserGoals(obj){
-    const userGoals = await User.findOne({ email: `${obj.email}` }).populate('goals');
+    const userGoals =  User.findOne({ email: `${obj.email}` }).populate('habits').populate('goals');
     console.log( 'user goals:', userGoals );
     return userGoals
 
@@ -136,6 +137,20 @@ async function findUserAndPopulateComments( data ){
     const userData = await User.findOne({ email: data.email }).populate('comments');
     return( userData );
 }
+async function createNewHabit ( data ){
+    console.log('habit data', data)
+    const obj = {
+        title : data.habit
+    }
+    const dbHabit = new Habit( obj )
+    dbHabit.save(async (err, habit) => {
+        if( err ){ console.log(err)};
+        console.log('new habit', habit);
+        const pushHabitId = mongoose.Types.ObjectId(habit._id);
+        const result = await  User.updateOne({email:`${data.email}`}, { $push: { habits: pushHabitId } });
+    })
+   
+}
 
 module.exports = {
     saveUser,
@@ -154,6 +169,7 @@ module.exports = {
     createComment,
     findUserAndPopulateComments,
     updateAvatar,
-    findUser
+    findUser,
+    createNewHabit
     
 }

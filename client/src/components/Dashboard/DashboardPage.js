@@ -5,6 +5,7 @@ import TodoLists from './TodoLists';
 import Followers from './Followers';
 import Following from './Following';
 import GoalModal from '../Home/GoalModal';
+import TaskModel from './TaskModel';
 
 import "./style.css";
 
@@ -94,14 +95,22 @@ const scroll = {
     
     window.scrollTo(0, following.current.offsetTop)  
    }
-   const [show,setShow] = useState(false);
-   async function addGoal(){
-    console.log('[Add New GOAL button pressed]',show)
-    setShow(true);
-    }
+   const [show, setShow] = useState(false);
+   const [ showTask , setShowTask ] = useState( false );
 
+   async function addGoal(){
+        console.log('[Add New GOAL button pressed]',show)
+        setShow(true);
+    }
     async function closeGoal(){
         setShow(false);
+    }
+    function addTask(){
+        console.log('you clicked add goal');
+        setShowTask( true );
+    }
+    function closeTask(){
+        setShowTask( false );
     }
 
 
@@ -113,14 +122,15 @@ const scroll = {
         </div>
         <div class='row' style={liveData}>
             <div class='col-12 col-md-8' style={columns}>
-                <CoverPhoto />     <button class='btn btn-light' onClick={addGoal} style={selectOption}><i class="fas fa-plus"></i>   Add New Goal</button>
+                <CoverPhoto />  
+                   {/* <button class='btn btn-light' onClick={addGoal} style={selectOption}><i class="fas fa-plus"></i>   Add New Goal</button> */}
             </div>
             <div class='col-12 col-md-3'style={columns} >
             <UserOptions executeScrollToFollowers={executeScrollToFollowers} executeScrollToFollowing={executeScrollToFollowing}/>
             </div>
         </div>
         <div class='row' style={liveData}>
-            <TodoLists />
+            <TodoLists setTask={addTask} setGoal={addGoal}/>
         </div>
         <div class='row' ref={followers} style={liveData}>
             <Followers />
@@ -129,6 +139,7 @@ const scroll = {
             <Following />
         </div>
         <GoalModal show={show} closeGoal={closeGoal}/>
+        <TaskModel show={showTask} closeTask={closeTask}/>
     </div>
     );
 

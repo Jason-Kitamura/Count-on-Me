@@ -170,6 +170,10 @@ app.post( '/api/getComments', async ( req, res ) => {
     console.log( 'comments user data', userData );
     res.send( userData.comments );
 })
+app.post( '/api/newHabit', async ( req, res ) => {
+    const createHabit = await orm.createNewHabit( req.body );
+    res.send();
+})
 
 
 //LISTENING

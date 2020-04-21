@@ -10,7 +10,9 @@ let user = new Schema ({
    goals : [ {type: Schema.Types.ObjectId, ref: 'goal'} ],
    following:[ {type: Schema.Types.ObjectId, ref: 'user'} ],
    followers:[ {type: Schema.Types.ObjectId, ref: 'user'} ],
-   comments : [ {type: Schema.Types.ObjectId, ref: 'comment'} ]
+   comments : [ {type: Schema.Types.ObjectId, ref: 'comment'} ],
+   habits : [ {type: Schema.Types.ObjectId, ref: 'habit'} ],
+
 
 
 } );
