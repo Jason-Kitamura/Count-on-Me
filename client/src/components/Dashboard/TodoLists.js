@@ -151,7 +151,7 @@ function Goals( props ) {
             <div class="card col-12 col-lg-3 col-md-6" style={card}>
                 <div class="card-body">
                     <h5 class="card-title text-center" style={titleStyle}>
-                        Habits Goals
+                        Habits
                         <i class="fas fa-plus fa-sm" aria-hidden="true" onClick={props.setTask} style={{ float : 'right', cursor : 'pointer' }}></i>
                     </h5>
                     <hr/>
