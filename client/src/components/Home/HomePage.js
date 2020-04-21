@@ -57,8 +57,7 @@ async function closeGoal(){
             <Posts />
             </div>
             <div class='col-12 col-sm-12 col-md-4'style={columns2} >
-            <Goals />
-            <button class='btn btn-light' onClick={addGoal} style={newGoal}><i class="fas fa-plus"></i>   Add New Goal</button>
+            <Goals setGoal={addGoal} />
             <Comments />
             <GoalModal show={show} closeGoal={closeGoal}/>
             </div>

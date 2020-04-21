@@ -13,7 +13,7 @@ function Comments(){
         marginBottom : '10px',
     }
     const  commentStyle = {
-        borderStyle:'groove',
+        border : 'solid thin grey',
         borderRadius:'10px',
         marginBottom:'10px',
         marginLeft : '4%',
@@ -21,12 +21,14 @@ function Comments(){
         paddingLeft : '8px',
         paddingRight : '8px',
         width : 'fit-content',
-        boxShadow: '5px 10px 15px #888888'
-    
-    }
+        boxShadow: '3px 3px 5px  #666666'    }
     const commentNameStyle = {
         margin : '0px',
-        textAlign:'left'
+        color: 'mediumBlue',
+        fontSize : '15px',
+        fontWeight : 'bold',
+        fontFamily :  'Comic Sans MS, Comic Sans, cursive',
+
     }
     const commentBodyStyle = {
         margin : '0px',

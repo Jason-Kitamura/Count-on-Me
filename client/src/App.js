@@ -38,6 +38,7 @@ function App() {
     backgroundColor: 'white',
   }
   
+  
   return (
     <Router>
         {console.log("App.js Rendering....")}
