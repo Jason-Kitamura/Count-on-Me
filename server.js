@@ -47,7 +47,7 @@ app.post( '/api/createUser', async ( req, res ) => {
 });
 
 app.post( '/api/checkUser', async ( req, res ) => {
-    console.log('received login info:', req.body );
+    // console.log('received login info:', req.body );
     const loginCredentrials = req.body;
 
     const findByEmail =  await orm.findUserByEmail(req.body);
@@ -74,14 +74,50 @@ app.post( '/api/createGoal',async  (req, res) => {
 
 app.post( '/api/getUserGoals', async ( req, res )=> {
     const obj = req.body;
-    console.log('get user goals for', obj.email );
+    // console.log('get user goals for', obj.email );
     const userGoals = await orm.getUserGoals(obj);
 
     res.send( JSON.stringify( userGoals ));
 });
+app.post( '/api/getFriendGoals', async ( req, res )=> {
+    const obj = req.body;
+    // console.log('get user goals for', obj.id );
+    const userGoals = await orm.getFriendGoals(obj);
+
+    res.send( JSON.stringify( userGoals ));
+});
+app.post( '/api/getUserFollowers', async ( req, res )=> {
+    const obj = req.body;
+    // console.log('get user followers for', obj.email );
+    const userFollowers = await orm.getUserFollowers(obj);
+    console.log(`Server recieved followers`, userFollowers)
+    res.send( JSON.stringify( userFollowers ));
+});
+app.post( '/api/getUserFollowersById', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user followers for', obj.id );
+    const userFollowers = await orm.getUserFollowersById(obj.id);
+    console.log(`Server recieved followers`, userFollowers)
+    res.send( JSON.stringify( userFollowers ));
+});
+app.post( '/api/getUserFollowing', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user following for', obj.email );
+    const userFollowing = await orm.getUserFollowing(obj);
+    console.log(`Server recieved followers`, userFollowing)
+    res.send( JSON.stringify( userFollowing ));
+});
+app.post( '/api/getUserFollowingById', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user followings for', obj.id );
+    const userFollowing = await orm.getUserFollowingById(obj.id);
+    console.log(`Server recieved following`, userFollowing)
+    res.send( JSON.stringify( userFollowing ));
+});
+
 app.post( '/api/getCompletedGoals', async ( req, res )=> {
     const obj = req.body;
-    console.log('get user goals for', obj.email );
+    // console.log('get user goals for', obj.email );
     const userGoals = await orm.getCompletedGoals(obj);
     const completedGoals = userGoals.goals.map((goal)=>{
         if(goal.completed === true){
@@ -110,10 +146,18 @@ app.post( '/api/undoGoal', async ( req, res )=> {
 
 
 app.get( '/api/userData/:emailId', async ( req, res ) => {
-    console.log('received userid: ', req.params.emailId );
+    // console.log('received userid: ', req.params.emailId );
     const id = req.params.emailId
     const findById =  await orm.getUserByEmailId(id);
-    console.log(`find by id`,findById);
+    // console.log(`find by id`,findById);
+    res.send(findById)
+})
+
+app.get( '/api/friend/:id', async ( req, res ) => {
+    // console.log('received userid: ', req.params.id );
+    const id = req.params.id
+    const findById =  await orm.getUserById(id);
+    // console.log(`find by id`,findById);
     res.send(findById)
 })
 
@@ -126,7 +170,7 @@ app.post('/api/addFollowing', async (req, res) => {
 });
 
 app.get('/api/user/:name', async (req, res) => {
-    console.log('received name: ', req.params.name);
+    // console.log('received name: ', req.params.name);
     const result= await orm.finduser(req.params.name);
     res.send(result);
 });
@@ -159,7 +203,8 @@ app.post( '/api/postComment', async ( req, res ) => {
     const commentData = {
         postEmail : obj.postEmail,
         name : userData.firstName,
-        body : obj.comment
+        body : obj.comment,
+        profilePic : userData.profilePic,
     }
     const createComment = await orm.createComment( commentData );
     res.send();
@@ -169,6 +214,10 @@ app.post( '/api/getComments', async ( req, res ) => {
     const userData = await orm.findUserAndPopulateComments( userEmail );
     console.log( 'comments user data', userData );
     res.send( userData.comments );
+})
+app.post( '/api/newHabit', async ( req, res ) => {
+    const createHabit = await orm.createNewHabit( req.body );
+    res.send();
 })
 
 

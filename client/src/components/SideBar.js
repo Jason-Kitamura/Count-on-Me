@@ -5,6 +5,7 @@ import axios from 'axios';
 import { func } from "prop-types";
 function SideBar( props ){
     const [showAttr, setShowAttr] = React.useState('Home');
+    const [ showForm, setShowForm] = useState( false )
     const theLocation = useLocation();
     const [profileLink,setProfileLink] = useState('');
     
@@ -32,12 +33,20 @@ function SideBar( props ){
         console.log(`[Profile picture Link ]`,user.data.profilePic)
         setProfileLink(`${user.data.profilePic}`)
     }
+    function uploadPic( e ){
+        e.preventDefault();
+        setShowForm(false);
+    } 
+    const btn ={
+        color:'white',marginTop:'0px'
+    }
+
 
     return (
         <>
             <nav id="sidebar">
             <div class="sidebar-header">
-                <h3>Goal Tracker</h3>
+                <h3> <i class="fas fa-chart-bar"></i> Goal Tracker</h3>
             </div>
             <ul class="list-unstyled components">
                 <div class="text-center">
@@ -67,37 +76,12 @@ function SideBar( props ){
                                 padding:'0px'
                                }} />
                             }
-                        <AvatarUpload  changeProfilePicture={changeProfilePicture}/>
-                        {/* <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        ref={imageUploader}
-                        style={{
-                            display: "none"
-                        }}
-                        />
-                        <div
-                        style={{
-                            height: "180px",
-                            width: "180px",
-                        }}
-                        onClick={() => imageUploader.current.click()}
-                        >
-                            <img
-                            src="https://pickaface.net/gallery/avatar/20151109_144853_2380_sample.png"
-                            class="avatar rounded-circle img-thumbnail"
-                            name="profile"
-                            ref={uploadedImage}
-                            alt="avatar"
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                position: "acsolute"
-                            }}
-                            />
-                        </div>
-                        Click to upload Image*/}
+                            { showForm ? <AvatarUpload uploadPic={uploadPic} changeProfilePicture={changeProfilePicture} /> : 
+                                    <div >
+                                        <button class="btn btnStyle" style={btn} onClick={function(){ setShowForm(true) }}>
+                                        <i class="fas fa-screwdriver"></i></button>
+                                    </div> }
+                            
                     </div>
                     <li className={((showAttr === 'Home') ? 'active' : '')}>
                         <Link to="/home" onClick={() => setShowAttr('Home')} >
