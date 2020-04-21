@@ -19,18 +19,22 @@ function Posts() {
 
     }
     const name = {
-        fontFamily: 'Pacifico',
+        fontFamily :  'Comic Sans MS, Comic Sans, cursive',
+        fontWeight : 'bold',
         fontSize : 'x-large',
         textAlign: 'left',
         padding: "10px",
-        margin: '0px'
+        margin: '0px',
+        color : 'mediumBlue'
     }
     const post = {
         display: 'flex',
         flexDirection: "row"
     }
     const cardBody = {
-        padding: '5px'
+        padding: '5px',
+        fontFamily :  'Comic Sans MS, Comic Sans, cursive',
+
     }
 
     const goalStyle = {
@@ -39,17 +43,23 @@ function Posts() {
         display : 'block',
         margin : 'auto',
         marginBottom : '5px',
-        padding : '5px'
+        padding : '4px',
+        boxShadow: '3px 3px 5px  #666666',
+        fontFamily :  'Comic Sans MS, Comic Sans, cursive',
+
+
     }
     const goalTitleStyle = {
         // textAlign : 'left',
-        fontWeight : 'bold',
+        // fontWeight : 'bold',
         margin : '0px'
     }
     const goalDesStyle = {
         // textAlign : 'left',
         margin : '0px',
-        fontSize : 'small'
+        fontSize : 'small',
+        fontFamily :  'Comic Sans MS, Comic Sans, cursive',
+
     }
     const iconStyle = {
         float : 'left',
@@ -61,13 +71,14 @@ function Posts() {
         borderTop: '1px solid #BDBDBD',
         padding:'10px',
         button: {
-            fontFamily: 'Pacifico',
             backgroundColor: 'Transparent',
             backgroundRepeat: 'no-repeat',
             border: 'none',
             cursor: 'pointer',
             overflow: 'hidden',
             outline: 'none',
+            color : 'mediumBlue',
+            fontWeight : 'bold'
             
         },
         input: {
@@ -77,25 +88,46 @@ function Posts() {
         }
     }
     const commentStyle = {
-        borderStyle : ' groove',
-        borderRadius : '5px',
+        border : 'solid grey thin',
+        borderRadius : '10px',
         textAlign : 'left',
         display : 'block',
         margin : 'auto',
-        marginLeft : '10%',
+        marginLeft : '40px',
         marginBottom : '10px',
         fontSize : 'smaller',
         width : 'fit-content',
-        padding : '5px'
+        height : 'fit-content',
+        padding : '4px 8px 4px 8px',
+        boxShadow: '3px 5px 5px 1px #888888'
     }
     const commentNameStyle = {
         margin : '0px',
+        color: 'mediumBlue',
+        fontSize : '15px',
+        fontWeight : 'bold'
+
     }
     const commentBodyStyle = {
         margin : '0px',
-        float : 'right',
         fontSize : 'small',
-        paddingLeft : '5px',
+        padding : '0px 0px 0px 5px',
+        color: 'black',
+        position : 'relative'
+
+    }
+    const postImage = {
+        borderRadius : '50%',
+        width : "100px",
+        height : '100px',
+        marginRight : '10px'
+    }
+    const commentImage = {
+        borderRadius : '50%',
+        width : "30px",
+        height : '30px',
+        marginRight : '10px',
+        float : 'left'
     }
     
     const [comment,setComment] = useState('');
@@ -148,11 +180,18 @@ function Posts() {
         } catch (err){ console.log("Error happened in posts component" + err) }
     }
     function checkCompleted( status ){
-        console.log( status );
+
         if ( status === true ){
             return ('fa fa-check')
         } else {
             return ('far fa-square')
+        }
+    }
+    function getImage( pic ){
+        if ( !pic || pic === ''){
+            return ( 'https://www.booksie.com/files/profiles/22/mr-anonymous.png')
+        } else {
+            return ( pic )
         }
     }
     if ( newsFeed.length === 0 ){
@@ -165,11 +204,13 @@ function Posts() {
         return (
             <div>
                 {newsFeed.map( post => (
+                
                     <div class="card" style={card}>
                         <div style={post}>
-                            <h5 style={name}>{post.firstName}</h5>
+                            <h5 style={name}><img style={postImage} src={getImage(post.profilePic)}/>{post.firstName}</h5>
                         </div>
                         <div style={cardBody}>
+                            <h4 style={{ fontWeight : 'bold' }}>Goals</h4>
                             <div>
                                 {post.goals.map( goal => (
                                     <div style={goalStyle}>
@@ -182,15 +223,24 @@ function Posts() {
                                 <input style={commentSection.input} onChange={HandleOnComment}  value={comment} type="text" id='input' class="form-control no-border" placeholder="Add a comment..." aria-label="comment" aria-describedby="basic-addon2" />
                                 <button style={commentSection.button} onClick={(e) => {postComment( e, post.email)}} class="btn" type="button">post</button>
                             </div>
-                        </div>
-                        <div style={cardBody}>
-                            {post.comments.map( comment => (
-                                <div style={commentStyle}>
-                                    <h5 style={commentNameStyle}>{comment.name}<p style={commentBodyStyle}>{comment.body}</p></h5>
-                                </div>
-                            ))}
-                        </div>
+                            <div class='card' style={cardBody}>
+                                <h5>Comments</h5>
+                                <hr/>
+                                {post.comments.map( comment => (
+                                    <div>
+                                        <h5>
+                                            <img style={commentImage} src={getImage(comment.profilePic)}/>
+                                            <div style={commentStyle}>
+                                                <h5 style={commentNameStyle}>{comment.name}<p style={commentBodyStyle}>{comment.body}</p></h5>
+                                            </div>
+                                        </h5>
+                                    </div>
+                                ))}
+                            </div>
+                        </div> 
                     </div>
+                    
+                
                 ))}
             </div> 
         );

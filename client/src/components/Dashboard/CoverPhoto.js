@@ -1,7 +1,8 @@
-import React from "react";
+import React,{useState} from "react";
+import axios from 'axios';
 
 function CoverPhoto( ){
-
+    const [profileLink,setProfileLink] = useState('');
     const style = {
         backgroundImage: `url(https://peakvisor.com/img/news/mount_fuji.jpg)`,
         backgroundSize: "cover",
@@ -27,14 +28,39 @@ function CoverPhoto( ){
         border: '3px solid white'
 
     } 
+    if(sessionStorage.getItem('userEmail') !== null){
+        getProfilePic()
+    }
+async function getProfilePic(){
+    const userFromSessionStorage = JSON.parse(sessionStorage.getItem('userEmail'));
+    console.log('[user mail id:]',userFromSessionStorage.email);
+    const user = await axios.get( `/api/userData/${userFromSessionStorage.email}`);
+    console.log(`[Profile picture Link ]`,user.data.profilePic)
+    setProfileLink(`${user.data.profilePic}`)
+}
     
     return(
         <div class="jumbotron jumbotron-fluid fill" style={style}>
             <div class="container">
                 <div class="d-flex justify-content-between" style={avatarPosition}>
                 <div class="avatar">
-                    <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt="Circle Image" style={avatarStyle} />
-                </div>
+                { { profileLink } === "" ?<img class="rounded-circle img-thumbnail" src="https://i.stack.imgur.com/34AD2.jpg" 
+                            alt="avatar"
+                            style={{
+                                borderRadius:'50%',
+                                width:'160px',
+                                height:'150px',
+                                padding:'0px'
+                               
+                            }}/> : <img  class="rounded-circle img-thumbnail" src={profileLink}
+                            alt="avatar"
+                            style={{
+                                borderRadius:'50%',
+                                width:'160px',
+                                height:'150px',
+                                padding:'0px'
+                               }} />
+                            }</div>
                 </div>
             </div>
         </div>
