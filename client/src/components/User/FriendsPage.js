@@ -3,8 +3,7 @@ import { useParams } from "react-router-dom";
 import CoverPhoto from './CoverPhoto';
 import UserOptions from './UserOptions';
 import TodoLists from './TodoLists';
-import Followers from './Followers';
-import Following from './Following';
+import FollowerCard from '../Dashboard/FollowerCard';
 
 import "./style.css";
 
@@ -40,8 +39,22 @@ function HomePage(){
     const scroll = {
         scrollBehavior: 'smooth'
     }
+    const card={
+        width:'100%',
+        margin:'10px',
+    }
 
-    const  id  = useParams();
+    const cardsContainer = {
+        flex:1,
+        flexDirection:'row',
+        padding:'10px',
+        margin:'20px',
+        marginTop: '45px',
+        marginLeft: '0px'
+        
+    }
+
+    let  idParam  = useParams();
     // console.log(`Displaying user with id...`, { id })
 
 
@@ -49,16 +62,24 @@ function HomePage(){
     const [ firstName, setUserFirstName ] = useState([]);
     const [ lastName, setUserLastName ] = useState([]);
     const [ email, setUserEmail ] = useState([]);
-    const followers = useRef(null);
+    const followersScroll = useRef(null);
     const following = useRef(null);
-
 
    useEffect( function(){
         getUser();
         // console.log('use effect is called');
     }, [] );
 
-   async function getUser(){
+   async function getUser(props){
+
+    let id; 
+
+    if(props){
+        id = props.id;
+    }else{
+        id = idParam;
+    }
+ 
     console.log(`calling axios.get for id: `, id)
     const user = await axios.get( `/api/friend/${id.id}`);
 
@@ -83,9 +104,9 @@ function HomePage(){
    }
 
    function executeScrollToFollowers(){
-    console.log(`Calling scroll function`, followers)
+    console.log(`Calling scroll function`, followersScroll)
     
-    window.scrollTo(0, followers.current.offsetTop)  
+    window.scrollTo(0, followersScroll.current.offsetTop)  
    }
 
    function executeScrollToFollowing (){
@@ -93,6 +114,67 @@ function HomePage(){
     
     window.scrollTo(0, following.current.offsetTop)  
    }
+
+   const [followers, setFollowers] = useState([]);
+   const [followings, setFollowing] = useState([]);
+
+
+
+   async function getFollowersList( ){
+       const obj = {
+           id : idParam
+       }
+       //get info from server
+       console.log(`Axios call for followers:`, obj)
+       const allFollowers = await axios.post( 'http://localhost:5000/api/getUserFollowersById', obj );
+       console.log('Array of followers', allFollowers.data);
+       setFollowers( allFollowers.data );
+       // console.log(`Followers set to `, followers)
+   }
+
+ useEffect( ()=>{
+
+       getFollowersList( );
+
+   },[])
+
+   async function getFollowingList( ){
+    const obj = {
+        id : idParam
+    }
+    //get info from server
+    console.log(`Axios call for following:`, obj)
+    const allFollowing = await axios.post( 'http://localhost:5000/api/getUserFollowingById', obj );
+    console.log('Array of following', allFollowing.data);
+    setFollowing( allFollowing.data );
+    // console.log(`Followers set to `, followers)
+    }
+
+    useEffect( ()=>{
+
+        getFollowingList( );
+
+    },[])
+
+
+   function refresh(){
+       console.log(`Calling for page refresh`)
+       getUser();
+       getFollowersList();
+       getFollowingList();
+    //    console.log(`window location:`, window.location)
+    //    window.location.pathname=`/user/${id}`
+
+        window.scrollTo(0, 0) 
+
+   }
+
+   useEffect( function(){
+    refresh();
+    // console.log('use effect is called');
+}, [idParam] );
+
+
   
 
     return (
@@ -111,11 +193,37 @@ function HomePage(){
         <div class='row' style={liveData}>
             <TodoLists email={email}/>
         </div>
-        <div class='row' ref={followers} style={liveData}>
-            <Followers/>
+        <div class='row' ref={followersScroll} style={liveData}>
+            <div class='row' style={cardsContainer}>    
+                <div class="card col-12" style={card}>
+                    <div class="card-body">
+
+                        Followers
+
+                        <div class="row d-flex justify-content-center mt-2">
+                        {followers.map( follower=><FollowerCard refresh={refresh} id={follower} />)}
+                    
+                    </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
         <div class='row' ref={following} style={liveData}>
-            <Following />
+            <div class='row' style={cardsContainer}>    
+                <div class="card col-12" style={card}>
+                    <div class="card-body">
+
+                        Following
+
+                        <div class="row d-flex justify-content-center mt-2">
+                        {followings.map( following=><FollowerCard id={following} />)}
+                    
+                    </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
        
     </div>

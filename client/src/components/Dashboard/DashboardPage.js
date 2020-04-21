@@ -109,7 +109,7 @@ const scroll = {
 
     return (
         <div style={scroll}>
-        <div id="header" ref={top}>
+        <div id="header">
             <h3  style={home}>{firstName} {lastName}</h3>
         </div>
         <div class='row' style={liveData}>
