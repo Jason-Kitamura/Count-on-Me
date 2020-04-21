@@ -13,15 +13,19 @@ function Comments(){
         marginBottom : '10px',
     }
     const  commentStyle = {
-        border : 'solid thin grey',
-        borderRadius:'10px',
-        marginBottom:'10px',
-        marginLeft : '4%',
-        padding:'4px',
-        paddingLeft : '8px',
-        paddingRight : '8px',
+        border : 'solid grey thin',
+        borderRadius : '10px',
+        textAlign : 'left',
+        display : 'block',
+        margin : 'auto',
+        marginLeft : '40px',
+        marginBottom : '10px',
+        fontSize : 'smaller',
         width : 'fit-content',
-        boxShadow: '3px 3px 5px  #666666'    }
+        height : 'fit-content',
+        padding : '4px 8px 4px 8px',
+        boxShadow: '3px 5px 5px 1px #888888'
+        }
     const commentNameStyle = {
         margin : '0px',
         color: 'mediumBlue',
@@ -31,10 +35,12 @@ function Comments(){
 
     }
     const commentBodyStyle = {
+
         margin : '0px',
-        float : 'right',
         fontSize : 'small',
-        paddingLeft : '5px',
+        padding : '0px 0px 0px 5px',
+        color: 'black'
+
     }
     const styleForNotificationHead ={
         
@@ -43,6 +49,14 @@ function Comments(){
         paddingBottom:'0px',
         textAlign:'left'
     }
+    const commentImage = {
+        borderRadius : '50%',
+        width : "30px",
+        height : '30px',
+        marginRight : '10px',
+        float : 'left'
+    }
+    
 
     const [ userComments, setUserComments ] = useState([]);
     const [ Email, setEmail ]=useState('');
@@ -62,6 +76,13 @@ function Comments(){
 
         getComments( user.email )
     },[])
+    function getImage( pic ){
+        if ( !pic || pic === ''){
+            return ( 'https://www.booksie.com/files/profiles/22/mr-anonymous.png')
+        } else {
+            return ( pic )
+        }
+    }
 
     
     /*-- m.p. post comment --*/
@@ -83,8 +104,13 @@ function Comments(){
             <div style={card} class="card">
                 <h5 style={commentTitle}>Comments</h5>
                 {userComments.map( comment => (
-                    <div style={commentStyle}>
-                        <h5 style={commentNameStyle}>{comment.name}<p style={commentBodyStyle}>{comment.body}</p></h5>
+                    <div>
+                        <h5>
+                            <img style={commentImage} src={getImage(comment.profilePic)}/>
+                            <div style={commentStyle}>
+                                <h5 style={commentNameStyle}>{comment.name}<p style={commentBodyStyle}>{comment.body}</p></h5>
+                            </div>
+                        </h5>
                     </div>
                 ))}
             </div>

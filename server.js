@@ -203,7 +203,8 @@ app.post( '/api/postComment', async ( req, res ) => {
     const commentData = {
         postEmail : obj.postEmail,
         name : userData.firstName,
-        body : obj.comment
+        body : obj.comment,
+        profilePic : userData.profilePic,
     }
     const createComment = await orm.createComment( commentData );
     res.send();

@@ -156,7 +156,8 @@ async function createComment( data ){
     console.log( 'orm recceived data ', data );
     const obj = {
         name : data.name,
-        body : data.body
+        body : data.body,
+        profilePic : data.profilePic
     }
 
     const dbcomment = new Comment( obj );

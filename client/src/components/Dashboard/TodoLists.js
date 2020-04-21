@@ -44,10 +44,12 @@ function Goals( props ) {
         float: 'left',
     }
     const undoBtn = {
+        lineHeight : '0',
         float: 'right',
         fontSize : 'small',
         cursor : 'pointer',
-        margin: '0px'
+        margin: '2px 0px 0px 0px'
+        
     }
 
     const [goals, setGoals] = useState([]);
@@ -140,10 +142,11 @@ function Goals( props ) {
                     {completed.map( goal => (
                         <h6 style={Goals} key={goal._id}>
                             <i class="fa fa-check" aria-hidden="true" style={checkBox}/>
-                            {goal.title}
                             <p onClick={e => {undoGoal(goal._id)}} style={undoBtn}>
                                 undo
                             </p>
+                            {goal.title}
+                           
                         </h6>
                      ))}
                 </div>
