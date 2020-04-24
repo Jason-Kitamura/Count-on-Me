@@ -41,6 +41,7 @@ function AvatarUpload(props) {
             }
         ).then( result=>result.json())
         props.changeProfilePicture(e);
+        props.uploadPic(e);
     }
     return (
         <div>            

@@ -19,8 +19,9 @@ function HomePage(){
        backgroundColor:'rgb(230, 126, 34)',
        color:'white',
        fontFamily: "'Noto Sans', sans-serif",
-       borderStyle:'groove', 
-       paddingTop: '5px'
+       display:'flex',
+       justifyContent:'space-around',
+       alignItems:'center'
    }
    const liveData = {
        flex:1,
@@ -54,9 +55,10 @@ const scroll = {
     const [ user, setUser ]= useState([]);
     const [ firstName, setUserFirstName ] = useState([]);
     const [ lastName, setUserLastName ] = useState([]);
+   
     const followers = useRef(null);
     const following = useRef(null);
-    
+
 
 
    useEffect( function(){
@@ -113,13 +115,16 @@ const scroll = {
     function closeTask(){
         setShowTask( false );
     }
-
+    const name={
+        marginRight:'5px'
+    }
 
 
     return (
         <div style={scroll}>
-        <div id="header">
-            <h3  style={home}>{firstName} {lastName}</h3>
+         <div id="header" style={home}>
+           <h4> <i class="fas fa-columns"></i> Dash Board</h4>
+           <h4 style={name}>{firstName}  {lastName}</h4>
         </div>
         <div class='row' style={liveData}>
             <div class='col-12 col-md-8' style={columns}>

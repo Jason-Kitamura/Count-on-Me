@@ -7,7 +7,7 @@ function SearchResult(props) {
         boxShadow:'3px 3px 3px 3px #888888',
         fontFamily: 'Antic'
     }
-    const img={
+    const imga={
        margin:'0px',
        padding:'10px'
     }
@@ -19,7 +19,7 @@ function SearchResult(props) {
         <div class="card" style={card}>
             <div class="card-body d-flex flex-column">
                 <div>
-                <img style={img} src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.flt4Xq9M4mMny9LVm2SwWgHaHa%26pid%3DApi&f=1" class="rounded-circle mr-3" height="170px" width="170px" alt="avatar" />
+                <img style={imga} src={props.img} class="rounded-circle mr-3" height="170px" width="170px" alt="avatar" />
                 </div>
                 <div >
                     <Link to={'/user/'+props.id}>

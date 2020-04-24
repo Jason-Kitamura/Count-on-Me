@@ -81,7 +81,7 @@ function Goals( props ) {
             id : id
         }
         //update in in database
-        const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
+        const undoGoalComplete = await axios.post( '/api/undoGoal', obj);
         console.log('Undo goal complete', undoGoalComplete );
         //re render page
         const user = JSON.parse(sessionStorage.getItem('userEmail'));

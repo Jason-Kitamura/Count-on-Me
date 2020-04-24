@@ -17,7 +17,8 @@ function SearchPage(props) {
     padding:'0px'
   }
   const inputtag = {
-    width:'70%'
+    width:'70%',
+    marginLeft:'10px'
   }
   const liStyle ={
     width:'70%'
@@ -25,7 +26,9 @@ function SearchPage(props) {
   const form = {
     display:'flex',
     flexDirection:'row',
-    marginTop:'10px'
+    marginTop:'10px',
+    marginLeft:'auto',
+    marginRight:'auto'
   }
   const ulStyle = {
     padding:'0px',
@@ -34,6 +37,7 @@ function SearchPage(props) {
   
   const [input, setInput] = useState('');
   const [namesList, setnamesList] = useState([]);
+  const [img,setImg] = useState('');
   
   async function handleChange(e) {
     const i = e.target.value;
@@ -74,8 +78,14 @@ function SearchPage(props) {
     setDisplay(true);
     setResult(userResult.data[0].firstName);
     setForsearch(userResult.data[0]._id);
+    setImg(userResult.data[0].profilePic)
     setnamesList([]);
     setInput('');
+  }
+  const container ={
+    margin:'0px',
+    padding:'0px',
+    height:'100%'
   }
  async  function addFollower(){
     const user = JSON.parse(sessionStorage.getItem('userEmail'));
@@ -93,8 +103,8 @@ function SearchPage(props) {
 
 if (display){
   return (
-    <>
-      <div>
+    
+      <div style={container}>
     
         <form style={form}>
           <input  type="text" style={inputtag} onChange={handleChange} placeholder="Search" value={input} aria-label="Search" />
@@ -102,24 +112,24 @@ if (display){
         </form>
         <ul>{namesList.map(name => <li class="list-group-item" style={liStyle} onClick={() => setInput(name)}>{name}</li>)}</ul>
         <div>
-          <SearchResult result={result} btn={btn} id={forsearch} addFollower={addFollower} />
+          <SearchResult result={result} img={img} btn={btn} id={forsearch} addFollower={addFollower} />
         </div>
       </div>
-    </>
+    
   )
 }
 else{
 
   return (
-    <>
-      <div >
+    
+      <div style={container}>
         <form style={form}>
           <input class="form-control"  style={inputtag} type="text" onChange={handleChange} placeholder="Search" value={input} aria-label="Search" />
           <button class="btn btn-primary" onClick={search} style={btnStyle} type="button">Search</button>
         </form>
         <ul style={ulStyle}>{namesList.map(name => <li class="list-group-item" style={liStyle} onClick={() => setInput(name)}>{name}</li>)}</ul>
       </div>
-    </>
+    
   )
   }
 }
