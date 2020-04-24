@@ -1,5 +1,6 @@
 import './App.css';
 import React from 'react';
+import Header from './components/Header/Header'
 import SideBar from './components/SideBar';
 import SearchPage from './components/Search/SearchPage';
 import LoginPage from './components/Login/LoginPage';
@@ -44,6 +45,9 @@ function App() {
         {console.log("App.js Rendering....")}
         <div className="App">
             <div class="wrapper">
+              <div>
+                <Header/>
+              
               
               <div class="sidebar">
                  <Route path={[ "/search", "/dashBoard", "/home", "/settings", "/user/:id"]} component={SideBar} /> 
@@ -78,6 +82,7 @@ function App() {
                         </div>
                     </div>
                   </div>
+                </div>
             </div>
         </div>
     </Router>
