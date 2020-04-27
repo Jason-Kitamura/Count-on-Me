@@ -39,14 +39,12 @@ async function getUserGoals(obj){
     const userGoals =  User.findOne({ email: `${obj.email}` }).populate('habits').populate('goals');
     console.log( 'user goals:', userGoals );
     return userGoals
-
 }
 
 async function getFriendGoals(obj){
-    const userGoals = await User.findById({ _id: `${obj.id}` }).populate('goals');
-    // console.log( 'user goals:', userGoals );
+    const userGoals = await User.findById({ _id: `${obj.id}` }).populate('habits').populate('goals');
+    console.log( 'friend goals:', userGoals );
     return userGoals
-
 }
 async function getUserFollowers(obj){
     const userFollowers = await User.findOne({ email: `${obj.email}` });

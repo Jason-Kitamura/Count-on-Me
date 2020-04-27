@@ -31,7 +31,7 @@ function App() {
   const modal = {
     width: '100%',
     height: '100%',
-    backgroundColor: "rgba(0,0,0,0.7)",
+    // backgroundColor: "rgba(0,0,0,0.7)",
     position: 'absolute',
     top: '0',
     display: 'flex',
@@ -59,35 +59,31 @@ function App() {
         {console.log("App.js Rendering....")}
         <div className="App">
             <div class="wrapper">
-              <div>
-                <Header/>
+              <div class="sidebar">
+                <Route path={["/search", "/dashBoard", "/home", "/settings", "/user/:id"]} component={SideBar} /> 
+              </div>
 
-                  <div class="sidebar">
-                    <Route path={["/search", "/dashBoard", "/home", "/settings", "/user/:id"]} component={SideBar} /> 
-                  </div>
+              <button type="button" id="sidebarCollapse" class="btn btn-info" style={style.ToggleSection}> {/* Toggle Button */}
+                <i class="fas fa-bars fa-1x"></i>
+              </button>
 
-                  <button type="button" id="sidebarCollapse" class="btn btn-info" style={style.ToggleSection}> {/* Toggle Button */}
-                    <i class="fas fa-bars fa-1x"></i>
-                  </button>
+                <div class="container-fluid" style={style.RightSection}>
 
-                  <div class="container-fluid" style={style.RightSection}>
+                  <div id="content" class="row " style={right}>
 
-                    <div id="content" class="row " style={right}>
+                    <div class="col-12" style={left}>
 
-                      <div class="col-12" style={left}>
+                      <Route path={["/search"]} component={SearchPage} />
+                      <Route path={["/dashboard"]} component={DashboardPage} />
+                      <Route path={["/home"]} component={HomePage} />
+                      <Route path={["/settings"]} component={SettingsPage} />
+                      <Route path={["/user/:id"]} component={FriendsPage} />
+                      <Route exact path={["/", "/login"]} component={LoginPage} />
 
-                        <Route path={["/search"]} component={SearchPage} />
-                        <Route path={["/dashboard"]} component={DashboardPage} />
-                        <Route path={["/home"]} component={HomePage} />
-                        <Route path={["/settings"]} component={SettingsPage} />
-                        <Route path={["/user/:id"]} component={FriendsPage} />
-                        <Route exact path={["/", "/login"]} component={LoginPage} />
-
-                      </div>
                     </div>
                   </div>
                 </div>
-            </div>
+              </div>
           </div>
     </Router>
   );

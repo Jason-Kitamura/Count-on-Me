@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Posts from './Posts';
 import Goals from './Goals';
 import Comments from './Comments';
+import Notifications from './Notifications';
 import GoalModal from './GoalModal';
 import axios from 'axios';
 
@@ -31,11 +32,13 @@ function HomePage(){
    }
    const columns = {
        padding:'0',
-       margin:'4px'
+       margin:'4px 50px 0px 50px ',
+       maxWidth : '700px',
    }
    const columns2 = {
     padding:'0',
-    margin:'4px',
+    margin:'4px 10px 0px 10px',
+    maxWidth : '400px',
     
 }
    const newGoal = {
@@ -76,12 +79,13 @@ setLastname(lastName);
         </div>
         <div class='row' style={liveData}>
             <div class='col-12 col-sm-12 col-md-7' style={columns}>
-            <Posts />
+                <Posts />
             </div>
             <div class='col-12 col-sm-12 col-md-4'style={columns2} >
-            <Goals setGoal={addGoal} />
-            <Comments />
-            <GoalModal show={show} closeGoal={closeGoal}/>
+                <Notifications/>
+                <Goals setGoal={addGoal} />
+                <Comments />
+                <GoalModal show={show} closeGoal={closeGoal}/>
             </div>
         </div>
         

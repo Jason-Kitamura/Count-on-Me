@@ -10,9 +10,21 @@ function Goals(props) {
         margin:'10px',
         marginLeft: '25px',
         marginRight: '25px',
+        boxShadow : '2px 2px 8px  #999999'
+
+    }
+    const titleStyle = {
+        fontFamily :  'Comic Sans MS, Comic Sans, cursive',
+        fontWeight : 'bold',
+        fontSize : 'large'
     }
     const  Goals = {
-        borderStyle:'groove',
+        display : 'block',
+        margin : 'auto',
+        border : 'solid thin grey',
+        width : '100%',
+        boxShadow: '3px 3px 5px  #666666',
+        fontFamily :  'Comic Sans MS, Comic Sans, cursive',
         marginBottom:'5px',
         padding:'3px'
     }
@@ -28,10 +40,12 @@ function Goals(props) {
     }
     const checkBox = {
         float: 'left',
+        color : 'limegreen'
     }
 
     const [goals, setGoals] = useState([]);
     const [completed, setCompleted] = useState([]);
+    const [ habits, setHabits ] = useState([]);
     const  id  = useParams();
     // console.log(`Calling for `, { id })
 
@@ -52,8 +66,10 @@ function Goals(props) {
             return;
         }
 
-        const goalsArray = allGoals.data.goals
-        console.log(`Front end recieved todos:`, goalsArray)
+        const goalsArray = allGoals.data.goals;
+        const habitsArray = allGoals.data.habits;
+
+        setHabits( habitsArray );
 
         const incompletedGoals = goalsArray.filter( goal => {
             return goal.completed === false;
@@ -72,7 +88,8 @@ function Goals(props) {
         <div class='row' style={cardsContainer}>
             <div class="card col-12 col-lg-3 col-md-6" style={card}>
                 <div class="card-body">
-                    <h5 class="card-title text-center">Today's Goals</h5>
+                    <h5 class="card-title text-center" style={titleStyle}>Today's Goals</h5>
+                    <hr/>
                     {goals.map( goal => (
                         <h6 style={Goals} key={goal._id}>
                             {goal.title}
@@ -82,7 +99,8 @@ function Goals(props) {
             </div>
             <div class="card col-12 col-lg-3 col-md-6" style={card}>
                 <div class="card-body">
-                    <h5 class="card-title text-center">Completed Goals</h5>
+                    <h5 class="card-title text-center" style={titleStyle}>Completed Goals</h5>
+                    <hr/>
                     {completed.map( goal => (
                         <h6 style={Goals} key={goal._id}>
                             <i class="fa fa-check" aria-hidden="true" style={checkBox}/>
@@ -93,17 +111,15 @@ function Goals(props) {
             </div>
             <div class="card col-12 col-lg-3 col-md-6" style={card}>
                 <div class="card-body">
-                    <h5 class="card-title text-center">Habits Goals</h5>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Eat</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Sleep</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Study</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Excercise</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Repeat</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Eat</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Sleep</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Study</h6>
-                    <h6 style={Goals}>  <i class="far fa-square"></i>   Excercise</h6>
-                    <h6 style={Goals}> <i class="fas fa-check-square"></i>   Repeat</h6>
+                    <h5 class="card-title text-center" style={titleStyle}>
+                        Habits
+                    </h5>
+                    <hr/>
+                    {habits.map( habit => (
+                        <h6 style={Goals} >
+                            {habit.title}
+                        </h6>
+                     ))}
                 </div>
             </div>
         </div>

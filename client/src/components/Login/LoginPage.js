@@ -8,8 +8,9 @@ function LoginPage( props ){
        height:'300px',
        bottom:'0px'
    }
+
     return (
-        <div >
+        <div>
             <LoginBox />
             <SignUpBox />
         </div>

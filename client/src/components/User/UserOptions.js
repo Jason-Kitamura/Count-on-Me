@@ -3,9 +3,11 @@ import React from 'react';
 
 function Goals(props) {
     const card={
-        width:'100%',
-        margin:'10px',
-        marginTop:'30px'
+        width:'fit-content',
+        display : 'block',
+        margin : 'auto',
+        marginTop:'30px',
+        boxShadow : '2px 2px 8px  #999999'
     }
 
     const selectOption = {
@@ -19,10 +21,9 @@ function Goals(props) {
        
         <div class="card" style={card}>
             <div class="card-body">
+                <button class='btn btn-primary' style={selectOption} onClick={props.executeScrollToFollowers}><i class="fas fa-users"></i>   Followers</button>
                 <br></br>
-                <button class='btn btn-light' style={selectOption} onClick={props.executeScrollToFollowers}><i class="fas fa-users"></i>   Followers</button>
-                <br></br>
-                <button class='btn btn-light' style={selectOption} onClick={props.executeScrollToFollowing}><i class="fas fa-users"></i>   Following</button>
+                <button class='btn btn-primary' style={selectOption} onClick={props.executeScrollToFollowing}><i class="fas fa-users"></i>   Following</button>
             </div>
         </div>
         

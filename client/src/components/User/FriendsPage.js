@@ -18,14 +18,14 @@ function HomePage(){
        color:'white',
        fontFamily: "'Noto Sans', sans-serif",
        borderStyle:'groove', 
-       paddingTop: '5px'
+       paddingTop: '5px',
+       marginBottom : '0'
    }
    const liveData = {
        flex:1,
        flexDirection:'row',
-       padding:'10px',
-       margin:'0px'
-       
+       padding:'0px',
+       margin:'0px',
    }
    const columns = {
        padding:'0',
@@ -42,6 +42,7 @@ function HomePage(){
     const card={
         width:'100%',
         margin:'10px',
+        boxShadow : '2px 2px 8px  #999999',
     }
 
     const cardsContainer = {
@@ -50,8 +51,7 @@ function HomePage(){
         padding:'10px',
         margin:'20px',
         marginTop: '45px',
-        marginLeft: '0px'
-        
+        marginLeft: '0px',
     }
 
     let  idParam  = useParams();
@@ -62,6 +62,7 @@ function HomePage(){
     const [ firstName, setUserFirstName ] = useState([]);
     const [ lastName, setUserLastName ] = useState([]);
     const [ email, setUserEmail ] = useState([]);
+    const [ profilePic, setProfilePic ] = useState('');
     const followersScroll = useRef(null);
     const following = useRef(null);
 
@@ -100,6 +101,7 @@ function HomePage(){
     lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1)
     setUserLastName( lastName )
     console.log(`User first:`, firstName , `user last`, lastName)
+    setProfilePic(user.data.profilePic);
 
    }
 
@@ -183,11 +185,11 @@ function HomePage(){
             <h3  style={home}>{firstName} {lastName}</h3>
         </div>
         <div class='row' style={liveData}>
-            <div class='col-12 col-md-8' style={columns}>
-                <CoverPhoto />   
+            <div class='col-12 col-md-9' style={columns}>
+                <CoverPhoto profilePic={profilePic}/>   
             </div>
-            <div class='col-12 col-md-3'style={columns} >
-            <UserOptions executeScrollToFollowers={executeScrollToFollowers} executeScrollToFollowing={executeScrollToFollowing}/>
+            <div class='col-12 col-md-2'style={columns} >
+                <UserOptions executeScrollToFollowers={executeScrollToFollowers} executeScrollToFollowing={executeScrollToFollowing}/>
             </div>
         </div>
         <div class='row' style={liveData}>

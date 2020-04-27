@@ -1,6 +1,10 @@
 import React, {useState, useContext} from 'react';
-import { LoginContext } from '../../LoginContext';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const axios = require('axios')
+
+toast.configure();
 
 function SignUp() {
     const [firstName, setFirstName ] = useState('');
@@ -22,9 +26,10 @@ function SignUp() {
         }
         console.log( 'new user:', newUser );
         if ( password2 !== newUser.password ) {
-            alert( ' passwords do not match ')
+            toast.error( ' passwords do not match ')
         } else if ( password2 == newUser.password ){
             const createUser = await axios.post( '/api/createUser', newUser);
+            console.log('create user response', createUser );
 
             setFirstName('');
             setLastName('');
@@ -32,7 +37,9 @@ function SignUp() {
             setPassword1('');
             setPassword2('');
 
-            alert('created user', createUser );
+            toast.success(`Created user ${createUser.data.firstName} ${createUser.data.lastName}`, {
+                autoClose : 3000
+            } );
 
         }
      }

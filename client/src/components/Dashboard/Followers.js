@@ -8,6 +8,8 @@ function Followers() {
     const card={
         width:'100%',
         margin:'10px',
+        boxShadow : '2px 2px 8px  #999999'
+
     }
 
     const cardsContainer = {

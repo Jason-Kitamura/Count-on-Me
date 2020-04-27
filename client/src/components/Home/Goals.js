@@ -7,7 +7,7 @@ function Goals( props ) {
         width:'100%',
         margin:'10px',
         fontFamily :  'Comic Sans MS, Comic Sans, cursive',
-
+        boxShadow : '2px 2px 8px  #999999'
     }
     const  Goals = {
         border : 'solid thin grey',
@@ -19,7 +19,10 @@ function Goals( props ) {
     const checkBox = {
         float: 'left',
         cursor : 'pointer',
-
+    }
+    const completeCheckBox = {
+        float : 'left',
+        color : 'limegreen'
     }
     const completeBox = {
         float: 'right',
@@ -105,7 +108,7 @@ function Goals( props ) {
                  ))}
                  {completed.map( goal => (
                     <h6 style={Goals} key={goal.id}>
-                        <i class="fa fa-check" aria-hidden="true" style={checkBox}/>
+                        <i class="fa fa-check" aria-hidden="true" style={completeCheckBox}/>
                         <p onClick={e => {undoGoal( goal._id)}} style={completeBox}>
                             undo
                         </p>

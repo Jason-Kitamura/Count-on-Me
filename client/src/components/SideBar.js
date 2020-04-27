@@ -46,7 +46,7 @@ function SideBar( props ){
         <>
             <nav id="sidebar">
             <div class="sidebar-header">
-                <h3> <i class="fas fa-chart-bar"></i> Goal Tracker</h3>
+                <h3> <i class="fas fa-chart-bar"></i> Count on-Me</h3>
             </div>
             <ul class="list-unstyled components">
                 <div class="text-center">

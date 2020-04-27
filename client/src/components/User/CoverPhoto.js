@@ -1,6 +1,6 @@
 import React from "react";
 
-function CoverPhoto( ){
+function CoverPhoto( props ){
 
     const style = {
         backgroundImage: `url(https://peakvisor.com/img/news/mount_fuji.jpg)`,
@@ -27,13 +27,20 @@ function CoverPhoto( ){
         border: '3px solid white'
 
     } 
+    function setPic(){
+        if ( props.profilePic === ''){
+            return( 'https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png' );
+        }else {
+            return( props.profilePic );
+        }
+    }
     
     return(
         <div class="jumbotron jumbotron-fluid fill" style={style}>
             <div class="container">
                 <div class="d-flex justify-content-between" style={avatarPosition}>
                 <div class="avatar">
-                    <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt="Circle Image" style={avatarStyle} />
+                    <img src={setPic()} alt="Circle Image" style={avatarStyle} />
                 </div>
                 </div>
             </div>

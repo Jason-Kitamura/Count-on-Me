@@ -26,10 +26,18 @@ function HomePage(){
    const liveData = {
        flex:1,
        flexDirection:'row',
-       padding:'10px',
+       padding:'0px',
        margin:'0px'
-       
    }
+   const goalData = {
+    flex:1,
+    flexDirection:'row',
+    padding:'0px',
+    margin:'0px',
+    width : '90%',
+    display : 'block',
+    margin : 'auto'
+}
    const columns = {
        padding:'0',
        margin:'4px'
@@ -127,15 +135,15 @@ const scroll = {
            <h4 style={name}>{firstName}  {lastName}</h4>
         </div>
         <div class='row' style={liveData}>
-            <div class='col-12 col-md-8' style={columns}>
+            <div class='col-12 col-md-9' style={columns}>
                 <CoverPhoto />  
                    {/* <button class='btn btn-light' onClick={addGoal} style={selectOption}><i class="fas fa-plus"></i>   Add New Goal</button> */}
             </div>
-            <div class='col-12 col-md-3'style={columns} >
-            <UserOptions executeScrollToFollowers={executeScrollToFollowers} executeScrollToFollowing={executeScrollToFollowing}/>
+            <div class='col-12 col-md-2'style={columns} >
+                <UserOptions executeScrollToFollowers={executeScrollToFollowers} executeScrollToFollowing={executeScrollToFollowing}/>
             </div>
         </div>
-        <div class='row' style={liveData}>
+        <div class='row' style={goalData}>
             <TodoLists setTask={addTask} setGoal={addGoal}/>
         </div>
         <div class='row' ref={followers} style={liveData}>

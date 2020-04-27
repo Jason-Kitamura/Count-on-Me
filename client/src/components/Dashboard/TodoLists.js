@@ -9,6 +9,7 @@ function Goals( props ) {
         margin:'10px',
         marginLeft: '25px',
         marginRight: '25px',
+        boxShadow : '2px 2px 8px  #999999'
     }
     const titleStyle = {
         fontFamily :  'Comic Sans MS, Comic Sans, cursive',
@@ -36,12 +37,16 @@ function Goals( props ) {
         flexDirection:'row',
         padding:'10px',
         margin:'0px',
-        marginTop: '45px',
-        marginLeft: '0px'
+        marginTop: '20px',
+        marginLeft: '0px',
+        width : '100%',
+        // display : 'block',
+        // margin : 'auto'
         
     }
     const checkBox = {
         float: 'left',
+        color : 'limegreen'
     }
     const undoBtn = {
         lineHeight : '0',
@@ -63,9 +68,9 @@ function Goals( props ) {
         }
         //get info from server
         const allGoals = await axios.post( '/api/getUserGoals', obj );
-        const goalsArray = allGoals.data.goals
-        const habitsArray = allGoals.data.habits
-        console.log( 'data', allGoals, 'habits', habitsArray)
+        const goalsArray = allGoals.data.goals;
+        const habitsArray = allGoals.data.habits;
+        console.log( 'data', allGoals, 'habits', habitsArray);
 
         setHabits( habitsArray );
 
@@ -160,7 +165,6 @@ function Goals( props ) {
                     <hr/>
                     {habits.map( habit => (
                         <h6 style={Goals} >
-                            <i class="fa fa-check" aria-hidden="true" style={checkBox}/>
                             {habit.title}
                         </h6>
                      ))}

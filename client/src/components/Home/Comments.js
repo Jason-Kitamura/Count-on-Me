@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { socketio } from "../Socket/Socket.io"; /*-- m.p. initialize the socketio --*/
+// import { socketio } from "../Socket/Socket.io"; /*-- m.p. initialize the socketio --*/
 
 function Comments(){
     const card={
         width:'100%',
         margin:'10px',
-        padding : '6%'
+        padding : '4px',
+        boxShadow : '2px 2px 8px  #999999'
+
     }
     const commentTitle = {
         fontWeight : '500',
@@ -32,23 +34,20 @@ function Comments(){
         fontSize : '15px',
         fontWeight : 'bold',
         fontFamily :  'Comic Sans MS, Comic Sans, cursive',
-
     }
     const commentBodyStyle = {
-
         margin : '0px',
         fontSize : 'small',
         padding : '0px 0px 0px 5px',
         color: 'black'
-
     }
-    const styleForNotificationHead ={
+    // const styleForNotificationHead ={
         
-        paddingLeft:'20px',
-        paddingTop:'10px',
-        paddingBottom:'0px',
-        textAlign:'left'
-    }
+    //     paddingLeft:'20px',
+    //     paddingTop:'10px',
+    //     paddingBottom:'0px',
+    //     textAlign:'left'
+    // }
     const commentImage = {
         borderRadius : '50%',
         width : "30px",
@@ -60,7 +59,7 @@ function Comments(){
 
     const [ userComments, setUserComments ] = useState([]);
     const [ Email, setEmail ]=useState('');
-    const [chatcomment, setChatcomment] = useState("");
+    // const [chatcomment, setChatcomment] = useState("");
 
     async function getComments( userEmail ){
         const obj = {
@@ -85,21 +84,21 @@ function Comments(){
     }
 
     
-    /*-- m.p. post comment --*/
-    socketio.on('whisp', function(data){
-        console.log(`${data.msg} from ${data.fromUser} to ${data.toUser}`)
-        setChatcomment(chatcomment + ` ${data.fromUser} : ${data.msg} <br/>`);
-    });
+    // /*-- m.p. post comment --*/
+    // socketio.on('whisp', function(data){
+    //     console.log(`${data.msg} from ${data.fromUser} to ${data.toUser}`)
+    //     setChatcomment(chatcomment + ` ${data.fromUser} : ${data.msg} <br/>`);
+    // });
 
     return(
         <div>
 
-            <div class="card" style={card}>
+            {/* <div class="card" style={card}>
                 <h5 class="card-title" style={styleForNotificationHead}><i class="fas fa-comment-alt"></i>   Notifications</h5>
                 <div class="card-body">
                     <p style={commentStyle} dangerouslySetInnerHTML={{__html: chatcomment}}></p>
                 </div>
-            </div>
+            </div> */}
         
             <div style={card} class="card">
                 <h5 style={commentTitle}>Comments</h5>

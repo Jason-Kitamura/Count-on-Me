@@ -8,7 +8,8 @@ import axios from 'axios';
 function Posts() {
     const card = {
         width: '100%',
-        margin: '10px'
+        margin: '10px',
+        boxShadow : '2px 2px 8px  #999999'
     }
     const img = {
         border: "1px hidden #ddd",
@@ -23,13 +24,13 @@ function Posts() {
         fontWeight : 'bold',
         fontSize : 'x-large',
         textAlign: 'left',
-        padding: "10px",
+        padding: "10px 10px 0px 10px",
         margin: '0px',
         color : 'mediumBlue'
     }
     const post = {
         display: 'flex',
-        flexDirection: "row"
+        flexDirection: "row",
     }
     const cardBody = {
         padding: '5px',
@@ -63,6 +64,10 @@ function Posts() {
     }
     const iconStyle = {
         float : 'left',
+    }
+    const iconStyleComplete = {
+        float : 'left',
+        color : 'limegreen'
     }
     const commentSection = {
         marginBottom: '0px',
@@ -182,9 +187,16 @@ function Posts() {
     function checkCompleted( status ){
 
         if ( status === true ){
-            return ('fa fa-check')
+            return ('fa fa-check fa-lg')
         } else {
-            return ('far fa-square')
+            return ('far fa-square fa-lg')
+        }
+    }
+    function checkStyle( status ){
+        if ( status === true ){
+            return (iconStyleComplete)
+        } else {
+            return (iconStyle)
         }
     }
     function getImage( pic ){
@@ -214,7 +226,7 @@ function Posts() {
                             <div>
                                 {post.goals.map( goal => (
                                     <div style={goalStyle}>
-                                        <h6 style={goalTitleStyle}><i className={checkCompleted(goal.completed)} style={iconStyle}></i>{goal.title}</h6>
+                                        <h6 style={goalTitleStyle}><i className={checkCompleted(goal.completed)} style={checkStyle(goal.completed)}></i>{goal.title}</h6>
                                         <p style={goalDesStyle}>{goal.description}</p>
                                     </div>
                                 ))}

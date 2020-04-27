@@ -43,7 +43,7 @@ app.put( '/api/upload/:userid', upload.single('myFile'), async function( req, re
 app.post( '/api/createUser', async ( req, res ) => {
     console.log( 'receving body: ', req.body );
     const Result = await orm.saveUser(req.body);
-    res.send( 'user data received! ',Result)
+    res.send( Result );
 });
 
 app.post( '/api/checkUser', async ( req, res ) => {
@@ -243,7 +243,7 @@ io.on('connection', function(socket){
       }
     });
 
-    socket.on('message-sent', function(data, callback){
+    socket.on('message-sent', async function(data, callback){
         console.log("inside message-sent in server!");
         // console.log("from user : " + data.A);
         // console.log("to user : " + data.B);
@@ -263,8 +263,14 @@ io.on('connection', function(socket){
         if (users[data.A]==users[data.B]) return; // means when it is not logged in or already disconnected
         console.log("<<Check passed...>>" + data.A + " is sending to " + data.B);
 
+        //getting user first and last name
+        const obj = {
+            email : data.A
+        }
+        const userDataA = await orm.findUserByEmail( obj );
+        console.log( 'user A data', userDataA );
         // users[socket.nickname].emit('whisp', {msg:data.T, fromUser:data.A, toUser:'Ali'});
-        users[data.B].emit('whisp', {msg:data.T, fromUser:data.A, toUser:data.B});
+        users[data.B].emit('whisp', {msg:data.T, fromUser:`${userDataA.firstName} ${userDataA.lastName}`, toUser:data.B});
    
     });
 
