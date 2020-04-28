@@ -18,8 +18,8 @@ function CoverPhoto( props ){
     }
 
     const avatarStyle = {
-
-        maxWidth: '20vh',
+        height : '100px',
+        width : '100px',
         height: 'auto',
         borderRadius: '50%',
         verticalAlign: 'left',

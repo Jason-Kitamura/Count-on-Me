@@ -5,6 +5,12 @@ const axios = require('axios');
 
 function FollowerCard(props){
 
+
+    const picStyle = {
+        height : '70px',
+        width : '70px'
+    }
+
     const [ user, setUser ]= useState([]);
     const [ firstName, setUserFirstName ] = useState([]);
     const [ lastName, setUserLastName ] = useState([]);
@@ -55,7 +61,7 @@ function FollowerCard(props){
                 <div class="col-6 col-md-4">
                         <div class="card">
                             <div class="card-header">
-                                <img class="rounded-circle" alt="70x70" src={profilePic} data-holder-rendered="true" />
+                                <img class="rounded-circle" alt="70x70" src={profilePic} style={picStyle} data-holder-rendered="true" />
                             </div>
                             
                             <div class="card-body">
