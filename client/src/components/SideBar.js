@@ -3,6 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import AvatarUpload from './AvatarUpload';
 import axios from 'axios';
 import { func } from "prop-types";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure();
+
 function SideBar( props ){
     const [showAttr, setShowAttr] = React.useState('Home');
     const [ showForm, setShowForm] = useState( false )
@@ -20,7 +25,9 @@ function SideBar( props ){
 
     function logOutUser(){
         sessionStorage.removeItem( 'userEmail' );
-        alert('you have logged out!')
+        toast.error('You have logged out!', {
+            autoClose : 2000
+        })
     }
     
         if(sessionStorage.getItem('userEmail') !== null){

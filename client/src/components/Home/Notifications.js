@@ -37,8 +37,8 @@ function Notifications() {
     const [chatComment, setChatComment] = useState("");
 
     socketio.once('whisp', function(data){
-        console.log(`${data.msg} from ${data.fromUser} to ${data.toUser}`)
-        setChatComment(chatComment + ` ${data.fromUser} commented: ${data.msg} `);
+        console.log(`${data.msg} from ${data.fromUser} to ${data.toUser}`);
+        setChatComment(  ` ${data.fromUser} commented: ${data.msg} `);
     });
     
     useEffect( () => {
