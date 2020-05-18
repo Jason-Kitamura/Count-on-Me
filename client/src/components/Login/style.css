@@ -1,9 +1,10 @@
 body {
-    background-color: rgba(245, 245, 245, 0.856);
+    background-color: rgb(248, 244, 236);
+
 }
 .header {
     color: whitesmoke;
-    background-color: rgba(0, 0, 0, 0.733);
+    background-color: rgb(230, 126, 34);
     height: 85px;
 }
 #headerRow{
@@ -32,6 +33,7 @@ body {
     margin-top: 6%;
     margin-right: 5%;
     text-align: left;
+    height:100%;
 }
 @media only screen and (max-device-width : 820px){
     #signUpForm{

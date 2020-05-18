@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import FollowerCard from './FollowerCard.js'
 
-function Goals() {
+const axios = require('axios');
+
+function Following() {
     const card={
         width:'100%',
         margin:'10px',
+        boxShadow : '2px 2px 8px  #999999'
     }
 
     const cardsContainer = {
@@ -16,6 +20,36 @@ function Goals() {
         
     }
 
+    const [followings, setFollowings] = useState([]);
+
+
+
+    async function getFollowersList( props ){
+        const obj = {
+            email : props 
+        }
+        //get info from server
+        console.log(`Axios call for following:`, obj)
+        const allFollowing = await axios.post( 'http://localhost:5000/api/getUserFollowing', obj );
+        console.log('Array of followers', allFollowing.data);
+        setFollowings( allFollowing.data );
+        // console.log(`Followers set to `, followers)
+    }
+
+  useEffect( ()=>{
+        const user = JSON.parse(sessionStorage.getItem('userEmail'));
+    
+        if ( !user.email ){
+            console.log( 'logged out!' );
+        } else {
+            console.log( 'logged in!', user.email );
+
+         getFollowersList( user.email );
+        }
+    },[])
+
+
+    
     return (
         <div class='row' style={cardsContainer}>    
             <div class="card col-12" style={card}>
@@ -24,39 +58,8 @@ function Goals() {
                     Following
 
                     <div class="row d-flex justify-content-center mt-2">
-                    <div class="col-6 col-md-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <img class="rounded-circle" alt="70x70" src="https://placehold.it/70x70" data-holder-rendered="true" />
-                            </div>
-                            
-                            <div class="card-body">
-                                <h5 class="card-title">First Last</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <img class="rounded-circle" alt="70x70" src="https://placehold.it/70x70" data-holder-rendered="true" />
-                            </div>
-                            
-                            <div class="card-body">
-                                <h5 class="card-title">First Last</h5>
-                            </div>
-                        </div>
-                    </div>
-                     <div class="col-6 col-md-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <img class="rounded-circle" alt="70x70" src="https://placehold.it/70x70" data-holder-rendered="true" />
-                            </div>
-                            
-                            <div class="card-body">
-                                <h5 class="card-title">First Last</h5>
-                            </div>
-                        </div>
-                    </div>
+                    {followings.map( following=><FollowerCard id={following} />)}
+                   
                 </div>
 
                 </div>
@@ -65,4 +68,4 @@ function Goals() {
     );
 }
 
-export default Goals;
+export default Following;

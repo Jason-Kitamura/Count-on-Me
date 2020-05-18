@@ -1,11 +1,14 @@
 import './App.css';
 import React from 'react';
+import Header from './components/Header/Header'
 import SideBar from './components/SideBar';
 import SearchPage from './components/Search/SearchPage';
 import LoginPage from './components/Login/LoginPage';
 import HomePage from './components/Home/HomePage';
 import SettingsPage from './components/Settings/SettingsPage';
 import DashboardPage from './components/Dashboard/DashboardPage';
+import FriendsPage from './components/User/FriendsPage';
+
 
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -14,16 +17,21 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 function App() {
   const style = {
     ToggleSection: {
-      border: "0px solid lightgreen"
+      border: "0px solid #2E4053",
+      backgroundColor: '#2E4053',
+      top:"100%",
+      fontSize:'20px'
+
     },
     RightSection: {
-      border: "0px solid Purple"
+      border: "0px solid Purple",
+      padding:'0px'
     }
   }
   const modal = {
     width: '100%',
     height: '100%',
-    backgroundColor: "rgba(0,0,0,0.7)",
+    // backgroundColor: "rgba(0,0,0,0.7)",
     position: 'absolute',
     top: '0',
     display: 'flex',
@@ -35,49 +43,50 @@ function App() {
     height: '600px',
     backgroundColor: 'white',
   }
+  const left = {
   
+    marginTop: '0px',
+    height:'100%',
+    paddingRight:'0px'
+  }
+  const right = {
+    padding: '0px',
+    paddingTop: '0rem'
+  }
+
   return (
     <Router>
         {console.log("App.js Rendering....")}
         <div className="App">
             <div class="wrapper">
-              
               <div class="sidebar">
-                 <Route path={[ "/search", "/dashBoard", "/home", "/settings"]} component={SideBar} /> 
+                <Route path={["/search", "/dashBoard", "/home", "/settings", "/user/:id"]} component={SideBar} /> 
               </div>
 
-              <div class="container-fluid" style={style.RightSection}>
-                    
-                    <div id="content" class="row pt-2">
-                      
-                        <div class="col-1 d-flex justify-content-start pl-0 align-self-baseline" style={style.ToggleSection}>
-                            {/* <nav class="navbar navbar-expand-lg navbar-light bg-light">  */}
-                                  <button type="button" id="sidebarCollapse" class="btn btn-info"> {/* Toggle Button */}
-                                    <i class="fas fa-align-left"></i>
-                                  </button>
-                            {/* </nav> */}
-                        </div>
-                    
-                        <div class="col-11 ">
-                   
-                          <Route path={["/search"]} component={SearchPage} />
-                          <Route path={["/dashboard"]} component={DashboardPage} />
-                          <Route path={["/home"]} component={HomePage} />
-                          <Route path={["/settings"]} component={SettingsPage} />
-                          <Route exact path={["/", "/login"]} component={LoginPage} />
+              <button type="button" id="sidebarCollapse" class="btn btn-info" style={style.ToggleSection}> {/* Toggle Button */}
+                <i class="fas fa-bars fa-1x"></i>
+              </button>
 
-                    
+                <div class="container-fluid" style={style.RightSection}>
 
+                  <div id="content" class="row " style={right}>
 
-                          {/* <Route path="/settings/:id" component={ProductInfoPage} /> */}
+                    <div class="col-12" style={left}>
 
-                        </div>
+                      <Route path={["/search"]} component={SearchPage} />
+                      <Route path={["/dashboard"]} component={DashboardPage} />
+                      <Route path={["/home"]} component={HomePage} />
+                      <Route path={["/settings"]} component={SettingsPage} />
+                      <Route path={["/user/:id"]} component={FriendsPage} />
+                      <Route exact path={["/", "/login"]} component={LoginPage} />
+
                     </div>
                   </div>
-            </div>
-        </div>
+                </div>
+              </div>
+          </div>
     </Router>
   );
 }
 
-  export default App;
+export default App;

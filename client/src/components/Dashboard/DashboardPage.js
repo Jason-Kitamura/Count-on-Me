@@ -5,6 +5,7 @@ import TodoLists from './TodoLists';
 import Followers from './Followers';
 import Following from './Following';
 import GoalModal from '../Home/GoalModal';
+import TaskModel from './TaskModel';
 
 import "./style.css";
 
@@ -18,16 +19,25 @@ function HomePage(){
        backgroundColor:'rgb(230, 126, 34)',
        color:'white',
        fontFamily: "'Noto Sans', sans-serif",
-       borderStyle:'groove', 
-       paddingTop: '5px'
+       display:'flex',
+       justifyContent:'space-around',
+       alignItems:'center'
    }
    const liveData = {
        flex:1,
        flexDirection:'row',
-       padding:'10px',
+       padding:'0px',
        margin:'0px'
-       
    }
+   const goalData = {
+    flex:1,
+    flexDirection:'row',
+    padding:'0px',
+    margin:'0px',
+    width : '90%',
+    display : 'block',
+    margin : 'auto'
+}
    const columns = {
        padding:'0',
        margin:'4px'
@@ -53,8 +63,10 @@ const scroll = {
     const [ user, setUser ]= useState([]);
     const [ firstName, setUserFirstName ] = useState([]);
     const [ lastName, setUserLastName ] = useState([]);
+   
     const followers = useRef(null);
     const following = useRef(null);
+
 
 
    useEffect( function(){
@@ -73,6 +85,7 @@ const scroll = {
     
     setUser( user );
     console.log( `Retrieved user data:`, user);
+    console.log( `Retrieved user data:`, user.data.profilePic);
     let firstName = user.data.firstName;
     firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1)
     setUserFirstName( firstName )
@@ -93,33 +106,45 @@ const scroll = {
     
     window.scrollTo(0, following.current.offsetTop)  
    }
-   const [show,setShow] = useState(false);
-   async function addGoal(){
-    console.log('[Add New GOAL button pressed]',show)
-    setShow(true);
-    }
+   const [show, setShow] = useState(false);
+   const [ showTask , setShowTask ] = useState( false );
 
+   async function addGoal(){
+        console.log('[Add New GOAL button pressed]',show)
+        setShow(true);
+    }
     async function closeGoal(){
         setShow(false);
     }
-
+    function addTask(){
+        console.log('you clicked add goal');
+        setShowTask( true );
+    }
+    function closeTask(){
+        setShowTask( false );
+    }
+    const name={
+        marginRight:'5px'
+    }
 
 
     return (
         <div style={scroll}>
-        <div id="header">
-            <h3  style={home}>{firstName} {lastName}</h3>
+         <div id="header" style={home}>
+           <h4> <i class="fas fa-columns"></i> Dash Board</h4>
+           <h4 style={name}>{firstName}  {lastName}</h4>
         </div>
         <div class='row' style={liveData}>
-            <div class='col-12 col-md-8' style={columns}>
-                <CoverPhoto />     <button class='btn btn-light' onClick={addGoal} style={selectOption}><i class="fas fa-plus"></i>   Add New Goal</button>
+            <div class='col-12 col-md-9' style={columns}>
+                <CoverPhoto />  
+                   {/* <button class='btn btn-light' onClick={addGoal} style={selectOption}><i class="fas fa-plus"></i>   Add New Goal</button> */}
             </div>
-            <div class='col-12 col-md-3'style={columns} >
-            <UserOptions executeScrollToFollowers={executeScrollToFollowers} executeScrollToFollowing={executeScrollToFollowing}/>
+            <div class='col-12 col-md-2'style={columns} >
+                <UserOptions executeScrollToFollowers={executeScrollToFollowers} executeScrollToFollowing={executeScrollToFollowing}/>
             </div>
         </div>
-        <div class='row' style={liveData}>
-            <TodoLists />
+        <div class='row' style={goalData}>
+            <TodoLists setTask={addTask} setGoal={addGoal}/>
         </div>
         <div class='row' ref={followers} style={liveData}>
             <Followers />
@@ -128,6 +153,7 @@ const scroll = {
             <Following />
         </div>
         <GoalModal show={show} closeGoal={closeGoal}/>
+        <TaskModel show={showTask} closeTask={closeTask}/>
     </div>
     );
 

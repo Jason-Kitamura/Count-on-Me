@@ -2,8 +2,12 @@ import React, {useState, useContext} from 'react';
 import './style.css'
 import {useHistory} from 'react-router-dom';
 import { socketio } from "../Socket/Socket.io"; /*-- m.p. initialize the socketio --*/
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const axios = require('axios');
+
+toast.configure();
 
 function LoginPage(props) {
 
@@ -21,21 +25,28 @@ function LoginPage(props) {
             email : email,
             password : password
         }
+        console.log(`[login details]`,loginCredentials);
         // route for server to check credentials
-        const response = await axios.post( 'http://localhost:5000/api/checkUser', loginCredentials );
+        const response = await axios.post( '/api/checkUser', loginCredentials );
         console.log('response', response.data.status );
 
         if ( response.data.status === 'success' ){
-           alert( 'login successful' );
+           toast.success( 'login successful', {
+               autoClose : 1000
+           } );
            openSocket( email ); /*-- m.p. socketio --*/
            const obj = {
                email : email,
                id : response.data.id
            }
            sessionStorage.setItem('userEmail',JSON.stringify( obj ));
-           history.push("/home")
+           setTimeout( () => {
+            history.push("/home");
+           }, 2000)
         } else {
-            alert( 'wrong email/password')
+            toast.error( 'Invalid login info', {
+                autoClose : 1500
+            })
         }
     }
 
@@ -51,7 +62,7 @@ function LoginPage(props) {
     return(
         <header className="header">
             <div className='row' id='headerRow'>
-                <h1 className='col-4' id='title'>Goal Tracker</h1 >
+                <h1 className='col-4' id='title'>Count on-Me</h1 >
                 <div className='col-4'></div >
                 <form className='col-4'>
                     <div className='row'>

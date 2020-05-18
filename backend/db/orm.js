@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
-// mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
-mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true});
+// mongoose.connect( process.env.MONGODB_URI , {useNewUrlParser: true, useUnifiedTopology:true});
+mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost:27017/goalTracker', {useNewUrlParser: true, useUnifiedTopology: true,});
 mongoose.set('useCreateIndex', true);
 
 // include mongoose models (it will include each file in the models directory)
 const User = require( './models/user' );
 const Goal = require('./models/goals');
 const Comment = require('./models/comment');
+const Habit = require('./models/habit')
 
 function saveUser(data){
     
@@ -35,15 +36,44 @@ async function addGoal(data)
 }
 
 async function getUserGoals(obj){
-    const userGoals = await User.findOne({ email: `${obj.email}` }).populate('goals');
+    const userGoals =  User.findOne({ email: `${obj.email}` }).populate('habits').populate('goals');
     console.log( 'user goals:', userGoals );
     return userGoals
+}
+
+async function getFriendGoals(obj){
+    const userGoals = await User.findById({ _id: `${obj.id}` }).populate('habits').populate('goals');
+    console.log( 'friend goals:', userGoals );
+    return userGoals
+}
+async function getUserFollowers(obj){
+    const userFollowers = await User.findOne({ email: `${obj.email}` });
+    console.log( 'user followers:', userFollowers.followers);
+    return userFollowers.followers
+
+}
+async function getUserFollowersById(obj){
+    const userFollowers = await User.findById({ _id: `${obj.id}` });
+    console.log( 'user followers:', userFollowers.followers);
+    return userFollowers.followers
+
+}
+async function getUserFollowing(obj){
+    const userFollowing = await User.findOne({ email: `${obj.email}` });
+    console.log( 'user following:', userFollowing.following);
+    return userFollowing.following
+
+}
+async function getUserFollowingById(obj){
+    const userFollowing = await User.findById({ _id: `${obj.id}` });
+    console.log( 'user following:', userFollowing.following);
+    return userFollowing.following
 
 }
 
 async function getCompletedGoals(data){
     const userGoals = await User.findOne({ email: `${obj.email}` }).populate('goals');
-    console.log( 'user goals:', userGoals );
+    // console.log( 'user goals:', userGoals );
     return userGoals
 }
 
@@ -61,12 +91,17 @@ async function undoGoal(obj){
 }
 async function getUserByEmailId(id){
     const result = await User.findOne({ email: id });
-    console.log(`[user found]`,result);
+    // console.log(`[user found]`,result);
+    return result
+}
+async function getUserById(id){
+    const result = await User.findById({ _id: id });
+    // console.log(`[user found]`,result);
     return result
 }
 async function findUserById(id){
     const result = await User.findOne({ _id: id})
-    console.log(`[User Found]`,result);
+    // console.log(`[User Found]`,result);
     return result;
 }
 function allUsers(){
@@ -78,6 +113,13 @@ function finduser(name)
 {
     console.log(`[name Received]`,name)
     const result = User.find({firstName:`${name}`});
+    console.log(`[User Found]`,result);
+    return result
+}
+function findUser(id)
+{
+    console.log(`[id Received]`,id)
+    const result = User.find({_id:id});
     console.log(`[User Found]`,result);
     return result
 }
@@ -101,12 +143,21 @@ async function findFolloweesAndPopulate( data ){
          })
     return userData;
 }
+//-----------------multer--------------------------------
+async function updateAvatar( userId, imageUrl ){
+    const dbResult = await User.findOneAndUpdate({_id: userId}, {$set :{profilePic : imageUrl}});
+    return dbResult
+}
+
+
 async function createComment( data ){
     console.log( 'orm recceived data ', data );
     const obj = {
         name : data.name,
-        body : data.body
+        body : data.body,
+        profilePic : data.profilePic
     }
+
     const dbcomment = new Comment( obj );
     return dbcomment.save(async (err, comment) => {
         if( err ){ console.log(err)};
@@ -115,6 +166,25 @@ async function createComment( data ){
         const result = await  User.updateOne({email:`${data.postEmail}`}, { $push: { comments: pushCommentId } });
         console.log(`[comment added to user]`, result);
     });
+}
+async function findUserAndPopulateComments( data ){
+    console.log('looking for user and populationg comments', data.email);
+    const userData = await User.findOne({ email: data.email }).populate('comments');
+    return( userData );
+}
+async function createNewHabit ( data ){
+    console.log('habit data', data)
+    const obj = {
+        title : data.habit
+    }
+    const dbHabit = new Habit( obj )
+    dbHabit.save(async (err, habit) => {
+        if( err ){ console.log(err)};
+        console.log('new habit', habit);
+        const pushHabitId = mongoose.Types.ObjectId(habit._id);
+        const result = await  User.updateOne({email:`${data.email}`}, { $push: { habits: pushHabitId } });
+    })
+   
 }
 
 module.exports = {
@@ -126,11 +196,21 @@ module.exports = {
     finduser,
     addFollowing,
     getUserGoals,
+    getUserById,
+    getUserFollowers,
+    getUserFollowing,
+    getUserFollowersById, 
+    getUserFollowingById,
+    getFriendGoals,
     getCompletedGoals,
     completeGoal,
     undoGoal,
     getUserByEmailId,
     findFolloweesAndPopulate,
-    createComment
+    createComment,
+    findUserAndPopulateComments,
+    updateAvatar,
+    findUser,
+    createNewHabit
     
 }

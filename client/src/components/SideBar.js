@@ -1,35 +1,59 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import AvatarUpload from './AvatarUpload';
+import axios from 'axios';
+import { func } from "prop-types";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure();
 
 function SideBar( props ){
     const [showAttr, setShowAttr] = React.useState('Home');
+    const [ showForm, setShowForm] = useState( false )
     const theLocation = useLocation();
+    const [profileLink,setProfileLink] = useState('');
+    
 
-    const uploadedImage = React.useRef(null);
-    const imageUploader = React.useRef(null);
-  
-    const handleImageUpload = e => {
-      const [file] = e.target.files;
-      if (file) {
-        const reader = new FileReader();
-        const { current } = uploadedImage;
-        current.file = file;
-        reader.onload = e => {
-          current.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    };
+    async function changeProfilePicture(){
+        const userFromSessionStorage = JSON.parse(sessionStorage.getItem('userEmail'));
+        console.log('[user mail id:]',userFromSessionStorage.email);
+        const user = await axios.get( `/api/userData/${userFromSessionStorage.email}`);
+        console.log(`[Profile picture Link ]`,user.data.profilePic)
+        setProfileLink(`${user.data.profilePic}`)
+    }
+
     function logOutUser(){
         sessionStorage.removeItem( 'userEmail' );
-        alert('you have logged out!')
+        toast.error('You have logged out!', {
+            autoClose : 2000
+        })
     }
+    
+        if(sessionStorage.getItem('userEmail') !== null){
+            getProfilePic()
+        }
+    async function getProfilePic(){
+        const userFromSessionStorage = JSON.parse(sessionStorage.getItem('userEmail'));
+        console.log('[user mail id:]',userFromSessionStorage.email);
+        const user = await axios.get( `/api/userData/${userFromSessionStorage.email}`);
+        console.log(`[Profile picture Link ]`,user.data.profilePic)
+        setProfileLink(`${user.data.profilePic}`)
+    }
+    function uploadPic( e ){
+        e.preventDefault();
+        setShowForm(false);
+    } 
+    const btn ={
+        color:'white',marginTop:'0px'
+    }
+
 
     return (
         <>
             <nav id="sidebar">
             <div class="sidebar-header">
-                <h3>Goal Tracker</h3>
+                <h3> <i class="fas fa-chart-bar"></i> Count on-Me</h3>
             </div>
             <ul class="list-unstyled components">
                 <div class="text-center">
@@ -41,35 +65,30 @@ function SideBar( props ){
                         justifyContent: "center"
                     }}
                     >
-                        <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        ref={imageUploader}
-                        style={{
-                            display: "none"
-                        }}
-                        />
-                        <div
-                        style={{
-                            height: "180px",
-                            width: "180px",
-                        }}
-                        onClick={() => imageUploader.current.click()}
-                        >
-                            <img
-                            src="https://pickaface.net/gallery/avatar/20151109_144853_2380_sample.png"
-                            class="avatar rounded-circle img-thumbnail"
-                            ref={uploadedImage}
+                      
+                            { { profileLink } === "" ?<img class="rounded-circle img-thumbnail" src="https://i.stack.imgur.com/34AD2.jpg" 
                             alt="avatar"
                             style={{
-                                width: "100%",
-                                height: "100%",
-                                position: "acsolute"
-                            }}
-                            />
-                        </div>
-                        Click to upload Image
+                                borderRadius:'50%',
+                                width:'160px',
+                                height:'150px',
+                                padding:'0px'
+                               
+                            }}/> : <img  class="rounded-circle img-thumbnail" src={profileLink}
+                            alt="avatar"
+                            style={{
+                                borderRadius:'50%',
+                                width:'160px',
+                                height:'150px',
+                                padding:'0px'
+                               }} />
+                            }
+                            { showForm ? <AvatarUpload uploadPic={uploadPic} changeProfilePicture={changeProfilePicture} /> : 
+                                    <div >
+                                        <button class="btn btnStyle" style={btn} onClick={function(){ setShowForm(true) }}>
+                                        <i class="fas fa-screwdriver"></i></button>
+                                    </div> }
+                            
                     </div>
                     <li className={((showAttr === 'Home') ? 'active' : '')}>
                         <Link to="/home" onClick={() => setShowAttr('Home')} >

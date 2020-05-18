@@ -1,27 +1,53 @@
 require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const orm = require('./backend/db/orm');
-const path = require('path');
 const bodyParser = require('body-parser');
+var fs = require('fs');
+const path = require('path');
+const cors = require('cors');
+const express = require('express');
+
+const orm = require('./backend/db/orm');
+
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('client/build/'));
+//app.use(express.static('client/build/'));
+app.use(express.static(path.join(__dirname, "client/build")));
 app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true}));
+//multer operations
+const multer = require('multer');
+
+//end point for multer picture-----------------/////////////////
+const upload = require('multer')({ dest: 'client/build/uploads/' });
+
+app.put( '/api/upload/:userid', upload.single('myFile'), async function( req, res ){
+  let userId = req.params.userid;
+  const filePath = req.file.path;
+  const originalName = req.file.originalname;
+ 
+  const fileExt = originalName.toLowerCase().substr((originalName.lastIndexOf('.'))).replace('jpeg','jpg');
+    fs.renameSync( `${__dirname}/${filePath}`, `${__dirname}/${filePath}${fileExt}` );
+  const imageUrl = req.file.path.replace(/\\/g, '/').replace('client/build/','/')+fileExt;
+  const imgUploadDb = await orm.updateAvatar( userId, imageUrl );
+  res.send( imgUploadDb );
+});
+
+//------------------------------------------------------------
+
+
 // NODE ENDPOINTS
 app.post( '/api/createUser', async ( req, res ) => {
     console.log( 'receving body: ', req.body );
     const Result = await orm.saveUser(req.body);
-    res.send( 'user data received! ')
+    res.send( Result );
 });
 
 app.post( '/api/checkUser', async ( req, res ) => {
-    console.log('received login info:', req.body );
+    // console.log('received login info:', req.body );
     const loginCredentrials = req.body;
 
     const findByEmail =  await orm.findUserByEmail(req.body);
@@ -48,14 +74,50 @@ app.post( '/api/createGoal',async  (req, res) => {
 
 app.post( '/api/getUserGoals', async ( req, res )=> {
     const obj = req.body;
-    console.log('get user goals for', obj.email );
+    // console.log('get user goals for', obj.email );
     const userGoals = await orm.getUserGoals(obj);
 
     res.send( JSON.stringify( userGoals ));
 });
+app.post( '/api/getFriendGoals', async ( req, res )=> {
+    const obj = req.body;
+    // console.log('get user goals for', obj.id );
+    const userGoals = await orm.getFriendGoals(obj);
+
+    res.send( JSON.stringify( userGoals ));
+});
+app.post( '/api/getUserFollowers', async ( req, res )=> {
+    const obj = req.body;
+    // console.log('get user followers for', obj.email );
+    const userFollowers = await orm.getUserFollowers(obj);
+    console.log(`Server recieved followers`, userFollowers)
+    res.send( JSON.stringify( userFollowers ));
+});
+app.post( '/api/getUserFollowersById', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user followers for', obj.id );
+    const userFollowers = await orm.getUserFollowersById(obj.id);
+    console.log(`Server recieved followers`, userFollowers)
+    res.send( JSON.stringify( userFollowers ));
+});
+app.post( '/api/getUserFollowing', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user following for', obj.email );
+    const userFollowing = await orm.getUserFollowing(obj);
+    console.log(`Server recieved followers`, userFollowing)
+    res.send( JSON.stringify( userFollowing ));
+});
+app.post( '/api/getUserFollowingById', async ( req, res )=> {
+    const obj = req.body;
+    console.log('get user followings for', obj.id );
+    const userFollowing = await orm.getUserFollowingById(obj.id);
+    console.log(`Server recieved following`, userFollowing)
+    res.send( JSON.stringify( userFollowing ));
+});
+
 app.post( '/api/getCompletedGoals', async ( req, res )=> {
     const obj = req.body;
-    console.log('get user goals for', obj.email );
+    // console.log('get user goals for', obj.email );
     const userGoals = await orm.getCompletedGoals(obj);
     const completedGoals = userGoals.goals.map((goal)=>{
         if(goal.completed === true){
@@ -84,10 +146,18 @@ app.post( '/api/undoGoal', async ( req, res )=> {
 
 
 app.get( '/api/userData/:emailId', async ( req, res ) => {
-    console.log('received userid: ', req.params.emailId );
+    // console.log('received userid: ', req.params.emailId );
     const id = req.params.emailId
     const findById =  await orm.getUserByEmailId(id);
-    console.log(`find by id`,findById);
+    // console.log(`find by id`,findById);
+    res.send(findById)
+})
+
+app.get( '/api/friend/:id', async ( req, res ) => {
+    // console.log('received userid: ', req.params.id );
+    const id = req.params.id
+    const findById =  await orm.getUserById(id);
+    // console.log(`find by id`,findById);
     res.send(findById)
 })
 
@@ -100,11 +170,20 @@ app.post('/api/addFollowing', async (req, res) => {
 });
 
 app.get('/api/user/:name', async (req, res) => {
-    console.log('received name: ', req.params.name);
+    // console.log('received name: ', req.params.name);
     const result= await orm.finduser(req.params.name);
     res.send(result);
 });
-
+app.get('/api/getUser/:id', async (req, res) => {
+    console.log('received name: ', req.params.id);
+    const result= await orm.findUser(req.params.id);
+    res.send(result);
+});
+app.post('/api/uploadImage', async  (req, res) => {
+  const data = await orm.uploadImage(req.body);
+  console.log(`result uploaded`,data);
+  res.send(data);
+});
 
 app.get('/api/allusers', async (req, res) => {
     const result= await orm.allUsers();
@@ -124,9 +203,20 @@ app.post( '/api/postComment', async ( req, res ) => {
     const commentData = {
         postEmail : obj.postEmail,
         name : userData.firstName,
-        body : obj.comment
+        body : obj.comment,
+        profilePic : userData.profilePic,
     }
     const createComment = await orm.createComment( commentData );
+    res.send();
+})
+app.post( '/api/getComments', async ( req, res ) => {
+    const userEmail = req.body;
+    const userData = await orm.findUserAndPopulateComments( userEmail );
+    console.log( 'comments user data', userData );
+    res.send( userData.comments );
+})
+app.post( '/api/newHabit', async ( req, res ) => {
+    const createHabit = await orm.createNewHabit( req.body );
     res.send();
 })
 
@@ -153,7 +243,7 @@ io.on('connection', function(socket){
       }
     });
 
-    socket.on('message-sent', function(data, callback){
+    socket.on('message-sent', async function(data, callback){
         console.log("inside message-sent in server!");
         // console.log("from user : " + data.A);
         // console.log("to user : " + data.B);
@@ -173,8 +263,14 @@ io.on('connection', function(socket){
         if (users[data.A]==users[data.B]) return; // means when it is not logged in or already disconnected
         console.log("<<Check passed...>>" + data.A + " is sending to " + data.B);
 
+        //getting user first and last name
+        const obj = {
+            email : data.A
+        }
+        const userDataA = await orm.findUserByEmail( obj );
+        console.log( 'user A data', userDataA );
         // users[socket.nickname].emit('whisp', {msg:data.T, fromUser:data.A, toUser:'Ali'});
-        users[data.B].emit('whisp', {msg:data.T, fromUser:data.A, toUser:data.B});
+        users[data.B].emit('whisp', {msg:data.T, fromUser:`${userDataA.firstName} ${userDataA.lastName}`, toUser:data.B});
    
     });
 
@@ -194,3 +290,12 @@ io.on('connection', function(socket){
 
   });
 
+  app.get('/*', function( req,res ){
+    console.log("redirect to index page!");
+    res.sendFile( path.join(__dirname, 'build', 'index.html') );
+  });
+
+//LISTENING
+// app.listen( PORT, function(){
+//     console.log( `RUNNING, http://localhost:${PORT}` ); 
+// });

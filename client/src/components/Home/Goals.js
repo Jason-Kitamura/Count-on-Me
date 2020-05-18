@@ -2,23 +2,32 @@ import React, {useEffect, useState} from 'react';
 const axios = require('axios');
 
 
-function Goals() {
+function Goals( props ) {
     const card={
         width:'100%',
-        margin:'10px'
+        margin:'10px',
+        fontFamily :  'Comic Sans MS, Comic Sans, cursive',
+        boxShadow : '2px 2px 8px  #999999'
     }
     const  Goals = {
-        borderStyle:'groove',
+        border : 'solid thin grey',
         marginBotton:'5px',
-        padding:'3px'
+        padding:'3px',
+        boxShadow: '3px 3px 5px  #666666'
+
     }
     const checkBox = {
         float: 'left',
         cursor : 'pointer',
-
+    }
+    const completeCheckBox = {
+        float : 'left',
+        color : 'limegreen'
     }
     const completeBox = {
         float: 'right',
+        lineHeight : '0',
+        marginTop : '2px',
         fontSize : 'small',
         cursor : 'pointer',
     }
@@ -75,7 +84,7 @@ function Goals() {
             id : id
         }
         //update in in database
-        const undoGoalComplete = await axios.post( 'http://localhost:5000/api/undoGoal', obj);
+        const undoGoalComplete = await axios.post( '/api/undoGoal', obj);
         console.log('Undo goal complete', undoGoalComplete );
         //re render page
         const user = JSON.parse(sessionStorage.getItem('userEmail'));
@@ -86,7 +95,11 @@ function Goals() {
        <div>
         <div class="card" style={card}>
             <div class="card-body">
-                <h5 class="card-title text-center">Today's Goals</h5>         
+                <h5 class="card-title text-center" style={{ fontWeight : 'bold' }}>
+                    Today's Goals
+                    <button class='btn btn-light' onClick={props.setGoal} style={{ float : 'right' }} ><i class="fas fa-plus"></i></button>
+                    </h5>        
+                    <hr/> 
                 {goals.map( goal => (
                     <h6 style={Goals} key={goal.id}>
                         <input type="checkbox" checked={false} onClick={e => {completeGoal( goal._id)}} style={checkBox}/>
@@ -95,7 +108,7 @@ function Goals() {
                  ))}
                  {completed.map( goal => (
                     <h6 style={Goals} key={goal.id}>
-                        <i class="fa fa-check" aria-hidden="true" style={checkBox}/>
+                        <i class="fa fa-check" aria-hidden="true" style={completeCheckBox}/>
                         <p onClick={e => {undoGoal( goal._id)}} style={completeBox}>
                             undo
                         </p>

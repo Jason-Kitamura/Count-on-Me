@@ -6,6 +6,9 @@
   height: 40vmin;
   pointer-events: none;
 }
+/* body {
+  background-color: burlywood;
+} */
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

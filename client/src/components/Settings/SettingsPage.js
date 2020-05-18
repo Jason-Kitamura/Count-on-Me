@@ -9,7 +9,6 @@ const axios = require('axios');
 function SettingsPage( props ){
 
   //Checking user login 
-  const userEmail = JSON.parse(sessionStorage.getItem('userEmail')).email;
  
 
    const [ user, setUser ]= useState([]);
@@ -26,6 +25,8 @@ function SettingsPage( props ){
    }, [] );
 
   async function getUser(){
+    const userEmail = JSON.parse(sessionStorage.getItem('userEmail')).email;
+
    console.log(`calling axios.get for email: `, userEmail)
    const user = await axios.get( `/api/userData/${userEmail}`);
 
@@ -34,7 +35,7 @@ function SettingsPage( props ){
        return;
    }
    
-   setUser( user );
+   setUser( userEmail );
    console.log( `Retrieved user data:`, user);
 
    let firstName = user.data.firstName;
@@ -51,18 +52,39 @@ function SettingsPage( props ){
    setPassword( password )
   }
 
+  const home = {
+    width:'100%',
+    height:'70px',
+    textAlign:'center',
+    fontFamily: "'Noto Sans', sans-serif",
+    color:'white',
+    display:'flex',
+    justifyContent:'space-around',
+    alignItems:'center',
+    backgroundColor:'rgb(230, 126, 34)'
+    
+}
 
-
+const row={
+  height:'100%',
+  width:'100%'
+}
+const col = {
+  padding:'0px',
+  paddingLeft:'15px'
+}
     return (
         <>
-        <div class="d-flex flex-column h-100">
-          <div class="row">
-            <div class="col-md-8 col-sm-6 col-xs-12 personal-info">
+        
+          <div class="row" style={row}>
+            <div class="col-md-12 col-sm-12 col-xs-12 personal-info" style={col}>
               <div class="alert alert-info alert-dismissable" style={{display:"none"}}>
                 <a class="panel-close close" data-dismiss="alert">×</a>
                 This is an <strong>alert</strong> to show important messages to the user.
               </div>
+            <div style={home}>
             <h3>Personal info</h3>
+            </div>
             <br></br>
             <br></br>
               <div class="form-group">
@@ -85,7 +107,7 @@ function SettingsPage( props ){
               <div class="row">
                 <label class="col-lg-3 control-label">Email:</label>
                 <div class="col-lg-8">
-                  <input class="form-control" value={userEmail} type="text" />
+                  <input class="form-control" value={user} type="text" />
                 </div>
                 </div>
               </div>
@@ -125,7 +147,7 @@ function SettingsPage( props ){
               </div>
             </div>
             </div>
-            </div>
+            
         </>
     )
 }
