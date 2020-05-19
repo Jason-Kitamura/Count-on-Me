@@ -27,3 +27,9 @@ function findLevel(index){
     return Math.floor(Math.log2(index + 1)); // index + 1 --> because zero based index in arrays
     //else return Math.round(Math.sqrt(index)) +1 ;
 }
+
+function findParentIndex(index, zeroLevel=true){
+    let parentIndex = index / 2;
+    if (zeroLevel) parentIndex = parentIndex - 1;
+    return parentIndex;
+}
