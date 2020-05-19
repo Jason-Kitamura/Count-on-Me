@@ -22,3 +22,8 @@ function tree (arr) {
      const right = sum(arr, 3);
      return (left == right) ? "" : (left > right ? "Left" : "Right"); 
 }
+
+function findLevel(index){
+    return Math.floor(Math.log2(index + 1)); // index + 1 --> because zero based index in arrays
+    //else return Math.round(Math.sqrt(index)) +1 ;
+}
