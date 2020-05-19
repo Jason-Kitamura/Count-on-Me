@@ -33,3 +33,18 @@ function findParentIndex(index, zeroLevel=true){
     if (zeroLevel) parentIndex = parentIndex - 1;
     return parentIndex;
 }
+
+function isInLeftBranch(index, rootIndex=0){
+    let firstIndxInLevel = Math.pow(2, findLevel(index)) - 1 ; // -1 --> because out root level is zero 
+    let lastIndxInLevel = firstIndxInLevel * 2; // because the root level is 0 otherwise --> (firstIndxInLevel * 2) - 1
+    return ( (index - firstIndxInLevel) < (firstIndxInLevel / 2) ) ? true : false;
+}
+
+function isLeftChild(index, zeroLevel=true){
+    let isLeft = false;
+    if (index % 2 != 0) { 
+        isLeft = true; // if it is odd number
+    }
+    if (!zeroLevel) isLeft = !isLeft;
+    return isLeft;
+}
